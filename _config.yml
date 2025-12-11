@@ -1,0 +1,6 @@
+title: Robot Learning Collective
+description: Robot learning, VLA models, embodied AI, and community projects.
+theme: jekyll-theme-minimal
+markdown: kramdown
+github:
+  is_project_page: false
