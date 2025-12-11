@@ -3,6 +3,8 @@ layout: page
 title: Winning the BEHAVIOR-1K Challenge
 ---
 
+v 0.1
+
 ## Intro
 The Robot Learning Collective took **1st place** in the 2025 **BEHAVIOR-1K Challenge**, a large-scale benchmark of 50 long-horizon household tasks in photo-realistic simulation. Each episode spans minutes of bimanual manipulation and navigation, with a single policy expected to generalize across diverse activities such as turning on a radio, cooking a hotdog, or tidying a room. This post gives a high-level tour of our solution and what we learned, with full details in the accompanying technical report.
 
