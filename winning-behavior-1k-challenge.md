@@ -98,8 +98,8 @@ Our system builds on the **Pi0.5 vision-language-action architecture**, with sev
 - **Action compression**: Spline interpolation for 1.3× speedup without hurting success rate.
 
 <table><tr>
-<td><img src="media/popcorn1.png" alt="Grasping door handle"><br><small>Grasping the microwave door</small></td>
-<td><img src="media/popcorn2.png" alt="Pressing start button"><br><small>Pressing the start button</small></td>
+<td><img src="assets/winning-behavior-1k-challenge/popcorn1.png" alt="Grasping door handle"><br><small>Grasping the microwave door</small></td>
+<td><img src="assets/winning-behavior-1k-challenge/popcorn2.png" alt="Pressing start button"><br><small>Pressing the start button</small></td>
 </tr></table>
 
 ## Results
@@ -116,8 +116,8 @@ On the held-out evaluation, our approach achieves **q-score ~0.26** with minimal
 
 <small>Top 5 teams on the held-out test set. [Full leaderboard →](https://behavior.stanford.edu/challenge/leaderboard.html)</small>
 
-<a href="media/per_task_and_eps_score.png" target="_blank">
-  <img src="media/per_task_and_eps_score.png" alt="Per-task scores" style="max-height: 400px; width: auto; border-radius: 4px; cursor: zoom-in;">
+<a href="assets/winning-behavior-1k-challenge/per_task_and_eps_score.png" target="_blank">
+  <img src="assets/winning-behavior-1k-challenge/per_task_and_eps_score.png" alt="Per-task scores" style="max-height: 400px; width: auto; border-radius: 4px; cursor: zoom-in;">
 </a>
 <small style="display: block; color: #666;">Per-task and per-episode scores. Green = success; red = failure. *Click to enlarge.*</small>
 
@@ -218,15 +218,15 @@ function showRecovery(index) {
 
 <div class="team-grid">
   <div class="team-member">
-    <img src="media/1707732561897.jpeg" alt="Ilia Larchenko">
+    <img src="assets/winning-behavior-1k-challenge/1707732561897.jpeg" alt="Ilia Larchenko">
     <p>Ilia Larchenko</p>
   </div>
   <div class="team-member">
-    <img src="media/1736204199843.jpeg" alt="Gleb Zarin">
+    <img src="assets/winning-behavior-1k-challenge/1736204199843.jpeg" alt="Gleb Zarin">
     <p>Gleb Zarin</p>
   </div>
   <div class="team-member">
-    <img src="media/1670851469680.jpeg" alt="Akash Karnatak">
+    <img src="assets/winning-behavior-1k-challenge/1670851469680.jpeg" alt="Akash Karnatak">
     <p>Akash Karnatak</p>
   </div>
 </div>
