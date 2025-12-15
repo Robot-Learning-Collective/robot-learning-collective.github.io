@@ -1,9 +1,15 @@
 ---
 layout: default
 title: Winning the BEHAVIOR-1K Challenge
+description: Applying modified Pi0.5 for multytask paroblem in massive simulation
+header_links:
+  - text: View on GitHub
+    url: https://github.com/IliaLarchenko/behavior-1k-solution
+  - text: ArXiv
+    url: https://arxiv.org/abs/2512.06951
 ---
 
-The Robot Learning Collective took **1st place** in the 2025 **BEHAVIOR-1K Challenge**, a large-scale benchmark of 50 long-horizon household tasks in photo-realistic simulation. Each episode spans minutes of bimanual manipulation and navigation, with a single policy expected to generalize across diverse activities such as turning on a radio, cooking a hotdog, or tidying a room.
+We took **1st place** in the 2025 **BEHAVIOR-1K Challenge**, a large-scale benchmark of 50 long-horizon household tasks in photo-realistic simulation. Each episode spans minutes of bimanual manipulation and navigation, with a single policy expected to generalize across diverse activities such as turning on a radio, cooking a hotdog, or tidying a room.
 
 <style>
 .top-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1.5rem 0; }

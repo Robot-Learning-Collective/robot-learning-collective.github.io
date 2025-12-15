@@ -1,12 +1,12 @@
 ---
 layout: default
 title: Robot Learning Collective
+description: Open-sourcing AI models for robots
 ---
 
 Welcome to the Robot Learning Collective. We build and share research, benchmarks, and tooling across robot learning, vision-language-action models, and embodied AI.
 
-## Quick links
-
-- GitHub: <https://github.com/>
-- Papers & docs: upcoming
-- Benchmarks & competitions: upcoming
+Our github
+Our mission
+Discord
+Our projects
