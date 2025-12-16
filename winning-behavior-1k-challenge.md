@@ -127,6 +127,75 @@ On the held-out evaluation, our approach achieves **q-score ~0.26** with minimal
 </a>
 <small style="display: block; color: #666;">Per-task and per-episode scores. Green = success; red = failure. *Click to enlarge.*</small>
 
+<style>
+.eval-block { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; margin: 1.5rem 0; }
+.eval-block h3 { margin: 0 0 0.25rem 0; }
+.eval-block .subtitle { margin: 0 0 1rem 0; color: #4b5563; font-size: 0.95rem; }
+.eval-container { display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap; margin: 0; }
+.eval-tabs { display: flex; flex-direction: column; gap: 0.5rem; flex: 1 1 160px; min-width: 140px; max-width: 240px; }
+.eval-tabs button { width: 100%; text-align: left; padding: 0.45rem 0.7rem; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 4px; font-size: clamp(0.7rem, 2vw, 0.85rem); }
+.eval-tabs button.active { background: #0366d6; color: white; border-color: #0366d6; }
+.eval-panels { flex: 1 1 400px; min-width: 300px; }
+.eval-panel { display: none; }
+.eval-panel.active { display: block; }
+.eval-panel video { width: 100%; height: auto; max-width: 100%; display: block; border-radius: 4px; }
+.eval-note { margin-top: 0.5rem; padding: 0.35rem 0.5rem; background: #f0f6ff; border-left: 3px solid #0366d6; border-radius: 4px; font-size: 0.85rem; color: #0b2d52; }
+</style>
+
+<div class="eval-block">
+  <h3>Example of Succesful Episodes</h3>
+  <p class="subtitle">Select an episode to show 10X-speed clip and its notes.</p>
+  <div class="eval-container">
+    <div class="eval-tabs"></div>
+    <div class="eval-panels"></div>
+  </div>
+</div>
+
+<script>
+function showEvalTab(index) {
+  document.querySelectorAll('.eval-tabs button').forEach((btn, i) => btn.classList.toggle('active', i === index));
+  document.querySelectorAll('.eval-panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
+}
+
+async function renderEvalClips() {
+  const tabs = document.querySelector('.eval-tabs');
+  const panels = document.querySelector('.eval-panels');
+  if (!tabs || !panels) return;
+
+  try {
+    const resp = await fetch('assets/winning-behavior-1k-challenge/eval_clips.json');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const evalClips = await resp.json();
+
+    evalClips.forEach((clip, idx) => {
+      const btn = document.createElement('button');
+      btn.textContent = clip.label;
+      btn.addEventListener('click', () => showEvalTab(idx));
+      tabs.appendChild(btn);
+
+      const panel = document.createElement('div');
+      panel.className = 'eval-panel';
+      panel.id = `eval-${idx}`;
+      panel.innerHTML = `
+        <video autoplay muted playsinline controls>
+          <source src="${clip.src}" type="video/mp4">
+        </video>
+        <div class="eval-note">${clip.note}</div>
+      `;
+      panels.appendChild(panel);
+    });
+
+    showEvalTab(0);
+  } catch (err) {
+    tabs.innerHTML = '<small>Failed to load clips.</small>';
+    console.error('Failed to load eval clips', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', renderEvalClips);
+</script>
+
+
 ### Failure Analysis
 
 We labeled failure reasons on a subset of tasks (15/50):

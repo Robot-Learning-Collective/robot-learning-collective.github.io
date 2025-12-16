@@ -1,0 +1,57 @@
+[
+  {
+    "label": "Cook Hot Dogs #42",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_cook_hot_dogs_42_x10.mp4",
+    "note": "Struggle to grasp the first hotdog a bit but the rest is pretty smooth"
+  },
+  {
+    "label": "Cook Hot Dogs #72",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_cook_hot_dogs_72_x10.mp4",
+    "note": "Struggle with picking but the rest is good"
+  },
+  {
+    "label": "Cook Hot Dogs #139",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_cook_hot_dogs_139_x10.mp4",
+    "note": "Close to perfect"
+  },
+  {
+    "label": "Move Boxes #94",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_moving_boxes_to_storage_94_x10.mp4",
+    "note": "No substantial mistakes"
+  },
+  {
+    "label": "Move Boxes #135",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_moving_boxes_to_storage_135_x10.mp4",
+    "note": "Carrying box with only one arm from certain moment, likely due to lack of force control"
+  },
+  {
+    "label": "Move Boxes #284",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_moving_boxes_to_storage_284_x10.mp4",
+    "note": "Was a bit confused where to go at the start, then grasp the box only with one hand, this led to confusion during placement of the box, robot pick up it again and only then place it for good, wasting time but still managing to finish in time"
+  },
+  {
+    "label": "Pick Up Trash #155",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_picking_up_trash_155_x10.mp4",
+    "note": "Knocked the last can with bucket but not a problem at all despite no such states in demo dataset"
+  },
+  {
+    "label": "Pick Up Trash #156",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_picking_up_trash_156_x10.mp4",
+    "note": "Picked bucket from the second attempt, also lost visual contact with last can and had to search it a bit"
+  },
+  {
+    "label": "Pick Up Trash #246",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_picking_up_trash_246_x10.mp4",
+    "note": "Dropped the last can (due to absence of force control and a bit of strange physics) and struggle to pick it up from the corner between the wall and the floor, spent a lot of time, but ultimately succeeded"
+  },
+  {
+    "label": "Setting Mousetraps #296",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_73000__eval_tricks_setting_mousetraps_296_x10.mp4",
+    "note": "Some strange \"jump\" while picking objects, made it harder to pick later"
+  },
+  {
+    "label": "Slicing Vegetable #266",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_slicing_vegetables_266_x10.mp4",
+    "note": "Something went wrong during placement of last object (zucchini) robot would not let it go for quite some time and moved the board in the process"
+  }
+]
