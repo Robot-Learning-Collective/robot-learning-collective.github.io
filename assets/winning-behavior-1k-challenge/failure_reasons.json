@@ -1,0 +1,15 @@
+[
+  { "label": "Dexterity", "value": 51, "color": "#a08070" },
+  { "label": "Order", "value": 26, "color": "#d4a04a" },
+  { "label": "Confusion", "value": 23, "color": "#c76b8f" },
+  { "label": "Robot fell", "value": 15, "color": "#aaa" },
+  { "label": "Reasoning", "value": 14, "color": "#e07060" },
+  { "label": "Search", "value": 9, "color": "#d4a04a" },
+  { "label": "Robot stuck", "value": 5, "color": "#b99ad6" },
+  { "label": "Head camera", "value": 4, "color": "#e07060" },
+  { "label": "Navigation", "value": 3, "color": "#aaa" },
+  { "label": "Unknown", "value": 3, "color": "#aaa" },
+  { "label": "Reachability", "value": 2, "color": "#d4a04a" },
+  { "label": "Catastrophic", "value": 1, "color": "#7ab87a" },
+  { "label": "Whole-body", "value": 1, "color": "#b99ad6" }
+]

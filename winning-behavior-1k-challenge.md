@@ -120,12 +120,19 @@ On the held-out evaluation, our approach achieves **q-score ~0.26** with minimal
 | 4 | The North Star | Huawei CRI EAI Team | 0.076 | 0.120 |
 | 5 | Embodied Intelligence | Independent | 0.052 | 0.095 |
 
-<small>Top 5 teams on the held-out test set. [Full leaderboard →](https://behavior.stanford.edu/challenge/leaderboard.html)</small>
+<small>Top 5 teams on the held-out test set. [Leaderboard](https://behavior.stanford.edu/challenge/leaderboard.html)</small>
 
-<a href="assets/winning-behavior-1k-challenge/per_task_and_eps_score.png" target="_blank">
+<div class="lightbox-trigger" onclick="openLightbox('assets/winning-behavior-1k-challenge/per_task_and_eps_score.png', 'Per-task and per-episode scores. Green = success; red = failure.')">
   <img src="assets/winning-behavior-1k-challenge/per_task_and_eps_score.png" alt="Per-task scores" style="max-height: 400px; width: auto; border-radius: 4px; cursor: zoom-in;">
-</a>
+</div>
 <small style="display: block; color: #666;">Per-task and per-episode scores. Green = success; red = failure. *Click to enlarge.*</small>
+
+<div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+  <div class="lightbox-content">
+    <img id="lightbox-img" alt="" onclick="event.stopPropagation()">
+    <div id="lightbox-caption"></div>
+  </div>
+</div>
 
 <style>
 .eval-block { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; margin: 1.5rem 0; }
@@ -139,11 +146,18 @@ On the held-out evaluation, our approach achieves **q-score ~0.26** with minimal
 .eval-panel { display: none; }
 .eval-panel.active { display: block; }
 .eval-panel video { width: 100%; height: auto; max-width: 100%; display: block; border-radius: 4px; }
+.eval-instruction { margin-top: 0.5rem; padding: 0.4rem 0.55rem; background: #fffaf0; border-left: 3px solid #d97706; border-radius: 4px; font-size: 0.9rem; color: #5a3b00; }
 .eval-note { margin-top: 0.5rem; padding: 0.35rem 0.5rem; background: #f0f6ff; border-left: 3px solid #0366d6; border-radius: 4px; font-size: 0.85rem; color: #0b2d52; }
+.lightbox-trigger { display: inline-block; }
+.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.78); display: none; align-items: center; justify-content: center; padding: 1.5rem; z-index: 9999; cursor: zoom-out; }
+.lightbox.active { display: flex; }
+.lightbox-content { position: relative; max-width: 98vw; max-height: 98vh; cursor: default; text-align: center; }
+.lightbox-content img { max-width: 96vw; max-height: 96vh; display: block; border-radius: 6px; margin: 0 auto; }
+.lightbox-caption { margin-top: 0.5rem; color: #f5f5f5; text-align: center; font-size: 0.95rem; }
 </style>
 
 <div class="eval-block">
-  <h3>Example of Succesful Episodes</h3>
+  <h3>Example of 100% Succesful Episodes</h3>
   <p class="subtitle">Select an episode to show 10X-speed clip and its notes.</p>
   <div class="eval-container">
     <div class="eval-tabs"></div>
@@ -180,7 +194,8 @@ async function renderEvalClips() {
         <video autoplay muted playsinline controls>
           <source src="${clip.src}" type="video/mp4">
         </video>
-        <div class="eval-note">${clip.note}</div>
+        ${clip.instruction ? `<div class="eval-instruction"><strong>Instruction:</strong> ${clip.instruction}</div>` : ''}
+        <div class="eval-note"><strong>Note:</strong> ${clip.note}</div>
       `;
       panels.appendChild(panel);
     });
@@ -195,36 +210,74 @@ async function renderEvalClips() {
 document.addEventListener('DOMContentLoaded', renderEvalClips);
 </script>
 
+<script>
+function openLightbox(src, caption) {
+  const box = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  const cap = document.getElementById('lightbox-caption');
+  if (!box || !img || !cap) return;
+  img.src = src;
+  img.alt = caption || '';
+  cap.textContent = caption || '';
+  box.classList.add('active');
+  document.addEventListener('keydown', handleLightboxKey);
+}
+
+function closeLightbox(event) {
+  const box = document.getElementById('lightbox');
+  if (!box) return;
+  box.classList.remove('active');
+  document.removeEventListener('keydown', handleLightboxKey);
+}
+
+function handleLightboxKey(e) {
+  if (e.key === 'Escape') closeLightbox(e);
+}
+</script>
+
+<script>
+async function renderFailureChart() {
+  const chart = document.getElementById('failure-chart');
+  if (!chart) return;
+  try {
+    const resp = await fetch('assets/winning-behavior-1k-challenge/failure_reasons.json');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    const max = Math.max(...data.map(d => d.value), 1);
+    chart.innerHTML = data.map(d => {
+      const widthPct = (d.value / max) * 100;
+      const color = d.color || '#888';
+      return `<div class="row">
+        <span class="lbl">${d.label}</span>
+        <div class="bar" style="width:${widthPct}%; background:${color};"></div>
+        <span class="val">${d.value}</span>
+      </div>`;
+    }).join('');
+  } catch (err) {
+    chart.innerHTML = '<small>Failed to load failure reasons.</small>';
+    console.error('Failed to load failure reasons', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', renderFailureChart);
+</script>
+
 
 ### Failure Analysis
 
 We labeled failure reasons on a subset of tasks (15/50):
 
 <style>
-.hbar-chart { margin: 1.5rem 0; max-width: 500px; }
-.hbar-chart .row { display: flex; align-items: center; margin-bottom: 5px; }
-.hbar-chart .lbl { width: 140px; text-align: right; padding-right: 10px; font-size: 12px; color: #444; }
-.hbar-chart .bar { height: 16px; border-radius: 2px; min-width: 4px; }
-.hbar-chart .val { margin-left: 6px; font-size: 11px; color: #666; }
+.hbar-chart { margin: 1.5rem auto; max-width: 720px; }
+.hbar-chart .row { display: flex; align-items: center; margin-bottom: 6px; }
+.hbar-chart .lbl { width: 160px; text-align: right; padding-right: 12px; font-size: 13px; color: #444; flex-shrink: 0; }
+.hbar-chart .bar { height: 16px; border-radius: 3px; min-width: 6px; background: #ccc; }
+.hbar-chart .val { margin-left: 8px; font-size: 12px; color: #666; flex-shrink: 0; }
 </style>
 
-<div class="hbar-chart">
-  <div class="row"><span class="lbl">Dexterity</span><div class="bar" style="width: 255px; background: #a08070;"></div><span class="val">51</span></div>
-  <div class="row"><span class="lbl">Order</span><div class="bar" style="width: 130px; background: #d4a04a;"></div><span class="val">26</span></div>
-  <div class="row"><span class="lbl">Confusion</span><div class="bar" style="width: 115px; background: #c76b8f;"></div><span class="val">23</span></div>
-  <div class="row"><span class="lbl">Robot fell</span><div class="bar" style="width: 75px; background: #aaa;"></div><span class="val">15</span></div>
-  <div class="row"><span class="lbl">Reasoning</span><div class="bar" style="width: 70px; background: #e07060;"></div><span class="val">14</span></div>
-  <div class="row"><span class="lbl">Search</span><div class="bar" style="width: 45px; background: #d4a04a;"></div><span class="val">9</span></div>
-  <div class="row"><span class="lbl">Robot stuck</span><div class="bar" style="width: 25px; background: #b99ad6;"></div><span class="val">5</span></div>
-  <div class="row"><span class="lbl">Head camera</span><div class="bar" style="width: 20px; background: #e07060;"></div><span class="val">4</span></div>
-  <div class="row"><span class="lbl">Navigation</span><div class="bar" style="width: 15px; background: #aaa;"></div><span class="val">3</span></div>
-  <div class="row"><span class="lbl">Unknown</span><div class="bar" style="width: 15px; background: #aaa;"></div><span class="val">3</span></div>
-  <div class="row"><span class="lbl">Reachability</span><div class="bar" style="width: 10px; background: #d4a04a;"></div><span class="val">2</span></div>
-  <div class="row"><span class="lbl">Catastrophic</span><div class="bar" style="width: 5px; background: #7ab87a;"></div><span class="val">1</span></div>
-  <div class="row"><span class="lbl">Whole-body</span><div class="bar" style="width: 5px; background: #b99ad6;"></div><span class="val">1</span></div>
-</div>
+<div class="hbar-chart" id="failure-chart"></div>
 
-<small>**Dexterity** (grasping/releasing) is the dominant failure mode (~33%), validating our VLA-based approach.</small>
+<small>Dexterity is the dominant failure mode (~33%), validating our VLA-based approach.</small>
 
 ## Recovery from cross-task learning
 

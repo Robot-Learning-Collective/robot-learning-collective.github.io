@@ -2,56 +2,67 @@
   {
     "label": "Cook Hot Dogs #42",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_cook_hot_dogs_42_x10.mp4",
-    "note": "Struggle to grasp the first hotdog a bit but the rest is pretty smooth"
+    "note": "Struggle to grasp the first hotdog a bit but the rest is pretty smooth",
+    "instruction": "Take the two hot dogs out of the refrigerator in the kitchen and cook them in the microwave until both are cooked."
   },
   {
     "label": "Cook Hot Dogs #72",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_cook_hot_dogs_72_x10.mp4",
-    "note": "Struggle with picking but the rest is good"
+    "note": "Struggle with picking but the rest is good",
+    "instruction": "Take the two hot dogs out of the refrigerator in the kitchen and cook them in the microwave until both are cooked."
   },
   {
     "label": "Cook Hot Dogs #139",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_cook_hot_dogs_139_x10.mp4",
-    "note": "Close to perfect"
+    "note": "Close to perfect",
+    "instruction": "Take the two hot dogs out of the refrigerator in the kitchen and cook them in the microwave until both are cooked."
   },
   {
-    "label": "Move Boxes #94",
+    "label": "Moving Boxes To Storage #94",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_moving_boxes_to_storage_94_x10.mp4",
-    "note": "No substantial mistakes"
+    "note": "No substantial mistakes",
+    "instruction": "Move the two storage containers from the living room to the garage. In the garage, place one container on the floor and stack the other container on top of it."
   },
   {
-    "label": "Move Boxes #135",
+    "label": "Moving Boxes To Storage #135",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_moving_boxes_to_storage_135_x10.mp4",
-    "note": "Carrying box with only one arm from certain moment, likely due to lack of force control"
+    "note": "Carrying box with only one arm from certain moment, likely due to lack of force control",
+    "instruction": "Move the two storage containers from the living room to the garage. In the garage, place one container on the floor and stack the other container on top of it."
   },
   {
-    "label": "Move Boxes #284",
+    "label": "Moving Boxes To Storage #284",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_moving_boxes_to_storage_284_x10.mp4",
-    "note": "Was a bit confused where to go at the start, then grasp the box only with one hand, this led to confusion during placement of the box, robot pick up it again and only then place it for good, wasting time but still managing to finish in time"
+    "note": "Was a bit confused where to go at the start, then grasp the box only with one hand, this led to confusion during placement of the box, robot pick up it again and only then place it for good, wasting time but still managing to finish in time",
+    "instruction": "Move the two storage containers from the living room to the garage. In the garage, place one container on the floor and stack the other container on top of it."
   },
   {
-    "label": "Pick Up Trash #155",
+    "label": "Picking Up Trash #155",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_picking_up_trash_155_x10.mp4",
-    "note": "Knocked the last can with bucket but not a problem at all despite no such states in demo dataset"
+    "note": "Knocked the last can with bucket but not a problem at all despite no such states in demo dataset",
+    "instruction": "Put the three can of soda from the living room inside the tash can in the kitchen."
   },
   {
-    "label": "Pick Up Trash #156",
+    "label": "Picking Up Trash #156",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_picking_up_trash_156_x10.mp4",
-    "note": "Picked bucket from the second attempt, also lost visual contact with last can and had to search it a bit"
+    "note": "Picked bucket from the second attempt, also lost visual contact with last can and had to search it a bit",
+    "instruction": "Put the three can of soda from the living room inside the tash can in the kitchen."
   },
   {
-    "label": "Pick Up Trash #246",
+    "label": "Picking Up Trash #246",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_picking_up_trash_246_x10.mp4",
-    "note": "Dropped the last can (due to absence of force control and a bit of strange physics) and struggle to pick it up from the corner between the wall and the floor, spent a lot of time, but ultimately succeeded"
+    "note": "Dropped the last can (due to absence of force control and a bit of strange physics) and struggle to pick it up from the corner between the wall and the floor, spent a lot of time, but ultimately succeeded",
+    "instruction": "Put the three can of soda from the living room inside the tash can in the kitchen."
   },
   {
     "label": "Setting Mousetraps #296",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_73000__eval_tricks_setting_mousetraps_296_x10.mp4",
-    "note": "Some strange \"jump\" while picking objects, made it harder to pick later"
+    "note": "Some strange \"jump\" while picking objects, made it harder to pick later",
+    "instruction": "Take the four mousetraps from the cabinet in the bathroom and place them on the bathroom floor. Make sure all four end up on the same floor surface, and ensure that at least two of them are either under or directly next to the same bathroom sink."
   },
   {
     "label": "Slicing Vegetable #266",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_slicing_vegetables_266_x10.mp4",
-    "note": "Something went wrong during placement of last object (zucchini) robot would not let it go for quite some time and moved the board in the process"
+    "note": "Something went wrong during placement of last object (zucchini) robot would not let it go for quite some time and moved the board in the process",
+    "instruction": "From the refrigerator in the kitchen, take out the two bell peppers, the two beets, and the zucchini. Then, on either chopping board on the countertop, use the parer to dice all of them so that only diced bell pepper, diced beet, and diced zucchini remain. Make sure the refrigerator is closed when you finish."
   }
 ]
