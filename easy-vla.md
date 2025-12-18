@@ -165,7 +165,7 @@ We evaluate all models purely on success rate—the percentage of episodes where
   </div>
 </div>
 
-### What We Learned
+#### What We Learned
 ...
 
 ### Task: Libero
@@ -188,13 +188,31 @@ LIBERO (Lifelong Robot Learning Benchmark) is a 3D robotic manipulation suite de
   </div>
 </div>
 
-### Results
+#### Results
 
 For training on LIBERO, we used the optimal learning rate determined by our best results on the PushT task. We trained for 60 epochs with a batch size of 192. Additionally, we applied image cropping and action masking. To optimize performance, we trained the model in mixed precision using the bf16 format.
 
 **_Reproducibility:_** : To reproduce our results, you can use the vla0-libero-final.yaml configuration file.
 
 We opted not to use relative positions; while an ablation study for the PushT task showed they provided a significant boost in success rate, they were difficult to apply to the LIBERO input data. Furthermore, while ensembling did not improve performance on PushT, we achieved our best metrics on LIBERO by ensembling across 8 tokens ahead.
+
+| Model | Params | Libero_object | Libero_spatial | Libero_goal | Libero_10 | Avg |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Diffusion Policy | 0.15B | 78.3 | 92.5 | 68.3 | 50.5 | 72.4 |
+| pi0-FAST | ? | 87.0 | 63.0 | 89.0 | 48.0 | 71.8 |
+| SmolVLA | 0.25B | 87.0 | 93.0 | 88.0 | 63.0 | 82.8 |
+| SmolVLA | 2.25B | 93.0 | 94.0 | 91.0 | 77.0 | 88.8 |
+| OpenVLA-OFT | ? | 94.3 | 95.2 | 91.7 | 86.5 | 91.9 |
+| pi0.5 - KI | ? | 96.6 | 97.2 | 94.6 | 85.8 | 93.3 |
+| VLA0 | 3B | 97.0 | 97.8 | 96.2 | 87.6 | 94.7 |
+| **EasyVLA (Ours)** | **0.5B** | **97.2** | **92.2** | **95.6** | **91.2** | **94.1** |
+
+#### Analysis
+Analyzing our results on LIBERO, we identified two primary challenges:
+
+1. Overfitting. During our analysis, we observed that our model works almost perfectly for certain tasks but struggles with others that do not appear significantly different. We believe this is a result of overfitting on specific task trajectories.
+
+2. High Scores & Benchmark Saturation. Our 0.5B model has a significantly smaller parameter count than the 3B model used in the VLA0 work. Typically, a smaller model should have reduced generalizing capabilities. However, the fact that we can achieve nearly the same scores as much larger models with a small number of tweaks suggests that the benchmark may not be sufficiently challenging for testing true information generalization.
 
 ### Fails
 
@@ -216,6 +234,14 @@ We opted not to use relative positions; while an ablation study for the PushT ta
 </div>
 
 # Discussions
+## Performance
+- We found that our model is mostly CPU bound, meaning the time spent placing CUDA kernel calls exceeds the actual execution time. Model compilation is an ideal way to address this problem. Unfortunately, we were unable to make it work within the Lerobot framework in conjunction with the Accelerate library. Fixing this compatibility is one of our primary goals for future development.
+
+- Mixed Precision: We found that training in float16 leads to gradient explosions, whereas training in bf16 avoids this issue entirely.
+
+- Loss Calculation: Calculating loss in lower precision leads to slight performance degradation. Consequently, we convert our logits to full precision before computing the loss. This approach performs nearly as well as full-precision training while running almost 2x faster.
+
+- FlashAttention: We do not use FlashAttention because it provides no performance boost compared to standard attention implementations for our use case, due to our small sequence lengths (usually < 512 tokens).
 
 ## Reflection and future steps
 ....
