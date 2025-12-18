@@ -165,12 +165,36 @@ We evaluate all models purely on success rate—the percentage of episodes where
   </div>
 </div>
 
-...
 ### What We Learned
+...
 
 ### Task: Libero
 
-Task desc
+<div style="display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-start;">
+  <div style="flex:1 1 320px; min-width:280px; max-width:640px;" markdown="1">
+LIBERO (Lifelong Robot Learning Benchmark) is a 3D robotic manipulation suite designed to evaluate how agents transfer and retain skills across a wide range of tasks. The agent operates a 7-DOF robotic arm in kitchen or tabletop environments, observing the scene through RGB images from both a workspace and a wrist-mounted camera. Success is measured by the agent's ability to complete long-horizon tasks and its performance on previously learned tasks after acquiring new ones. Following the methodology of the VLA0 paper, we compare our model across four task suites:
+
+- `Libero_object`: Varies the types of objects manipulated to test generalizable object recognition (e.g., "pick up the ketchup/milk/juice and put it in the basket").
+
+- `Libero_spatial`: Focuses on spatial relationships and layouts (e.g., "put the bowl on the plate" with varying object positions).
+
+- `Libero_goal`: Keeps objects the same but changes the end goal (e.g., "open the drawer" vs. "put the mug in the drawer").
+
+- `Libero_10`: Focuses on long-horizon and procedural sequences (e.g., "open the microwave and put the bowl in it"), requiring the agent to chain multiple behaviors together to complete complex, multi-step goals.
+
+</div>
+  <div style="flex:1 1 320px; min-width:280px; max-width:480px; text-align:center;">
+    <img src="/assets/easy-vla/687474703a2f2f72656d69636164656e652e636f6d2f6173736574732f6769662f70757368745f646966667573696f6e2e676966.gif" alt="Libero demo" style="width:100%; height:auto; border-radius:4px;">
+  </div>
+</div>
+
+### Results
+
+For training on LIBERO, we used the optimal learning rate determined by our best results on the PushT task. We trained for 60 epochs with a batch size of 192. Additionally, we applied image cropping and action masking. To optimize performance, we trained the model in mixed precision using the bf16 format.
+
+**_Reproducibility:_** : To reproduce our results, you can use the vla0-libero-final.yaml configuration file.
+
+We opted not to use relative positions; while an ablation study for the PushT task showed they provided a significant boost in success rate, they were difficult to apply to the LIBERO input data. Furthermore, while ensembling did not improve performance on PushT, we achieved our best metrics on LIBERO by ensembling across 8 tokens ahead.
 
 ### Fails
 
