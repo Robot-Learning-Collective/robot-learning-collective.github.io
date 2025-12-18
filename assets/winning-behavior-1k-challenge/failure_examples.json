@@ -1,0 +1,86 @@
+[
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/can_meat_100.mp4",
+    "task": "can_meat",
+    "episode": 100,
+    "reason": "dexterity",
+    "note": "Robot dropped the can (this happens with every episode for can_meat task, we are not sure why)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/can_meat_139.mp4",
+    "task": "can_meat",
+    "episode": 139,
+    "reason": "dexterity",
+    "note": "Robot dropped both cans (this happens with every episode for can_meat task, we are not sure why)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/boxing_books_up_for_storage_200.mp4",
+    "task": "boxing_books_up_for_storage",
+    "episode": 200,
+    "reason": "confusion",
+    "note": "Robot cannot place the box (this happens often and we do not know why)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/boxing_books_up_for_storage_182.mp4",
+    "task": "boxing_books_up_for_storage",
+    "episode": 182,
+    "reason": "order",
+    "note": "Robot picked up books first and cannot place them in the box because the box was in a different location in the demo dataset"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/boxing_books_up_for_storage_120.mp4",
+    "task": "boxing_books_up_for_storage",
+    "episode": 182,
+    "reason": "confusion",
+    "note": "Robot struggled to place the box and then tried to escape :)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/cook_hot_dogs_158.mp4",
+    "task": "cook_hot_dogs",
+    "episode": 158,
+    "reason": "order",
+    "note": "Robot turned on the microwave while trying to open it and became confused"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/cook_hot_dogs_166.mp4",
+    "task": "cook_hot_dogs",
+    "episode": 166,
+    "reason": "dexterity",
+    "note": "Robot dropped a hotdog"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/hanging_pictures_99.mp4",
+    "task": "hanging_pictures",
+    "episode": 99,
+    "reason": "navigation",
+    "note": "Robot moved to location of the other task (radio)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/hanging_pictures_103.mp4",
+    "task": "hanging_pictures",
+    "episode": 103,
+    "reason": "dexterity",
+    "note": "Robot dropped the picture while trying to hang it (typical for this task)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/hanging_pictures_281.mp4",
+    "task": "hanging_pictures",
+    "episode": 281,
+    "reason": "dexterity",
+    "note": "Knocked down the picture and cannot pick it up"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/moving_boxes_to_storage_211.mp4",
+    "task": "moving_boxes_to_storage",
+    "episode": 211,
+    "reason": "confusion",
+    "note": "Robot cannot place/release the box (this happens sometimes with this task)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/moving_boxes_to_storage_206.mp4",
+    "task": "moving_boxes_to_storage",
+    "episode": 206,
+    "reason": "collision",
+    "note": "Robot dragged the table and fell over it"
+  }
+]

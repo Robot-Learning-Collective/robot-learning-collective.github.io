@@ -18,12 +18,6 @@ We took **1st place** in the 2025 **BEHAVIOR-1K Challenge**, a large-scale bench
 .top-buttons img { height: 32px; }
 </style>
 
-<div class="top-buttons">
-  <a href="https://arxiv.org/abs/2512.06951" target="_blank"><img src="https://img.shields.io/badge/arXiv-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white" alt="arXiv"></a>
-  <a href="https://github.com/IliaLarchenko/behavior-1k-solution" target="_blank"><img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"></a>
-  <a href="https://huggingface.co/IliaLarchenko/behavior_submission" target="_blank"><img src="https://img.shields.io/badge/🤗_Hugging_Face-ffd21e?style=for-the-badge" alt="Hugging Face"></a>
-  <a href="https://discord.gg/Jr8tcnVNGw" target="_blank"><img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
-</div>
 
 <nav style="background: #f6f8fa; padding: 0.75rem 1rem; border-radius: 6px; margin: 1.5rem 0; font-size: 14px;">
   <strong>Contents:</strong>
@@ -279,6 +273,63 @@ We labeled failure reasons on a subset of tasks (15/50):
 
 <small>Dexterity is the dominant failure mode (~33%), validating our VLA-based approach.</small>
 
+### Fails
+
+<div class="eval-block">
+  <h3>Examples of Failure Episodes</h3>
+  <p class="subtitle">Select an episode to show a clip plus reason and notes.</p>
+  <div class="eval-container">
+    <div class="fail-tabs eval-tabs"></div>
+    <div class="fail-panels eval-panels"></div>
+  </div>
+</div>
+
+<script>
+function showFailTab(index) {
+  document.querySelectorAll('.fail-tabs button').forEach((btn, i) => btn.classList.toggle('active', i === index));
+  document.querySelectorAll('.fail-panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
+}
+
+async function renderFailureExamples() {
+  const tabs = document.querySelector('.fail-tabs');
+  const panels = document.querySelector('.fail-panels');
+  if (!tabs || !panels) return;
+
+  try {
+    const resp = await fetch('assets/winning-behavior-1k-challenge/failure_examples.json');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const examples = await resp.json();
+
+    examples.forEach((ex, idx) => {
+      const btn = document.createElement('button');
+      const label = `${ex.task.replace(/_/g, ' ')} #${ex.episode}`;
+      btn.textContent = label;
+      btn.addEventListener('click', () => showFailTab(idx));
+      tabs.appendChild(btn);
+
+      const panel = document.createElement('div');
+      panel.className = 'eval-panel fail-panel';
+      panel.id = `fail-${idx}`;
+      panel.innerHTML = `
+        <video autoplay muted playsinline controls>
+          <source src="${ex.video_path}" type="video/mp4">
+        </video>
+        ${ex.reason ? `<div class="eval-instruction"><strong>Reason:</strong> ${ex.reason}</div>` : ''}
+        <div class="eval-note"><strong>Note:</strong> ${ex.note}</div>
+      `;
+      panels.appendChild(panel);
+    });
+
+    showFailTab(0);
+  } catch (err) {
+    tabs.innerHTML = '<small>Failed to load failure examples.</small>';
+    console.error('Failed to load failure examples', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', renderFailureExamples);
+</script>
+
 ## Recovery from cross-task learning
 
 Training on all 50 tasks leads to **emergent recovery behaviors**. Single-task models never recover from mistakes; the multi-task model learns to pick up fallen items and retry.
@@ -288,6 +339,10 @@ Training on all 50 tasks leads to **emergent recovery behaviors**. Single-task m
 .video-pair > div { flex: 1; }
 .video-pair video { width: 100%; height: auto; display: block; }
 .video-pair .label { font-size: 0.9rem; margin-top: 0.5rem; color: #555; }
+@media (max-width: 820px) {
+  .video-pair { flex-direction: column; }
+  .video-pair > div { width: 100%; }
+}
 .recovery-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
 .recovery-tabs button { padding: 0.5rem 1rem; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 4px; font-size: 0.9rem; }
 .recovery-tabs button.active { background: #0366d6; color: white; border-color: #0366d6; }
@@ -333,9 +388,11 @@ function showRecovery(index) {
 }
 </script>
 
----
+<div class="top-buttons">
+  <a href="https://discord.gg/Jr8tcnVNGw" target="_blank"><img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
+</div>
 
-## Team
+---
 
 <style>
 .team-grid { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; margin: 2rem 0; }
