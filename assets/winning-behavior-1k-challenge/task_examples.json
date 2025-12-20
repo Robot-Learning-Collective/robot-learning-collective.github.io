@@ -1,0 +1,57 @@
+[
+  {
+    "label": "Task 1: Picking Up Trash",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00010120_fast.mp4",
+    "instruction": "Put the three cans of soda from the living room inside the trash can in the kitchen."
+  },
+  {
+    "label": "Task 4: Can Meat",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00040010_fast.mp4",
+    "instruction": "Open the kitchen cabinet, take out the two hinged jars, open them, place exactly two cooked bratwursts from the chopping board on the countertop into each jar, then close both jars, put them back inside the cabinet, and close the cabinet."
+  },
+  {
+    "label": "Task 12: Preparing Lunch Box",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00120030_fast.mp4",
+    "instruction": "Put apple halves, sandwich, and cookie into the packing box, then add tea from the fridge."
+  },
+  {
+    "label": "Task 16: Moving Boxes",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00160020_fast.mp4",
+    "instruction": "Move two storage containers from living room to garage and stack them."
+  },
+  {
+    "label": "Task 23: Boxing Books Up for Storage",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00230010_fast.mp4",
+    "instruction": "Put all six books from the bookcases in the living room into the box on the living room floor."
+  },
+  {
+    "label": "Task 32: Wash Baseball Cap",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00320050_fast.mp4",
+    "instruction": "Wash two baseball caps on the countertop using the washer until clean."
+  },
+  {
+    "label": "Task 34: Hanging Pictures",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00340030_fast.mp4",
+    "instruction": "Pick up the poster from the kitchen countertop and hang it on one of the wall nails in the kitchen."
+  },
+  {
+    "label": "Task 38: Spraying For Bugs",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00380020_fast.mp4",
+    "instruction": "Pick up pesticide atomizer and spray both potted plants in the garden."
+  },
+  {
+    "label": "Task 42: Chop An Onion",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00420030_fast.mp4",
+    "instruction": "Dice the onion on the chopping board, put it in the bowl, then wash the knife and board."
+  },
+  {
+    "label": "Task 43: Slicing Vegetables",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00430050_fast.mp4",
+    "instruction": "From the refrigerator in the kitchen, take out the two bell peppers, the two beets, and the zucchini. Then, on either chopping board on the countertop, use the parer to dice all of them so that only diced bell pepper, diced beet, and diced zucchini remain. Make sure the refrigerator is closed when you finish."
+  },
+  {
+    "label": "Task 45: Cook Hot Dogs",
+    "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00450010_fast.mp4",
+    "instruction": "Take the two hot dogs out of the refrigerator in the kitchen and cook them in the microwave until both are cooked."
+  }
+]

@@ -16,6 +16,30 @@ We took **1st place** in the 2025 **BEHAVIOR-1K Challenge**, a large-scale bench
 .top-buttons a { transition: transform 0.1s, opacity 0.1s; }
 .top-buttons a:hover { transform: translateY(-2px); opacity: 0.9; }
 .top-buttons img { height: 32px; }
+.eval-block { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; margin: 1.5rem 0; }
+.eval-block h3 { margin: 0 0 0.25rem 0; }
+.eval-block .subtitle { margin: 0 0 1rem 0; color: #4b5563; font-size: 0.95rem; }
+.eval-container { display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap; margin: 0; }
+.eval-tabs { display: flex; flex-direction: column; gap: 0.5rem; flex: 1 1 160px; min-width: 140px; max-width: 240px; }
+.eval-tabs button { width: 100%; text-align: left; padding: 0.45rem 0.7rem; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 4px; font-size: clamp(0.7rem, 2vw, 0.85rem); }
+.eval-tabs button.active { background: #0366d6; color: white; border-color: #0366d6; }
+.eval-panels { flex: 1 1 400px; min-width: 300px; }
+.eval-panel { display: none; }
+.eval-panel.active { display: block; }
+.eval-panel video { width: 100%; height: auto; max-width: 100%; display: block; border-radius: 4px; }
+.eval-instruction { margin-top: 0.5rem; padding: 0.4rem 0.55rem; background: #fffaf0; border-left: 3px solid #d97706; border-radius: 4px; font-size: 0.9rem; color: #5a3b00; }
+.eval-note { margin-top: 0.5rem; padding: 0.35rem 0.5rem; background: #f0f6ff; border-left: 3px solid #0366d6; border-radius: 4px; font-size: 0.85rem; color: #0b2d52; }
+.lightbox-trigger { display: inline-block; }
+.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.78); display: none; align-items: center; justify-content: center; padding: 1.5rem; z-index: 9999; cursor: zoom-out; }
+.lightbox.active { display: flex; }
+.lightbox-content { position: relative; max-width: 98vw; max-height: 98vh; cursor: default; text-align: center; }
+.lightbox-content img { max-width: 96vw; max-height: 96vh; display: block; border-radius: 6px; margin: 0 auto; }
+.lightbox-caption { margin-top: 0.5rem; color: #f5f5f5; text-align: center; font-size: 0.95rem; }
+.side-by-side { display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap; }
+.side-by-side .text-col { flex: 1 1 300px; min-width: 250px; }
+.side-by-side .img-col { flex: 1 1 400px; min-width: 300px; }
+.side-by-side .text-col ul { margin: 0; padding-left: 1.2rem; }
+.side-by-side .text-col li { margin-bottom: 0.75rem; }
 </style>
 
 
@@ -32,58 +56,180 @@ We took **1st place** in the 2025 **BEHAVIOR-1K Challenge**, a large-scale bench
 
 50 tasks etc.
 
-## Task Examples
-
-*Videos shown at 8× speed.*
-
 <style>
 .video-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
 .video-tabs button { padding: 0.5rem 1rem; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 4px; font-size: 0.85rem; }
 .video-tabs button.active { background: #0366d6; color: white; border-color: #0366d6; }
 .video-panel { display: none; }
 .video-panel.active { display: block; }
+.video-panel video { width: 100%; height: auto; max-width: 640px; display: block; margin: 0 auto; border-radius: 6px; }
 </style>
 
-<div class="video-tabs">
-  <button class="active" onclick="showTab(0)">Task 1: Picking Up Trash</button>
-  <button onclick="showTab(1)">Task 12: Preparing Lunch Box</button>
-  <button onclick="showTab(2)">Task 16: Moving Boxes</button>
-  <button onclick="showTab(3)">Task 32: Wash Baseball Cap</button>
-  <button onclick="showTab(4)">Task 38: Spraying For Bugs</button>
-  <button onclick="showTab(5)">Task 42: Chop An Onion</button>
-</div>
-
-<div class="video-panel active" id="panel-0">
-  <video width="640" height="360" autoplay muted playsinline controls><source src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00010120_fast.mp4" type="video/mp4"></video>
-  <p><small>Put the three cans of soda from the living room inside the trash can in the kitchen.</small></p>
-</div>
-<div class="video-panel" id="panel-1">
-  <video width="640" height="360" autoplay muted playsinline controls><source src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00120030_fast.mp4" type="video/mp4"></video>
-  <p><small>Put apple halves, sandwich, and cookie into the packing box, then add tea from the fridge.</small></p>
-</div>
-<div class="video-panel" id="panel-2">
-  <video width="640" height="360" autoplay muted playsinline controls><source src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00160020_fast.mp4" type="video/mp4"></video>
-  <p><small>Move two storage containers from living room to garage and stack them.</small></p>
-</div>
-<div class="video-panel" id="panel-3">
-  <video width="640" height="360" autoplay muted playsinline controls><source src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00320050_fast.mp4" type="video/mp4"></video>
-  <p><small>Wash two baseball caps on the countertop using the washer until clean.</small></p>
-</div>
-<div class="video-panel" id="panel-4">
-  <video width="640" height="360" autoplay muted playsinline controls><source src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00380020_fast.mp4" type="video/mp4"></video>
-  <p><small>Pick up pesticide atomizer and spray both potted plants in the garden.</small></p>
-</div>
-<div class="video-panel" id="panel-5">
-  <video width="640" height="360" autoplay muted playsinline controls><source src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/episode_00420030_fast.mp4" type="video/mp4"></video>
-  <p><small>Dice the onion on the chopping board, put it in the bowl, then wash the knife and board.</small></p>
-</div>
-
 <script>
-function showTab(index) {
-  document.querySelectorAll('.video-tabs button').forEach((btn, i) => btn.classList.toggle('active', i === index));
-  document.querySelectorAll('.video-panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
+// Reusable tabbed-video initializer (shared across intro, success, fail blocks)
+function initTabbedVideos({
+  rootSelector,
+  root,
+  tabsSelector,
+  panelsSelector,
+  jsonUrl,
+  panelClass = 'eval-panel',
+  renderButtonLabel,
+  renderPanelHTML,
+}) {
+  const rootEl = root || document.querySelector(rootSelector);
+  if (!rootEl) return;
+  const tabs = rootEl.querySelector(tabsSelector);
+  const panels = rootEl.querySelector(panelsSelector);
+  if (!tabs || !panels) return;
+
+  const panelSelector = `.${panelClass.split(' ').join('.')}`;
+  let activeIndex = 0;
+  let isRootVisible = false;
+
+  const pauseAll = () => {
+    panels.querySelectorAll(panelSelector).forEach((panel) => {
+      const vid = panel.querySelector('video');
+      if (vid) vid.pause();
+    });
+  };
+
+  const playActive = () => {
+    const activePanel = panels.querySelector(`${panelSelector}.active`);
+    const vid = activePanel ? activePanel.querySelector('video') : null;
+    if (vid) vid.play().catch(() => {});
+  };
+
+  const observer =
+    typeof IntersectionObserver !== 'undefined'
+      ? new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.target !== rootEl) return;
+              isRootVisible = entry.isIntersecting;
+              if (isRootVisible) {
+                playActive();
+              } else {
+                pauseAll();
+              }
+            });
+          },
+          { threshold: 0.2 }
+        )
+      : null;
+
+  if (observer) observer.observe(rootEl);
+
+  const activate = (index) => {
+    activeIndex = index;
+    tabs.querySelectorAll('button').forEach((btn, i) => {
+      const isActive = i === index;
+      btn.classList.toggle('active', isActive);
+    });
+    panels.querySelectorAll(panelSelector).forEach((panel, i) => {
+      const isActive = i === index;
+      panel.classList.toggle('active', isActive);
+      panel.style.display = isActive ? 'block' : 'none';
+      const vid = panel.querySelector('video');
+      if (vid && !isActive) vid.pause();
+    });
+    if (isRootVisible) playActive();
+  };
+
+  fetch(jsonUrl)
+    .then((resp) => {
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      return resp.json();
+    })
+    .then((items) => {
+      items.forEach((item, idx) => {
+        const btn = document.createElement('button');
+        btn.textContent = renderButtonLabel(item, idx);
+        btn.addEventListener('click', () => activate(idx));
+        if (idx === 0) btn.classList.add('active');
+        tabs.appendChild(btn);
+
+        const panel = document.createElement('div');
+        panel.className = panelClass;
+        panel.id = `${rootEl.id || 'panel'}-${idx}`;
+        panel.innerHTML = renderPanelHTML(item, idx);
+        panel.style.display = idx === 0 ? 'block' : 'none';
+        if (idx === 0) panel.classList.add('active');
+        panels.appendChild(panel);
+      });
+
+      if (items.length) activate(0);
+    })
+    .catch((err) => {
+      tabs.innerHTML = '<small>Failed to load clips.</small>';
+      console.error('Failed to load tabbed videos', err);
+    });
 }
+
+// Predefined renderers so blocks can be configured with data attributes
+const TAB_RENDERERS = {
+  intro: {
+    panelClass: 'eval-panel video-panel',
+    renderButtonLabel: (item) => item.label,
+    renderPanelHTML: (item) => `
+      <video autoplay muted playsinline controls>
+        <source src="${item.src}" type="video/mp4">
+      </video>
+      ${item.instruction ? `<div class="eval-note"><strong>Instruction:</strong> ${item.instruction}</div>` : ''}
+    `,
+  },
+  success: {
+    panelClass: 'eval-panel',
+    renderButtonLabel: (clip) => clip.label,
+    renderPanelHTML: (clip) => `
+      <video autoplay muted playsinline controls>
+        <source src="${clip.src}" type="video/mp4">
+      </video>
+      ${clip.instruction ? `<div class="eval-instruction"><strong>Instruction:</strong> ${clip.instruction}</div>` : ''}
+      <div class="eval-note"><strong>Note:</strong> ${clip.note}</div>
+    `,
+  },
+  fail: {
+    panelClass: 'eval-panel fail-panel',
+    renderButtonLabel: (ex) => `${ex.task} #${ex.episode}`,
+    renderPanelHTML: (ex) => `
+      <video autoplay muted playsinline controls>
+        <source src="${ex.video_path}" type="video/mp4">
+      </video>
+      ${ex.reason ? `<div class="eval-instruction"><strong>Reason:</strong> ${ex.reason}</div>` : ''}
+      <div class="eval-note"><strong>Note:</strong> ${ex.note}</div>
+    `,
+  },
+};
+
+function initAllTabbedVideoBlocks() {
+  document.querySelectorAll('[data-tabbed-json]').forEach((block) => {
+    const type = block.dataset.tabbedType || 'intro';
+    const renderer = TAB_RENDERERS[type];
+    if (!renderer) return;
+    initTabbedVideos({
+      root: block,
+      tabsSelector: block.dataset.tabsSelector || '.eval-tabs',
+      panelsSelector: block.dataset.panelsSelector || '.eval-panels',
+      jsonUrl: block.dataset.tabbedJson,
+      panelClass: block.dataset.panelClass || renderer.panelClass,
+      renderButtonLabel: renderer.renderButtonLabel,
+      renderPanelHTML: renderer.renderPanelHTML,
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initAllTabbedVideoBlocks);
 </script>
+
+<div class="eval-block" id="intro-evals" data-tabbed-json="assets/winning-behavior-1k-challenge/task_examples.json" data-tabbed-type="intro">
+  <h3 id="task-examples" style="margin-top: 0;">Task Examples</h3>
+  <p class="subtitle"><em>Videos shown at 8× speed (RGB video from head camera in original 720x720 resolution).</em></p>
+  <div class="eval-container">
+    <div class="video-tabs eval-tabs"></div>
+    <div class="video-panels eval-panels"></div>
+  </div>
+</div>
 
 ## Approach
 
@@ -114,12 +260,25 @@ On the held-out evaluation, our approach achieves **q-score ~0.26** with minimal
 | 4 | The North Star | Huawei CRI EAI Team | 0.076 | 0.120 |
 | 5 | Embodied Intelligence | Independent | 0.052 | 0.095 |
 
-<small>Top 5 teams on the held-out test set. [Leaderboard](https://behavior.stanford.edu/challenge/leaderboard.html)</small>
+Top 5 teams on the held-out test set ([leaderboard](https://behavior.stanford.edu/challenge/leaderboard.html))
 
-<div class="lightbox-trigger" onclick="openLightbox('assets/winning-behavior-1k-challenge/per_task_and_eps_score.png', 'Per-task and per-episode scores. Green = success; red = failure.')">
-  <img src="assets/winning-behavior-1k-challenge/per_task_and_eps_score.png" alt="Per-task scores" style="max-height: 400px; width: auto; border-radius: 4px; cursor: zoom-in;">
+### Per individual task results
+
+<div class="side-by-side">
+  <div class="text-col">
+    <ul>
+      <li>Some tasks are almost solved, except under particularly tricky initial conditions.</li>
+      <li>For tasks with 0 success, we do not observe that they are generally impossible; instead, they usually contain one tricky step that involves very high-precision manipulation (with low success rate even for human teleoperators) or a carefully followed sequence that is slightly beyond the current model's limits.</li>
+      <li>Task duration does not appear to be a fundamental obstacle: longer tasks simply have many more steps, which makes full success harder, but partial success remains very achievable.</li>
+    </ul>
+  </div>
+  <div class="img-col">
+    <div class="lightbox-trigger" onclick="openLightbox('assets/winning-behavior-1k-challenge/per_task_and_eps_score.png')">
+      <img src="assets/winning-behavior-1k-challenge/per_task_and_eps_score.png" alt="Per-task scores" style="max-height: 600px; width: auto; border-radius: 4px; cursor: zoom-in;">
+    </div>
+    <small style="display: block; color: #666; margin-top: 0.5rem;">Per-task and per-episode scores sorted by task duration. Green = success; light green = partial success; red = failure. <em>Click to enlarge.</em></small>
+  </div>
 </div>
-<small style="display: block; color: #666;">Per-task and per-episode scores. Green = success; red = failure. *Click to enlarge.*</small>
 
 <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
   <div class="lightbox-content">
@@ -128,81 +287,14 @@ On the held-out evaluation, our approach achieves **q-score ~0.26** with minimal
   </div>
 </div>
 
-<style>
-.eval-block { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; margin: 1.5rem 0; }
-.eval-block h3 { margin: 0 0 0.25rem 0; }
-.eval-block .subtitle { margin: 0 0 1rem 0; color: #4b5563; font-size: 0.95rem; }
-.eval-container { display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap; margin: 0; }
-.eval-tabs { display: flex; flex-direction: column; gap: 0.5rem; flex: 1 1 160px; min-width: 140px; max-width: 240px; }
-.eval-tabs button { width: 100%; text-align: left; padding: 0.45rem 0.7rem; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 4px; font-size: clamp(0.7rem, 2vw, 0.85rem); }
-.eval-tabs button.active { background: #0366d6; color: white; border-color: #0366d6; }
-.eval-panels { flex: 1 1 400px; min-width: 300px; }
-.eval-panel { display: none; }
-.eval-panel.active { display: block; }
-.eval-panel video { width: 100%; height: auto; max-width: 100%; display: block; border-radius: 4px; }
-.eval-instruction { margin-top: 0.5rem; padding: 0.4rem 0.55rem; background: #fffaf0; border-left: 3px solid #d97706; border-radius: 4px; font-size: 0.9rem; color: #5a3b00; }
-.eval-note { margin-top: 0.5rem; padding: 0.35rem 0.5rem; background: #f0f6ff; border-left: 3px solid #0366d6; border-radius: 4px; font-size: 0.85rem; color: #0b2d52; }
-.lightbox-trigger { display: inline-block; }
-.lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.78); display: none; align-items: center; justify-content: center; padding: 1.5rem; z-index: 9999; cursor: zoom-out; }
-.lightbox.active { display: flex; }
-.lightbox-content { position: relative; max-width: 98vw; max-height: 98vh; cursor: default; text-align: center; }
-.lightbox-content img { max-width: 96vw; max-height: 96vh; display: block; border-radius: 6px; margin: 0 auto; }
-.lightbox-caption { margin-top: 0.5rem; color: #f5f5f5; text-align: center; font-size: 0.95rem; }
-</style>
-
-<div class="eval-block">
+<div class="eval-block" id="success-evals" data-tabbed-json="assets/winning-behavior-1k-challenge/eval_clips.json" data-tabbed-type="success">
   <h3>Example of 100% Succesful Episodes</h3>
-  <p class="subtitle">Select an episode to show 10X-speed clip and its notes.</p>
+  <p class="subtitle">Select an episode to show 10X-speed.</p>
   <div class="eval-container">
     <div class="eval-tabs"></div>
     <div class="eval-panels"></div>
   </div>
 </div>
-
-<script>
-function showEvalTab(index) {
-  document.querySelectorAll('.eval-tabs button').forEach((btn, i) => btn.classList.toggle('active', i === index));
-  document.querySelectorAll('.eval-panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
-}
-
-async function renderEvalClips() {
-  const tabs = document.querySelector('.eval-tabs');
-  const panels = document.querySelector('.eval-panels');
-  if (!tabs || !panels) return;
-
-  try {
-    const resp = await fetch('assets/winning-behavior-1k-challenge/eval_clips.json');
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const evalClips = await resp.json();
-
-    evalClips.forEach((clip, idx) => {
-      const btn = document.createElement('button');
-      btn.textContent = clip.label;
-      btn.addEventListener('click', () => showEvalTab(idx));
-      tabs.appendChild(btn);
-
-      const panel = document.createElement('div');
-      panel.className = 'eval-panel';
-      panel.id = `eval-${idx}`;
-      panel.innerHTML = `
-        <video autoplay muted playsinline controls>
-          <source src="${clip.src}" type="video/mp4">
-        </video>
-        ${clip.instruction ? `<div class="eval-instruction"><strong>Instruction:</strong> ${clip.instruction}</div>` : ''}
-        <div class="eval-note"><strong>Note:</strong> ${clip.note}</div>
-      `;
-      panels.appendChild(panel);
-    });
-
-    showEvalTab(0);
-  } catch (err) {
-    tabs.innerHTML = '<small>Failed to load clips.</small>';
-    console.error('Failed to load eval clips', err);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', renderEvalClips);
-</script>
 
 <script>
 function openLightbox(src, caption) {
@@ -275,60 +367,14 @@ We labeled failure reasons on a subset of tasks (15/50):
 
 ### Fails
 
-<div class="eval-block">
+<div class="eval-block" id="fail-evals" data-tabbed-json="assets/winning-behavior-1k-challenge/failure_examples.json" data-tabbed-type="fail">
   <h3>Examples of Failure Episodes</h3>
-  <p class="subtitle">Select an episode to show a clip plus reason and notes.</p>
+  <p class="subtitle">Select an episode to show 5X-speed clip</p>
   <div class="eval-container">
     <div class="fail-tabs eval-tabs"></div>
     <div class="fail-panels eval-panels"></div>
   </div>
 </div>
-
-<script>
-function showFailTab(index) {
-  document.querySelectorAll('.fail-tabs button').forEach((btn, i) => btn.classList.toggle('active', i === index));
-  document.querySelectorAll('.fail-panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
-}
-
-async function renderFailureExamples() {
-  const tabs = document.querySelector('.fail-tabs');
-  const panels = document.querySelector('.fail-panels');
-  if (!tabs || !panels) return;
-
-  try {
-    const resp = await fetch('assets/winning-behavior-1k-challenge/failure_examples.json');
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const examples = await resp.json();
-
-    examples.forEach((ex, idx) => {
-      const btn = document.createElement('button');
-      const label = `${ex.task.replace(/_/g, ' ')} #${ex.episode}`;
-      btn.textContent = label;
-      btn.addEventListener('click', () => showFailTab(idx));
-      tabs.appendChild(btn);
-
-      const panel = document.createElement('div');
-      panel.className = 'eval-panel fail-panel';
-      panel.id = `fail-${idx}`;
-      panel.innerHTML = `
-        <video autoplay muted playsinline controls>
-          <source src="${ex.video_path}" type="video/mp4">
-        </video>
-        ${ex.reason ? `<div class="eval-instruction"><strong>Reason:</strong> ${ex.reason}</div>` : ''}
-        <div class="eval-note"><strong>Note:</strong> ${ex.note}</div>
-      `;
-      panels.appendChild(panel);
-    });
-
-    showFailTab(0);
-  } catch (err) {
-    tabs.innerHTML = '<small>Failed to load failure examples.</small>';
-    console.error('Failed to load failure examples', err);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', renderFailureExamples);
-</script>
 
 ## Recovery from cross-task learning
 
@@ -388,6 +434,8 @@ function showRecovery(index) {
 }
 </script>
 
+
+Join our Discord:
 <div class="top-buttons">
   <a href="https://discord.gg/Jr8tcnVNGw" target="_blank"><img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
 </div>
@@ -404,14 +452,14 @@ function showRecovery(index) {
 <div class="team-grid">
   <div class="team-member">
     <img src="assets/winning-behavior-1k-challenge/1707732561897.jpeg" alt="Ilia Larchenko">
-    <p>Ilia Larchenko</p>
+    <p><a href="https://www.linkedin.com/in/larchenko/">Ilia Larchenko</a></p>
   </div>
   <div class="team-member">
     <img src="assets/winning-behavior-1k-challenge/1736204199843.jpeg" alt="Gleb Zarin">
-    <p>Gleb Zarin</p>
+    <p><a href="https://www.linkedin.com/in/zaringleb/">Gleb Zarin</a></p>
   </div>
   <div class="team-member">
     <img src="assets/winning-behavior-1k-challenge/1670851469680.jpeg" alt="Akash Karnatak">
-    <p>Akash Karnatak</p>
+    <p><a href="https://www.linkedin.com/in/akash-karnatak-9027371a0/">Akash Karnatak</a></p>
   </div>
 </div>
