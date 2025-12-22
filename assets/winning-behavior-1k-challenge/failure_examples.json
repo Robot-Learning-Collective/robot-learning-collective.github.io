@@ -89,5 +89,138 @@
     "episode": 86,
     "reason": "confusion",
     "note": "Robot cannot place/release the box, then started to share and tilting backwards"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/picking_up_toys_120.mp4",
+    "task": "Picking Up Toys",
+    "episode": 120,
+    "reason": "dexterity",
+    "note": "Robot strugle to slide-and-pick up a toy"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/picking_up_toys_247.mp4",
+    "task": "Picking Up Toys",
+    "episode": 247,
+    "reason": "dexterity",
+    "note": "Robot dropped a toy during the sliding motion"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/picking_up_trash_106.mp4",
+    "task": "Picking Up Trash",
+    "episode": 106,
+    "reason": "search",
+    "note": "Robot can not find the basket (nor do I, may be a problem with initialising)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/picking_up_trash_161.mp4",
+    "task": "Picking Up Trash",
+    "episode": 161,
+    "reason": "robot fell",
+    "note": "While squatting to pick up a knocked can, robot starts to tilt bakward and robotate"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/picking_up_trash_196.mp4",
+    "task": "Picking Up Trash",
+    "episode": 196,
+    "reason": "order",
+    "note": "Put the busket down after collecting 2/3 of cans"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/set_up_a_coffee_station_in_your_kitchen_88.mp4",
+    "task": "Set Up A Coffee Station In Your Kitchen",
+    "episode": 88,
+    "reason": "dexterity",
+    "note": "Robot knocked over the coffee maker"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/set_up_a_coffee_station_in_your_kitchen_67.mp4",
+    "task": "Set Up A Coffee Station In Your Kitchen",
+    "episode": 67,
+    "reason": "dexterity",
+    "note": "Robot dropped the filter while trying to grasp it"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/set_up_a_coffee_station_in_your_kitchen_216.mp4",
+    "task": "Set Up A Coffee Station In Your Kitchen",
+    "episode": 216,
+    "reason": "order",
+    "note": "Robot picket up the cap first and became confused (tried to insert it into coffee maker instead of the filter)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/set_up_a_coffee_station_in_your_kitchen_285.mp4",
+    "task": "Set Up A Coffee Station In Your Kitchen",
+    "episode": 285,
+    "reason": "dexterity",
+    "note": "The filter 'jumped' out of the robot's hand and robot can not reach it"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/setting_mousetraps_100.mp4",
+    "task": "Setting Mousetraps",
+    "episode": 100,
+    "reason": "order",
+    "note": "Robot 'finished' after setting only the first pair of mousetraps (typical for this task)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/setting_mousetraps_250.mp4",
+    "task": "Setting Mousetraps",
+    "episode": 250,
+    "reason": "robot fell",
+    "note": "Robot starts to 'shake' while squatting"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/slicing_vegetables_72.mp4",
+    "task": "Slicing Vegetables",
+    "episode": 72,
+    "reason": "whole-body",
+    "note": "Robot can not open the fridge (typical for this task, maybe the base is too close to the fridge)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/slicing_vegetables_223.mp4",
+    "task": "Slicing Vegetables",
+    "episode": 223,
+    "reason": "dexterity",
+    "note": "Robot can not open the fridge (accidentally closed it)"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/slicing_vegetables_203.mp4",
+    "task": "Slicing Vegetables",
+    "episode": 203,
+    "reason": "confusion",
+    "note": "Robot accidentally faced the empty fridge and became confused"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/sorting_vegetables_58.mp4",
+    "task": "Sorting Vegetables",
+    "episode": 58,
+    "reason": "reasoning",
+    "note": "Put corn and bok choy in the same bowl"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/spraying_for_bugs_287.mp4",
+    "task": "Spraying For Bugs",
+    "episode": 287,
+    "reason": "reasoning",
+    "note": "Robot knocked over the spray bottle and forgot about it"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/turning_on_radio_295.mp4",
+    "task": "Turning On Radio",
+    "episode": 295,
+    "reason": "reasoning",
+    "note": "Robot approached the table from the wrong side and cannot reach the radio"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/picking_up_toys_130.mp4",
+    "task": "Picking Up Toys",
+    "episode": 130,
+    "reason": "robot stuck",
+    "note": "Robot stuck in the narrow space between the bed and the wall"
+  },
+  {
+    "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/turning_on_radio_214.mp4",
+    "task": "Turning On Radio",
+    "episode": 214,
+    "reason": "Head camera",
+    "note": "Robot lost visual contact with the radio and knocked it over"
   }
 ]

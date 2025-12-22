@@ -86,6 +86,8 @@ function initTabbedVideos({
   const panelSelector = `.${panelClass.split(' ').join('.')}`;
   let activeIndex = 0;
   let isRootVisible = false;
+  let allItems = [];
+  let pendingFilterFn = null;
 
   const pauseAll = () => {
     panels.querySelectorAll(panelSelector).forEach((panel) => {
@@ -136,34 +138,55 @@ function initTabbedVideos({
     if (isRootVisible) playActive();
   };
 
+  const renderItems = (items) => {
+    tabs.innerHTML = '';
+    panels.innerHTML = '';
+    items.forEach((item, idx) => {
+      const btn = document.createElement('button');
+      btn.textContent = renderButtonLabel(item, idx);
+      btn.addEventListener('click', () => activate(idx));
+      if (idx === 0) btn.classList.add('active');
+      tabs.appendChild(btn);
+
+      const panel = document.createElement('div');
+      panel.className = panelClass;
+      panel.id = `${rootEl.id || 'panel'}-${idx}`;
+      panel.innerHTML = renderPanelHTML(item, idx);
+      panel.style.display = idx === 0 ? 'block' : 'none';
+      if (idx === 0) panel.classList.add('active');
+      panels.appendChild(panel);
+    });
+    if (items.length) activate(0);
+    else tabs.innerHTML = '<small>No matching episodes found.</small>';
+  };
+
   fetch(jsonUrl)
     .then((resp) => {
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       return resp.json();
     })
     .then((items) => {
-      items.forEach((item, idx) => {
-        const btn = document.createElement('button');
-        btn.textContent = renderButtonLabel(item, idx);
-        btn.addEventListener('click', () => activate(idx));
-        if (idx === 0) btn.classList.add('active');
-        tabs.appendChild(btn);
-
-        const panel = document.createElement('div');
-        panel.className = panelClass;
-        panel.id = `${rootEl.id || 'panel'}-${idx}`;
-        panel.innerHTML = renderPanelHTML(item, idx);
-        panel.style.display = idx === 0 ? 'block' : 'none';
-        if (idx === 0) panel.classList.add('active');
-        panels.appendChild(panel);
-      });
-
-      if (items.length) activate(0);
+      allItems = items;
+      if (pendingFilterFn) {
+        renderItems(allItems.filter(pendingFilterFn));
+      } else {
+        renderItems(allItems);
+      }
     })
     .catch((err) => {
       tabs.innerHTML = '<small>Failed to load clips.</small>';
       console.error('Failed to load tabbed videos', err);
     });
+
+  // Expose filter method on the root element
+  rootEl.filterItems = (filterFn) => {
+    if (allItems.length === 0) {
+      pendingFilterFn = filterFn;
+    } else {
+      const filtered = filterFn ? allItems.filter(filterFn) : allItems;
+      renderItems(filtered);
+    }
+  };
 }
 
 // Predefined renderers so blocks can be configured with data attributes
@@ -330,15 +353,47 @@ async function renderFailureChart() {
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
     const max = Math.max(...data.map(d => d.value), 1);
-    chart.innerHTML = data.map(d => {
-      const widthPct = (d.value / max) * 100;
-      const color = d.color || '#888';
-      return `<div class="row">
-        <span class="lbl">${d.label}</span>
-        <div class="bar" style="width:${widthPct}%; background:${color};"></div>
-        <span class="val">${d.value}</span>
-      </div>`;
-    }).join('');
+    
+    let activeFilter = 'dexterity';
+    
+    const updateChart = () => {
+      chart.innerHTML = data.map(d => {
+        const widthPct = (d.value / max) * 100;
+        const color = d.color || '#888';
+        const isActive = activeFilter === d.label.toLowerCase();
+        return `<div class="row" style="cursor: pointer; opacity: ${!activeFilter || isActive ? '1' : '0.35'};" onclick="toggleFailureFilter('${d.label.toLowerCase()}')">
+          <span class="lbl" style="font-weight: ${isActive ? 'bold' : 'normal'};">${d.label}</span>
+          <div class="bar" style="width:${widthPct}%; background:${color};"></div>
+        </div>`;
+      }).join('');
+    };
+
+    window.toggleFailureFilter = (reason) => {
+      const failBlock = document.getElementById('fail-evals');
+      if (!failBlock || !failBlock.filterItems) return;
+      
+      if (activeFilter === reason) {
+        activeFilter = null;
+        failBlock.filterItems(null);
+      } else {
+        activeFilter = reason;
+        failBlock.filterItems(item => item.reason && item.reason.toLowerCase() === reason);
+      }
+      updateChart();
+    };
+
+    // Apply initial filter once the video component is ready
+    const applyInitialFilter = () => {
+      const failBlock = document.getElementById('fail-evals');
+      if (failBlock && failBlock.filterItems) {
+        failBlock.filterItems(item => item.reason && item.reason.toLowerCase() === 'dexterity');
+      } else {
+        setTimeout(applyInitialFilter, 50);
+      }
+    };
+
+    applyInitialFilter();
+    updateChart();
   } catch (err) {
     chart.innerHTML = '<small>Failed to load failure reasons.</small>';
     console.error('Failed to load failure reasons', err);
@@ -348,24 +403,20 @@ async function renderFailureChart() {
 document.addEventListener('DOMContentLoaded', renderFailureChart);
 </script>
 
-
 ### Failure Analysis
 
-We labeled failure reasons on a subset of tasks (15/50):
+We labeled failure reasons on a subset of tasks (15/50). **Click a bar to filter example videos below:**
 
 <style>
 .hbar-chart { margin: 1.5rem auto; max-width: 720px; }
-.hbar-chart .row { display: flex; align-items: center; margin-bottom: 6px; }
+.hbar-chart .row { display: flex; align-items: center; margin-bottom: 6px; transition: opacity 0.2s; }
+.hbar-chart .row:hover { background: #f0f4f8; border-radius: 4px; }
 .hbar-chart .lbl { width: 160px; text-align: right; padding-right: 12px; font-size: 13px; color: #444; flex-shrink: 0; }
 .hbar-chart .bar { height: 16px; border-radius: 3px; min-width: 6px; background: #ccc; }
-.hbar-chart .val { margin-left: 8px; font-size: 12px; color: #666; flex-shrink: 0; }
 </style>
 
 <div class="hbar-chart" id="failure-chart"></div>
 
-<small>Dexterity is the dominant failure mode (~33%), validating our VLA-based approach.</small>
-
-### Fails
 
 <div class="eval-block" id="fail-evals" data-tabbed-json="assets/winning-behavior-1k-challenge/failure_examples.json" data-tabbed-type="fail">
   <h3>Examples of Failure Episodes</h3>
@@ -375,6 +426,8 @@ We labeled failure reasons on a subset of tasks (15/50):
     <div class="fail-panels eval-panels"></div>
   </div>
 </div>
+
+Please note that fail reason labelling are subjective, and there to provide the big picture. Refer to all evaluation videos and scores [here](https://drive.google.com/drive/folders/12Wb21mQi6UP8_OMKPGNHOII_-MV3oxk-?usp=sharing).
 
 ## Recovery from cross-task learning
 
