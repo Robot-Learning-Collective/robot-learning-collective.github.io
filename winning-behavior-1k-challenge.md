@@ -686,4 +686,10 @@ Our analysis ends up matching what many practitioners are currently focused on i
   </div>
 </div>
 
+### Acknowledgments
+This work was made possible by the generous support of [Nebuis](https://nebius.com/), who provided the high-performance cloud GPU compute resources required to train our models.
+
+We would also like to thank following people for their help and
+support: [Vladimir Ershov](https://www.linkedin.com/in/vladimir-ershov-33559466/), [Justyna Ilczuk](https://www.linkedin.com/in/justynailczuk/), [Andrey Mulenkov](https://www.linkedin.com/in/andrey-mulenkov/).
+
 Interested in Robot Learning? Join our [Discord](https://discord.gg/Jr8tcnVNGw) to discuss the Challenge results and collaboration.
