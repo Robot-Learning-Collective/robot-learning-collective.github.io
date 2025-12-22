@@ -673,7 +673,7 @@ Our analysis ends up matching what many practitioners are currently focused on i
 
 <div class="team-grid">
   <div class="team-member">
-    <img src="assets/winning-behavior-1k-challenge/1707732561897.jpeg" alt="Ilia Larchenko">
+    <img src="assets/winning-behavior-1k-challenge/image3.jpg" alt="Ilia Larchenko">
     <p><a href="https://www.linkedin.com/in/larchenko/">Ilia Larchenko</a></p>
   </div>
   <div class="team-member">
@@ -681,7 +681,7 @@ Our analysis ends up matching what many practitioners are currently focused on i
     <p><a href="https://www.linkedin.com/in/zaringleb/">Gleb Zarin</a></p>
   </div>
   <div class="team-member">
-    <img src="assets/winning-behavior-1k-challenge/1670851469680.jpeg" alt="Akash Karnatak">
+    <img src="assets/winning-behavior-1k-challenge/photo_2025-12-22_20-08-47.jpg" alt="Akash Karnatak">
     <p><a href="https://www.linkedin.com/in/akash-karnatak-9027371a0/">Akash Karnatak</a></p>
   </div>
 </div>
