@@ -82,7 +82,13 @@ function initTabbedVideos({
   const playActive = () => {
     const activePanel = panels.querySelector(`${panelSelector}.active`);
     const vid = activePanel ? activePanel.querySelector('video') : null;
-    if (vid) vid.play().catch(() => {});
+    if (vid) {
+      if (vid.dataset.src && !vid.src) {
+        vid.src = vid.dataset.src;
+        vid.load();
+      }
+      vid.play().catch(() => {});
+    }
   };
 
   const observer =
@@ -116,7 +122,14 @@ function initTabbedVideos({
       panel.classList.toggle('active', isActive);
       panel.style.display = isActive ? 'block' : 'none';
       const vid = panel.querySelector('video');
-      if (vid && !isActive) vid.pause();
+      if (vid) {
+        if (!isActive) {
+          vid.pause();
+        } else if (vid.dataset.src && !vid.src) {
+          vid.src = vid.dataset.src;
+          vid.load();
+        }
+      }
     });
     if (isRootVisible) playActive();
   };
@@ -178,8 +191,7 @@ const TAB_RENDERERS = {
     panelClass: 'eval-panel video-panel',
     renderButtonLabel: (item) => item.label,
     renderPanelHTML: (item) => `
-      <video autoplay muted playsinline controls>
-        <source src="${item.src}" type="video/mp4">
+      <video autoplay muted playsinline controls data-src="${item.src}">
       </video>
       ${item.instruction ? `<div class="eval-note"><strong>Instruction:</strong> ${item.instruction}</div>` : ''}
     `,
@@ -188,8 +200,7 @@ const TAB_RENDERERS = {
     panelClass: 'eval-panel',
     renderButtonLabel: (clip) => clip.label,
     renderPanelHTML: (clip) => `
-      <video autoplay muted playsinline controls>
-        <source src="${clip.src}" type="video/mp4">
+      <video autoplay muted playsinline controls data-src="${clip.src}">
       </video>
       ${clip.instruction ? `<div class="eval-instruction"><strong>Instruction:</strong> ${clip.instruction}</div>` : ''}
       <div class="eval-note"><strong>Note:</strong> ${clip.note}</div>
@@ -199,8 +210,7 @@ const TAB_RENDERERS = {
     panelClass: 'eval-panel fail-panel',
     renderButtonLabel: (ex) => `${ex.task} #${ex.episode}`,
     renderPanelHTML: (ex) => `
-      <video autoplay muted playsinline controls>
-        <source src="${ex.video_path}" type="video/mp4">
+      <video autoplay muted playsinline controls data-src="${ex.video_path}">
       </video>
       ${ex.reason ? `<div class="eval-instruction"><strong>Reason:</strong> ${ex.reason}</div>` : ''}
       <div class="eval-note"><strong>Note:</strong> ${ex.note}</div>
@@ -588,11 +598,11 @@ Training on all 50 tasks leads to **emergent recovery behaviors**. Single-task m
 <div class="recovery-panel active" id="recovery-0">
   <div class="video-pair">
     <div>
-      <video autoplay muted playsinline controls><source src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_early_ex1.mp4" type="video/mp4"></video>
+      <video autoplay muted playsinline controls data-src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_early_ex1.mp4"></video>
       <div class="label">Before: fails to recover</div>
     </div>
     <div>
-      <video muted playsinline controls><source src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_late_ex1.mp4" type="video/mp4"></video>
+      <video muted playsinline controls data-src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_late_ex1.mp4"></video>
       <div class="label">After: robust recovery</div>
     </div>
   </div>
@@ -601,11 +611,11 @@ Training on all 50 tasks leads to **emergent recovery behaviors**. Single-task m
 <div class="recovery-panel" id="recovery-1">
   <div class="video-pair">
     <div>
-      <video autoplay muted playsinline controls><source src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_early_ex2.mp4" type="video/mp4"></video>
+      <video autoplay muted playsinline controls data-src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_early_ex2.mp4"></video>
       <div class="label">Before: error cascades to failure</div>
     </div>
     <div>
-      <video muted playsinline controls><source src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_late_ex2.mp4" type="video/mp4"></video>
+      <video muted playsinline controls data-src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_late_ex2.mp4"></video>
       <div class="label">After: recovers and completes task</div>
     </div>
   </div>
@@ -614,8 +624,37 @@ Training on all 50 tasks leads to **emergent recovery behaviors**. Single-task m
 <script>
 function showRecovery(index) {
   document.querySelectorAll('.recovery-tabs button').forEach((btn, i) => btn.classList.toggle('active', i === index));
-  document.querySelectorAll('.recovery-panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
+  document.querySelectorAll('.recovery-panel').forEach((panel, i) => {
+    const isActive = i === index;
+    panel.classList.toggle('active', isActive);
+    const videos = panel.querySelectorAll('video');
+    videos.forEach(vid => {
+      if (isActive) {
+        if (vid.dataset.src && !vid.src) {
+          vid.src = vid.dataset.src;
+          vid.load();
+        }
+        vid.play().catch(() => {});
+      } else {
+        vid.pause();
+      }
+    });
+  });
 }
+
+// Lazy load recovery videos when they come into view
+document.addEventListener('DOMContentLoaded', () => {
+  const recoverySection = document.querySelector('.recovery-tabs');
+  if (recoverySection && typeof IntersectionObserver !== 'undefined') {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        showRecovery(0); // Load/play first tab
+        observer.disconnect();
+      }
+    }, { threshold: 0.1 });
+    observer.observe(recoverySection);
+  }
+});
 </script>
 ## Summary
 
