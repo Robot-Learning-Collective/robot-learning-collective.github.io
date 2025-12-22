@@ -1,15 +1,19 @@
 ---
 layout: default
 title: Winning the BEHAVIOR-1K Challenge
-description: Applying modified Pi0.5 for multytask paroblem in massive simulation
+description: Applying modified Pi0.5 for multitask problem in massive simulation
 header_links:
   - text: View on GitHub
     url: https://github.com/IliaLarchenko/behavior-1k-solution
   - text: ArXiv
     url: https://arxiv.org/abs/2512.06951
+  - text: Challenge
+    url: https://behavior.stanford.edu/index.html
 ---
 
-We took **1st place** in the 2025 **BEHAVIOR-1K Challenge**, a large-scale benchmark of 50 long-horizon household tasks in photo-realistic simulation. Each episode spans minutes of bimanual manipulation and navigation, with a single policy expected to generalize across diverse activities such as turning on a radio, cooking a hotdog, or tidying a room.
+We present a vision-action policy that achieved first place in the 2025 BEHAVIOR Challenge, a large scale benchmark of 50 long horizon household tasks in photo realistic simulation requiring bimanual manipulation, navigation, and objects interaction.
+Building on the Pi0.5 architecture, we introduce several innovations, including **correlated noise for flow matching** to improve training efficiency and produce smoother action sequences, as well as **learnable mixed layer attention** and **System 2 stage tracking** for ambiguity resolution. Training uses **multi-sample flow matching** to reduce variance, while inference applies action compression and challenge specific correction rules. 
+Our method achieves a 26% q-score across all tasks on both public and private leaderboards, and this report provides a detailed **analysis of observed failure modes**.
 
 <style>
 .top-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1.5rem 0; }
@@ -42,28 +46,7 @@ We took **1st place** in the 2025 **BEHAVIOR-1K Challenge**, a large-scale bench
 .side-by-side .text-col li { margin-bottom: 0.75rem; }
 </style>
 
-
-<nav style="background: #f6f8fa; padding: 0.75rem 1rem; border-radius: 6px; margin: 1.5rem 0; font-size: 14px;">
-  <strong>Contents:</strong>
-  <a href="#challenge" style="margin-left: 1rem;">Challenge</a> ·
-  <a href="#task-examples">Task Examples</a> ·
-  <a href="#approach">Approach</a> ·
-  <a href="#results">Results</a> ·
-  <a href="#recovery-from-cross-task-learning">Recovery</a>
-</nav>
-
 ## Challenge
-
-50 tasks etc.
-
-<style>
-.video-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-.video-tabs button { padding: 0.5rem 1rem; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 4px; font-size: 0.85rem; }
-.video-tabs button.active { background: #0366d6; color: white; border-color: #0366d6; }
-.video-panel { display: none; }
-.video-panel.active { display: block; }
-.video-panel video { width: 100%; height: auto; max-width: 640px; display: block; margin: 0 auto; border-radius: 6px; }
-</style>
 
 <script>
 // Reusable tabbed-video initializer (shared across intro, success, fail blocks)
@@ -253,23 +236,171 @@ document.addEventListener('DOMContentLoaded', initAllTabbedVideoBlocks);
     <div class="video-panels eval-panels"></div>
   </div>
 </div>
+<style>
+.video-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.video-tabs button { padding: 0.5rem 1rem; border: 1px solid #ccc; background: #f5f5f5; cursor: pointer; border-radius: 4px; font-size: 0.85rem; }
+.video-tabs button.active { background: #0366d6; color: white; border-color: #0366d6; }
+.video-panel { display: none; }
+.video-panel.active { display: block; }
+.video-panel video { width: 100%; height: auto; max-width: 640px; display: block; margin: 0 auto; border-radius: 6px; }
+</style>
 
-## Approach
+The Challenge includes 50 tasks set in multiple house-like environments. The main difficulties are:
+* **Long-horizon execution:** Tasks run for an average of 6.6 minutes.
+* **Bimanual manipulation:** Coordinated control of two 7-DOF arms with parallel jaw grippers.
+* **Mobile navigation:** Operation in realistic indoor and outdoor environments.
+* **Non-Markovian states:** Many states are visually ambiguous. For example, a robot holding a radio at the beginning of a task may appear identical to holding it at the end. Without memory of past actions or explicit stage tracking, the policy cannot distinguish between these states and may take incorrect actions.
+* **No recovery demonstrations:** The training set contains only successful demonstrations, spanning a very narrow manifold of possible trajectories. When the robot deviates from the demonstrated trajectories due to compounding errors, it encounters states not seen during training.
+* **Data:** Each task provides 200 demonstrations. Public evaluation uses 10 additional instances; the private leaderboard evaluates performance on a separate held-out set.
+* **High compute requirements:** Training on the full 1200 hours of data takes weeks, and full evaluation across all tasks takes several days.
 
-Our system builds on the **Pi0.5 vision-language-action architecture**, with several key changes:
+## Model
 
-- **Correlated noise for flow matching**: We train with noise drawn from an empirical action covariance matrix, making training more sample-efficient and enabling correlation-aware inpainting at inference.
+<div id="model-stepper" style="margin: 2rem auto; max-width: 1000px; font-family: sans-serif;">
+  <div style="display: flex; justify-content: space-between; align-items: stretch; margin-bottom: 1.5rem; background: #f8fafc; border-radius: 8px; border: 1px solid #e5e7eb; overflow: hidden;">
+    <button id="prev-step" style="width: 16.66%; min-width: 60px; cursor: pointer; border: none; border-right: 1px solid #e5e7eb; background: white; font-weight: bold; font-size: 2.5rem; line-height: 1; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">&larr;</button>
+    <div style="text-align: center; flex-grow: 1; padding: 1.2rem 1rem; display: flex; flex-direction: column; justify-content: center;">
+      <h4 id="step-title" style="margin: 0 0 0.5rem 0; color: #1e293b; font-size: 1.1rem;">VLA Foundation</h4>
+      <p id="step-description" style="margin: 0; font-size: 0.95rem; color: #64748b; line-height: 1.4;">Our policy is based on the Pi0.5 vision-language-action (VLA) architecture, combining a SigLIP vision encoder with a Gemma LLM backbone.</p>
+    </div>
+    <button id="next-step" style="width: 16.66%; min-width: 60px; cursor: pointer; border: none; border-left: 1px solid #e5e7eb; background: white; font-weight: bold; font-size: 2.5rem; line-height: 1; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">&rarr;</button>
+  </div>
 
-- **System 2 stage tracker**: A lightweight module that predicts discrete task stages and feeds progress signals back to the policy, helping avoid early termination and order errors.
+  <div id="svg-container" style="position: relative; width: 100%; border: 1px solid #eee; border-radius: 8px; background: white; overflow: hidden; min-height: 400px; display: flex; align-items: center; justify-content: center;">
+    <div id="svg-loading" style="padding: 2rem; color: #64748b;">Loading interactive model...</div>
+  </div>
+  
+  <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 0.5rem;" id="step-dots"></div>
+</div>
 
-- **Correction rules**: Simple heuristics that detect and recover from common failure modes like accidental gripper closures.
+<style>
+  #model-stepper .dot { width: 10px; height: 10px; border-radius: 50%; background: #cbd5e1; cursor: pointer; transition: background 0.2s; }
+  #model-stepper .dot.active { background: #0366d6; }
+</style>
 
-- **Action compression**: Spline interpolation for 1.3× speedup without hurting success rate.
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const container = document.getElementById("svg-container");
+  const titleEl = document.getElementById("step-title");
+  const descEl = document.getElementById("step-description");
+  const dotsContainer = document.getElementById("step-dots");
+  const prevBtn = document.getElementById("prev-step");
+  const nextBtn = document.getElementById("next-step");
 
-<table><tr>
-<td><img src="assets/winning-behavior-1k-challenge/popcorn1.png" alt="Grasping door handle"><br><small>Grasping the microwave door</small></td>
-<td><img src="assets/winning-behavior-1k-challenge/popcorn2.png" alt="Pressing start button"><br><small>Pressing the start button</small></td>
-</tr></table>
+  let currentStep = 0;
+  let svg = null;
+
+  const steps = [
+    { title: "VLA Foundation", description: "Our policy is based on the Pi0.5 vision-language-action architecture, combining a SigLIP vision encoder with a Gemma LLM backbone.", show: ["base"] },
+    { title: "Task Embeddings", description: "Instead of text prompts, we use learned task embeddings to maintain multi-task capabilities with simpler inputs.", show: ["base", "task_emb"] },
+    { title: "System 2 Reasoning", description: "We add a System 2 for task progress tracking; VLA predicts current stage and System 2 uses heuristic to filter large 'jumps' in the progress estimation.", show: ["base", "task_emb", "system2"] },
+    { title: "Hybrid Attention", description: "A learnable mixed-layer attention mechanism allows the action expert to attend to optimal combinations of VLM layers.", show: ["base", "system2", "task_emb", "hybrid_att"] },
+    { title: "Multi-sample flow matching", description: "During training we sample flow matching multiple times per single VLM inference to optimize training speed.", show: ["base", "system2", "task_emb", "hybrid_att", "expert_steps"] },
+    { title: "Correlated noise for flow matching", description: "We train with correlated noise drawn from empirical action covariance to model natural robot motion structure.", show: ["base", "system2", "task_emb", "hybrid_att", "expert_steps", "noise"] },
+    { title: "Soft Inpainting", description: "Soft inpainting at inference time ensures smooth, continuous transitions between action sequences.", show: ["base", "system2", "task_emb", "hybrid_att", "expert_steps", "noise", "inpainting"] },
+    { title: "Execution Speedup", description: "Cubic spline compression speeds up robot execution by 1.3x without hurting success rate.", show: ["base", "system2", "task_emb", "hybrid_att", "expert_steps", "noise", "inpainting", "speedup"] }
+  ];
+
+  const calloutMap = {
+    "system2": {
+      shapes: ["m15.695", "m20.650"],
+      colors: ["#ffd966"],
+      textPrefixes: ["m51.943", "m84.177", "m81.410", "m331.146", "m43.884"]
+    },
+    "task_emb": {
+      shapes: ["m358.316"],
+      textPrefixes: ["m394.419", "m383.771"]
+    },
+    "hybrid_att": {
+      shapes: ["m559.717"],
+      textPrefixes: ["m597.012", "m625.7"]
+    },
+    "expert_steps": {
+      shapes: ["m763.895 227"],
+      textPrefixes: ["m779.693", "m785.677"]
+    },
+    "noise": {
+      shapes: ["m763.895 435"],
+      textPrefixes: ["m804.806"]
+    },
+    "inpainting": {
+      shapes: ["m763.895 331"],
+      textPrefixes: ["m789.791", "m820.912"]
+    },
+    "speedup": {
+      shapes: ["m763.895 123"],
+      textPrefixes: ["m794.673", "m791.447"]
+    }
+  };
+
+  function updateStep() {
+    if (!svg) return;
+    const step = steps[currentStep];
+    titleEl.textContent = step.title;
+    descEl.textContent = step.description;
+    
+    svg.querySelectorAll("path").forEach(p => {
+      const fill = p.getAttribute("fill");
+      const stroke = p.getAttribute("stroke");
+      const d = p.getAttribute("d") || "";
+      let featureKey = null;
+
+      for (const [key, cfg] of Object.entries(calloutMap)) {
+        if ((cfg.shapes && cfg.shapes.some(s => d.startsWith(s))) || 
+            (cfg.colors && (cfg.colors.includes(fill) || cfg.colors.includes(stroke))) ||
+            (cfg.textPrefixes && cfg.textPrefixes.some(tp => d.startsWith(tp)))) {
+          featureKey = key;
+          break;
+        }
+      }
+
+      let visible = false;
+      if (!featureKey) {
+        if (step.show.includes("base")) visible = true;
+      } else {
+        if (step.show.includes(featureKey)) visible = true;
+      }
+      p.style.opacity = visible ? "1" : "0.08";
+      p.style.transition = "opacity 0.3s ease";
+    });
+
+    dotsContainer.querySelectorAll(".dot").forEach((dot, i) => {
+      dot.classList.toggle("active", i === currentStep);
+    });
+
+    prevBtn.disabled = currentStep === 0;
+    nextBtn.disabled = currentStep === steps.length - 1;
+    prevBtn.style.opacity = prevBtn.disabled ? "0.3" : "1";
+    nextBtn.style.opacity = nextBtn.disabled ? "0.3" : "1";
+  }
+
+  fetch("assets/winning-behavior-1k-challenge/interactive_model.svg")
+    .then(r => r.text())
+    .then(text => {
+      container.innerHTML = text;
+      svg = container.querySelector("svg");
+      if (!svg) return;
+      
+      svg.style.width = "100%";
+      svg.style.height = "auto";
+      svg.style.maxHeight = "70vh";
+
+      // Create dots
+      steps.forEach((_, i) => {
+        const dot = document.createElement("div");
+        dot.className = "dot";
+        dot.addEventListener("click", () => { currentStep = i; updateStep(); });
+        dotsContainer.appendChild(dot);
+      });
+
+      updateStep();
+    });
+
+  prevBtn.addEventListener("click", () => { if (currentStep > 0) { currentStep--; updateStep(); } });
+  nextBtn.addEventListener("click", () => { if (currentStep < steps.length - 1) { currentStep++; updateStep(); } });
+});
+</script>
+
 
 ## Results
 
@@ -311,7 +442,7 @@ Top 5 teams on the held-out test set ([leaderboard](https://behavior.stanford.ed
 </div>
 
 <div class="eval-block" id="success-evals" data-tabbed-json="assets/winning-behavior-1k-challenge/eval_clips.json" data-tabbed-type="success">
-  <h3>Example of 100% Succesful Episodes</h3>
+  <h3>Examples of 100% Successful Episodes</h3>
   <p class="subtitle">Select an episode to show 10X-speed.</p>
   <div class="eval-container">
     <div class="eval-tabs"></div>
@@ -427,9 +558,9 @@ We labeled failure reasons on a subset of tasks (15/50). **Click a bar to filter
   </div>
 </div>
 
-Please note that fail reason labelling are subjective, and there to provide the big picture. Refer to all evaluation videos and scores [here](https://drive.google.com/drive/folders/12Wb21mQi6UP8_OMKPGNHOII_-MV3oxk-?usp=sharing).
+Please note that fail reason labeling is subjective, and is there to provide the big picture. Refer to all evaluation videos and scores [here](https://drive.google.com/drive/folders/12Wb21mQi6UP8_OMKPGNHOII_-MV3oxk-?usp=sharing).
 
-## Recovery from cross-task learning
+### Recovery from cross-task learning
 
 Training on all 50 tasks leads to **emergent recovery behaviors**. Single-task models never recover from mistakes; the multi-task model learns to pick up fallen items and retry.
 
@@ -486,19 +617,18 @@ function showRecovery(index) {
   document.querySelectorAll('.recovery-panel').forEach((panel, i) => panel.classList.toggle('active', i === index));
 }
 </script>
+## Summary
 
-
-Join our Discord:
-<div class="top-buttons">
-  <a href="https://discord.gg/Jr8tcnVNGw" target="_blank"><img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
-</div>
+Our analysis ends up matching what many practitioners are currently focused on in real world systems: VLA models for dexterous manipulation, System 2 style components to guide IL policies, and more diverse pre training data to expand the range of states where the model can act sensibly. This suggests that the challenge is closely tied to real world problems.
 
 ---
+
 
 <style>
 .team-grid { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; margin: 2rem 0; }
 .team-member { text-align: center; }
-.team-member img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #ddd; }
+.team-member img { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 3px solid #ddd; transition: transform 0.2s; }
+.team-member img:hover { transform: scale(1.05); }
 .team-member p { margin-top: 0.75rem; font-weight: 500; color: #333; }
 </style>
 
@@ -516,3 +646,5 @@ Join our Discord:
     <p><a href="https://www.linkedin.com/in/akash-karnatak-9027371a0/">Akash Karnatak</a></p>
   </div>
 </div>
+
+Interested in Robot Learning? Join our [Discord](https://discord.gg/Jr8tcnVNGw) to discuss the Challenge results and collaboration.
