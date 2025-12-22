@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Winning the BEHAVIOR-1K Challenge
-description: Applying modified Pi0.5 for multitask problem in massive simulation
+description: Applying a VLA model to a multi-task problem in a massive simulation
 header_links:
   - text: View on GitHub
     url: https://github.com/IliaLarchenko/behavior-1k-solution
@@ -11,9 +11,9 @@ header_links:
     url: https://behavior.stanford.edu/index.html
 ---
 
-We present a vision-action policy that achieved first place in the 2025 BEHAVIOR Challenge, a large scale benchmark of 50 long horizon household tasks in photo realistic simulation requiring bimanual manipulation, navigation, and objects interaction.
-Building on the Pi0.5 architecture, we introduce several innovations, including **correlated noise for flow matching** to improve training efficiency and produce smoother action sequences, as well as **learnable mixed layer attention** and **System 2 stage tracking** for ambiguity resolution. Training uses **multi-sample flow matching** to reduce variance, while inference applies action compression and challenge specific correction rules. 
-Our method achieves a 26% q-score across all tasks on both public and private leaderboards, and this report provides a detailed **analysis of observed failure modes**.
+We present a vision-action policy that achieved first place in the 2025 BEHAVIOR Challenge, a large-scale benchmark of 50 long-horizon household tasks in photo-realistic simulation requiring bimanual manipulation, navigation, and object interaction.
+Building on the Pi0.5 architecture, we introduce several innovations, including **correlated noise for flow matching** to improve training efficiency and produce smoother action sequences, as well as **learnable mixed layer attention** and **System 2 stage tracking** for ambiguity resolution. Training uses **multi-sample flow matching** to reduce variance, while inference applies action compression and heuristics to overcome dataset limitations. 
+Our method achieves a 26% q-score on both public and private leaderboards, and this report provides a detailed **analysis of observed failure modes**.
 
 <style>
 .top-buttons { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 1.5rem 0; }
@@ -212,7 +212,6 @@ const TAB_RENDERERS = {
     renderPanelHTML: (ex) => `
       <video autoplay muted playsinline controls data-src="${ex.video_path}">
       </video>
-      ${ex.reason ? `<div class="eval-instruction"><strong>Reason:</strong> ${ex.reason}</div>` : ''}
       <div class="eval-note"><strong>Note:</strong> ${ex.note}</div>
     `,
   },
@@ -259,10 +258,10 @@ The Challenge includes 50 tasks set in multiple house-like environments. The mai
 * **Long-horizon execution:** Tasks run for an average of 6.6 minutes.
 * **Bimanual manipulation:** Coordinated control of two 7-DOF arms with parallel jaw grippers.
 * **Mobile navigation:** Operation in realistic indoor and outdoor environments.
-* **Non-Markovian states:** Many states are visually ambiguous. For example, a robot holding a radio at the beginning of a task may appear identical to holding it at the end. Without memory of past actions or explicit stage tracking, the policy cannot distinguish between these states and may take incorrect actions.
-* **No recovery demonstrations:** The training set contains only successful demonstrations, spanning a very narrow manifold of possible trajectories. When the robot deviates from the demonstrated trajectories due to compounding errors, it encounters states not seen during training.
-* **Data:** Each task provides 200 demonstrations. Public evaluation uses 10 additional instances; the private leaderboard evaluates performance on a separate held-out set.
-* **High compute requirements:** Training on the full 1200 hours of data takes weeks, and full evaluation across all tasks takes several days.
+* **Non-Markovian states:** Many states are visually ambiguous. Without memory of past actions or explicit stage tracking, the policy cannot distinguish between these states and may take incorrect actions.
+* **No recovery demonstrations:** The training set contains only successful demonstrations, spanning a very narrow manifold of possible trajectories.
+* **Data:** Each task provides 200 demonstrations. Public evaluation uses 10 additional instances; the private leaderboard evaluates performance on a separate held-out set of another 10 instances.
+* **High compute requirements:** Training on all 1200 hours of data takes weeks, and full evaluation across all tasks takes several days.
 
 ## Model
 
@@ -301,12 +300,12 @@ document.addEventListener("DOMContentLoaded", function() {
   let svg = null;
 
   const steps = [
-    { title: "VLA Foundation", description: "Our policy is based on the Pi0.5 vision-language-action architecture, combining a SigLIP vision encoder with a Gemma LLM backbone.", show: ["base"] },
-    { title: "Task Embeddings", description: "Instead of text prompts, we use learned task embeddings to maintain multi-task capabilities with simpler inputs.", show: ["base", "task_emb"] },
-    { title: "System 2 Reasoning", description: "We add a System 2 for task progress tracking; VLA predicts current stage and System 2 uses heuristic to filter large 'jumps' in the progress estimation.", show: ["base", "task_emb", "system2"] },
+    { title: "VLA Foundation", description: "Our policy is based on the Pi0.5 vision-language-action architecture, which combines a VLM (3B PaliGemma) and a flow-matching transformer-based action expert.", show: ["base"] },
+    { title: "Task Embeddings", description: "Instead of text prompts, we use learned task embeddings to maintain multi-task capabilities with simpler inputs, as language comprehension was not required for this challenge.", show: ["base", "task_emb"] },
+    { title: "System 2 Reasoning", description: "We add a simple System 2 for task progress tracking; the VLA model predicts the current stage and System 2 uses a heuristic to filter large 'jumps' in the progress estimation before feeding the stage back into the model for the next timestep.", show: ["base", "task_emb", "system2"] },
     { title: "Hybrid Attention", description: "A learnable mixed-layer attention mechanism allows the action expert to attend to optimal combinations of VLM layers.", show: ["base", "system2", "task_emb", "hybrid_att"] },
     { title: "Multi-sample flow matching", description: "During training we sample flow matching multiple times per single VLM inference to optimize training speed.", show: ["base", "system2", "task_emb", "hybrid_att", "expert_steps"] },
-    { title: "Correlated noise for flow matching", description: "We train with correlated noise drawn from empirical action covariance to model natural robot motion structure.", show: ["base", "system2", "task_emb", "hybrid_att", "expert_steps", "noise"] },
+    { title: "Correlated noise for flow matching", description: "To account for high correlation across robot action space and time, we train with correlated noise drawn from empirical action covariance to model natural robot motion structure.", show: ["base", "system2", "task_emb", "hybrid_att", "expert_steps", "noise"] },
     { title: "Soft Inpainting", description: "Soft inpainting at inference time ensures smooth, continuous transitions between action sequences.", show: ["base", "system2", "task_emb", "hybrid_att", "expert_steps", "noise", "inpainting"] },
     { title: "Execution Speedup", description: "Cubic spline compression speeds up robot execution by 1.3x without hurting success rate.", show: ["base", "system2", "task_emb", "hybrid_att", "expert_steps", "noise", "inpainting", "speedup"] }
   ];
@@ -431,7 +430,7 @@ Top 5 teams on the held-out test set ([leaderboard](https://behavior.stanford.ed
 <div class="side-by-side">
   <div class="text-col">
     <ul>
-      <li>Some tasks are almost solved, except under particularly tricky initial conditions.</li>
+      <li>Average task success rate varies significantly. Some tasks are almost solved, except under particularly tricky initial conditions, while in others, the model was unsuccessful across all 10 trials.</li>
       <li>For tasks with 0 success, we do not observe that they are generally impossible; instead, they usually contain one tricky step that involves very high-precision manipulation (with low success rate even for human teleoperators) or a carefully followed sequence that is slightly beyond the current model's limits.</li>
       <li>Task duration does not appear to be a fundamental obstacle: longer tasks simply have many more steps, which makes full success harder, but partial success remains very achievable.</li>
     </ul>
@@ -453,7 +452,7 @@ Top 5 teams on the held-out test set ([leaderboard](https://behavior.stanford.ed
 
 <div class="eval-block" id="success-evals" data-tabbed-json="assets/winning-behavior-1k-challenge/eval_clips.json" data-tabbed-type="success">
   <h3>Examples of 100% Successful Episodes</h3>
-  <p class="subtitle">Select an episode to show 10X-speed.</p>
+  <p class="subtitle">Select an episode to show 10X-speed clip</p>
   <div class="eval-container">
     <div class="eval-tabs"></div>
     <div class="eval-panels"></div>
@@ -572,7 +571,7 @@ Please note that fail reason labeling is subjective, and is there to provide the
 
 ### Recovery from cross-task learning
 
-Training on all 50 tasks leads to **emergent recovery behaviors**. Single-task models never recover from mistakes; the multi-task model learns to pick up fallen items and retry.
+Training on all 50 tasks leads to **emergent recovery behaviors**. Due to the data collection process, single-task models never recover from mistakes; the multi-task model learns to pick up fallen items and retry.
 
 <style>
 .video-pair { display: flex; gap: 1rem; margin: 1rem 0; }
@@ -687,9 +686,9 @@ Our analysis ends up matching what many practitioners are currently focused on i
 </div>
 
 ### Acknowledgments
-This work was made possible by the generous support of [Nebuis](https://nebius.com/), who provided the high-performance cloud GPU compute resources required to train our models.
+This work was made possible by the generous support of [Nebius](https://nebius.com/), who provided the high-performance cloud GPU compute resources required to train our models.
 
-We would also like to thank following people for their help and
+We would also like to thank the following people for their help and
 support: [Vladimir Ershov](https://www.linkedin.com/in/vladimir-ershov-33559466/), [Justyna Ilczuk](https://www.linkedin.com/in/justynailczuk/), [Andrey Mulenkov](https://www.linkedin.com/in/andrey-mulenkov/).
 
 Interested in Robot Learning? Join our [Discord](https://discord.gg/Jr8tcnVNGw) to discuss the Challenge results and collaboration.
