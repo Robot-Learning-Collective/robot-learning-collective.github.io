@@ -735,10 +735,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 ### Acknowledgments
+This work was made possible by the generous support of [Nebius](https://nebius.com/), who provided the high-performance cloud GPU compute resources required to train our models.
 <a href="https://nebius.com/" target="_blank">
   <img src="assets/winning-behavior-1k-challenge/idOGJsi66K_logos.webp" alt="Nebius Logo" style="height: 32px; width: auto; margin: 10px 0;">
 </a>
-This work was made possible by the generous support of [Nebius](https://nebius.com/), who provided the high-performance cloud GPU compute resources required to train our models.
 
 We would also like to thank the following people for their help and
 support: [Vladimir Ershov](https://www.linkedin.com/in/vladimir-ershov-33559466/), [Justyna Ilczuk](https://www.linkedin.com/in/justynailczuk/), [Andrey Mulenkov](https://www.linkedin.com/in/andrey-mulenkov/).
