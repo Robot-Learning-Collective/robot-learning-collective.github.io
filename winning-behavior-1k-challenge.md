@@ -708,6 +708,8 @@ document.addEventListener('DOMContentLoaded', () => {
 * Evidence from cross-task learning reinforces the view that imitation-learning-based models benefit significantly from training on diverse datasets.
 * Due to limited resources for thorough ablation studies, we cannot precisely identify which components were critical. Nonetheless, the combined approach proves robust and outperforms comparable Pi0.5-based methods despite having a smaller training budget.
 
+
+
 ---
 
 
@@ -735,10 +737,11 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 ### Acknowledgments
-This work was made possible by the generous support of [Nebius](https://nebius.com/), who provided the high-performance cloud GPU compute resources required to train our models.
 <a href="https://nebius.com/" target="_blank">
   <img src="assets/winning-behavior-1k-challenge/idOGJsi66K_logos.webp" alt="Nebius Logo" style="height: 32px; width: auto; margin: 10px 0;">
 </a>
+
+This work was made possible by the generous support of [Nebius](https://nebius.com/), who provided the high-performance cloud GPU compute resources required to train our models.
 
 We would also like to thank the following people for their help and
 support: [Vladimir Ershov](https://www.linkedin.com/in/vladimir-ershov-33559466/), [Justyna Ilczuk](https://www.linkedin.com/in/justynailczuk/), [Andrey Mulenkov](https://www.linkedin.com/in/andrey-mulenkov/).
