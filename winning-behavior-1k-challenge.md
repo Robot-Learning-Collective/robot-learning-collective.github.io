@@ -410,7 +410,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-
 ## Results
 
 On the held-out evaluation, our approach achieves **q-score ~0.26** (including partial successes) with minimal public–private gap.
@@ -667,6 +666,42 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
+
+### Runtime heuristics
+
+Unfortunately, cross task learning alone was insufficient to overcome the bias toward ideal demonstrations in the data. As a result, the robot often missed the grasp, closed the gripper, and failed to retry, since the training data lacked recovery demonstrations that include reopening the gripper. In practice, however, a fully closed gripper usually indicates that the robot has grasped nothing. By introducing a simple heuristic that automatically opens the gripper in such cases, we observed robust recovery behavior that was surprisingly similar to what emerges when recovery is properly represented during data collection.
+
+<div class="video-pair" id="heuristics-videos">
+  <div>
+    <video autoplay muted playsinline controls data-src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/vegetables_grab_fail.mov"></video>
+    <div class="label">Without heuristics: fails to recover</div>
+  </div>
+  <div>
+    <video muted playsinline controls data-src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/regrab_vegetables_success.mov"></video>
+    <div class="label">With heuristics: robust recovery</div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('heuristics-videos');
+  if (container && typeof IntersectionObserver !== 'undefined') {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        container.querySelectorAll('video').forEach(vid => {
+          if (vid.dataset.src && !vid.src) {
+            vid.src = vid.dataset.src;
+            vid.load();
+          }
+        });
+        observer.disconnect();
+      }
+    }, { threshold: 0.1 });
+    observer.observe(container);
+  }
+});
+</script>
+
 ## Summary
 
 * The dominant failure modes closely reflect real-world challenges faced by imitation-learning-based robotics models, supporting the role of the BEHAVIOR benchmark as a valuable test bed for evaluating new approaches.
@@ -700,11 +735,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 ### Acknowledgments
-This work was made possible by the generous support of [Nebius](https://nebius.com/), who provided the high-performance cloud GPU compute resources required to train our models.
-
 <a href="https://nebius.com/" target="_blank">
   <img src="assets/winning-behavior-1k-challenge/idOGJsi66K_logos.webp" alt="Nebius Logo" style="height: 32px; width: auto; margin: 10px 0;">
 </a>
+This work was made possible by the generous support of [Nebius](https://nebius.com/), who provided the high-performance cloud GPU compute resources required to train our models.
 
 We would also like to thank the following people for their help and
 support: [Vladimir Ershov](https://www.linkedin.com/in/vladimir-ershov-33559466/), [Justyna Ilczuk](https://www.linkedin.com/in/justynailczuk/), [Andrey Mulenkov](https://www.linkedin.com/in/andrey-mulenkov/).
