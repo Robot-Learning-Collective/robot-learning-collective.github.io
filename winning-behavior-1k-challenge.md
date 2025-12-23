@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Winning the BEHAVIOR-1K Challenge
-description: Applying a VLA model to a multi-task problem in a massive simulation
+title: Winning the BEHAVIOR-1K Challenge (NeurIPS 2025)
+description: Can one robotics model trained via Imitation Learning solve 50 household tasks?
 header_links:
   - text: View on GitHub
     url: https://github.com/IliaLarchenko/behavior-1k-solution
@@ -238,8 +238,8 @@ document.addEventListener('DOMContentLoaded', initAllTabbedVideoBlocks);
 </script>
 
 <div class="eval-block" id="intro-evals" data-tabbed-json="assets/winning-behavior-1k-challenge/task_examples.json" data-tabbed-type="intro">
-  <h3 id="task-examples" style="margin-top: 0;">Task Examples</h3>
-  <p class="subtitle"><em>Videos shown at 8× speed (RGB video from head camera in original 720x720 resolution).</em></p>
+  <h3 id="task-examples" style="margin-top: 0;">Training Examples</h3>
+  <p class="subtitle"><em>Each task comes with 200 demonstrations recorded via teleoperation. Video: robot head camera 8× speed.</em></p>
   <div class="eval-container">
     <div class="video-tabs eval-tabs"></div>
     <div class="video-panels eval-panels"></div>
@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 ## Results
 
-On the held-out evaluation, our approach achieves **q-score ~0.26** with minimal public–private gap.
+On the held-out evaluation, our approach achieves **q-score ~0.26** (including partial successes) with minimal public–private gap.
 
 | Rank | Team | Affiliation | Task Success (private) | Q-Score (private) |
 |:----:|:-----|:------------|:----------------------:|:-----------------:|
@@ -506,6 +506,12 @@ async function renderFailureChart() {
           <div class="bar" style="width:${widthPct}%; background:${color};"></div>
         </div>`;
       }).join('');
+      
+      const activeData = data.find(d => d.label.toLowerCase() === activeFilter);
+      const descBox = document.getElementById('failure-desc');
+      if (descBox) {
+        descBox.innerHTML = activeData ? `<strong>${activeData.label}:</strong> ${activeData.desc}` : '<em>Select a reason to see the explanation and video examples.</em>';
+      }
     };
 
     window.toggleFailureFilter = (reason) => {
@@ -517,7 +523,9 @@ async function renderFailureChart() {
         failBlock.filterItems(null);
       } else {
         activeFilter = reason;
-        failBlock.filterItems(item => item.reason && item.reason.toLowerCase() === reason);
+        // Handle potential naming mismatches for filtering
+        const filterKey = (reason === 'whole-body coordination') ? 'whole-body' : reason;
+        failBlock.filterItems(item => item.reason && item.reason.toLowerCase() === filterKey);
       }
       updateChart();
     };
@@ -545,7 +553,7 @@ document.addEventListener('DOMContentLoaded', renderFailureChart);
 
 ### Failure Analysis
 
-We labeled failure reasons on a subset of tasks (15/50). **Click a bar to filter example videos below:**
+To analyze why the robot fails, we labeled failures on a subset of tasks (15/50). *Select a reason to see the explanation and video examples:*
 
 <style>
 .hbar-chart { margin: 1.5rem auto; max-width: 720px; }
@@ -557,6 +565,10 @@ We labeled failure reasons on a subset of tasks (15/50). **Click a bar to filter
 
 <div class="hbar-chart" id="failure-chart"></div>
 
+<div id="failure-desc" style="max-width: 720px; margin: 0 auto 2rem; padding: 1rem; background: #f0f6ff; border-radius: 6px; border-left: 4px solid #0366d6; font-size: 0.95rem; min-height: 3em;">
+  <em>Select a reason to see the explanation and video examples.</em>
+</div>
+
 
 <div class="eval-block" id="fail-evals" data-tabbed-json="assets/winning-behavior-1k-challenge/failure_examples.json" data-tabbed-type="fail">
   <h3>Examples of Failure Episodes</h3>
@@ -567,11 +579,11 @@ We labeled failure reasons on a subset of tasks (15/50). **Click a bar to filter
   </div>
 </div>
 
-Please note that fail reason labeling is subjective, and is there to provide the big picture. Refer to all evaluation videos and scores [here](https://drive.google.com/drive/folders/12Wb21mQi6UP8_OMKPGNHOII_-MV3oxk-?usp=sharing).
+Please note that fail reason labeling is subjective, and is there to provide a big picture. Refer to all evaluation videos and scores [here](https://drive.google.com/drive/folders/12Wb21mQi6UP8_OMKPGNHOII_-MV3oxk-?usp=sharing).
 
 ### Recovery from cross-task learning
 
-Training on all 50 tasks leads to **emergent recovery behaviors**. Due to the data collection process, single-task models never recover from mistakes; the multi-task model learns to pick up fallen items and retry.
+Training on all 50 tasks leads to **emergent behaviors**. Due to the data collection process, single-task models never recover from mistakes; the multi-task model trained sufficiently long learns to use skills from other tasks to recover (e.g., to pick up a dropped item).
 
 <style>
 .video-pair { display: flex; gap: 1rem; margin: 1rem 0; }
@@ -598,11 +610,11 @@ Training on all 50 tasks leads to **emergent recovery behaviors**. Due to the da
   <div class="video-pair">
     <div>
       <video autoplay muted playsinline controls data-src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_early_ex1.mp4"></video>
-      <div class="label">Before: fails to recover</div>
+      <div class="label">Single task model: no attempt to recover</div>
     </div>
     <div>
       <video muted playsinline controls data-src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_late_ex1.mp4"></video>
-      <div class="label">After: robust recovery</div>
+      <div class="label">Multi task model: non-trivial recovery</div>
     </div>
   </div>
 </div>
@@ -611,11 +623,11 @@ Training on all 50 tasks leads to **emergent recovery behaviors**. Due to the da
   <div class="video-pair">
     <div>
       <video autoplay muted playsinline controls data-src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_early_ex2.mp4"></video>
-      <div class="label">Before: error cascades to failure</div>
+      <div class="label">Single task model: no attempt to recover</div>
     </div>
     <div>
       <video muted playsinline controls data-src="https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/recovery_picture_late_ex2.mp4"></video>
-      <div class="label">After: recovers and completes task</div>
+      <div class="label">Multi task model: non-trivial recovery</div>
     </div>
   </div>
 </div>
@@ -657,7 +669,9 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 ## Summary
 
-Our analysis ends up matching what many practitioners are currently focused on in real world systems: VLA models for dexterous manipulation, System 2 style components to guide IL policies, and more diverse pre training data to expand the range of states where the model can act sensibly. This suggests that the challenge is closely tied to real world problems.
+* The dominant failure modes closely reflect real-world challenges faced by imitation-learning-based robotics models, supporting the role of the BEHAVIOR benchmark as a valuable test bed for evaluating new approaches.
+* Evidence from cross-task learning reinforces the view that imitation-learning-based models benefit significantly from training on diverse datasets.
+* Due to limited resources for thorough ablation studies, we cannot precisely identify which components were critical. Nonetheless, the combined approach proves robust and outperforms comparable Pi0.5-based methods despite having a smaller training budget.
 
 ---
 
@@ -687,6 +701,10 @@ Our analysis ends up matching what many practitioners are currently focused on i
 
 ### Acknowledgments
 This work was made possible by the generous support of [Nebius](https://nebius.com/), who provided the high-performance cloud GPU compute resources required to train our models.
+
+<a href="https://nebius.com/" target="_blank">
+  <img src="assets/winning-behavior-1k-challenge/idOGJsi66K_logos.webp" alt="Nebius Logo" style="height: 32px; width: auto; margin: 10px 0;">
+</a>
 
 We would also like to thank the following people for their help and
 support: [Vladimir Ershov](https://www.linkedin.com/in/vladimir-ershov-33559466/), [Justyna Ilczuk](https://www.linkedin.com/in/justynailczuk/), [Andrey Mulenkov](https://www.linkedin.com/in/andrey-mulenkov/).

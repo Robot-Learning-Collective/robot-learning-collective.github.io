@@ -1,13 +1,13 @@
 [
-  { "label": "Dexterity", "value": 51, "color": "#a08070" },
-  { "label": "Order", "value": 26, "color": "#d4a04a" },
-  { "label": "Confusion", "value": 23, "color": "#c76b8f" },
-  { "label": "Robot fell", "value": 15, "color": "#aaa" },
-  { "label": "Reasoning", "value": 14, "color": "#e07060" },
-  { "label": "Search", "value": 9, "color": "#d4a04a" },
-  { "label": "Robot stuck", "value": 5, "color": "#b99ad6" },
-  { "label": "Head camera", "value": 4, "color": "#e07060" },
-  { "label": "Navigation", "value": 3, "color": "#aaa" },
-  { "label": "Unclassified", "value": 3, "color": "#aaa" },
-  { "label": "Whole-body", "value": 1, "color": "#b99ad6" }
+  { "label": "Dexterity", "value": 51, "color": "#a08070", "desc": "Clumsiness: the robot cannot reliably pick up or release items. This is the dominant problem, accounting for around one‑third of failures." },
+  { "label": "Order", "value": 26, "color": "#d4a04a", "desc": "Progress errors: wrong action sequence or deciding to finish early. Our System 2 helps but does not fully solve the issue. This is exacerbated by 'tails' on passive actions in the demo dataset." },
+  { "label": "Confusion", "value": 23, "color": "#c76b8f", "desc": "Weird behavior probably caused by the robot entering an out‑of‑distribution state." },
+  { "label": "Robot fell", "value": 15, "color": "#aaa", "desc": "While attempting to squat to pick an item from the floor, the robot sometimes starts to fall backward." },
+  { "label": "Reasoning", "value": 14, "color": "#e07060", "desc": "The robot should choose a locally non‑obvious action." },
+  { "label": "Search", "value": 9, "color": "#d4a04a", "desc": "Randomness in denoising works well for exploration but can lead to repeatedly traversing the same area while missing others." },
+  { "label": "Robot stuck", "value": 5, "color": "#b99ad6", "desc": "The robot base narrowly fits in some layouts; without base sensors, the model sometimes tries to move while in contact with the environment." },
+  { "label": "Head camera", "value": 4, "color": "#e07060", "desc": "The head camera doesn't cover the floor or high shelves; combined with no observation history, this leads to failures despite wrist camera potential visibility." },
+  { "label": "Navigation", "value": 3, "color": "#aaa", "desc": "Navigating to fixed locations is usually fine, but rarely the model confuses tasks and goes to the wrong location." },
+  { "label": "Unclassified", "value": 3, "color": "#aaa", "desc": "Failures that we could not attribute to any specific problem." },
+  { "label": "Whole-body coordination", "value": 1, "color": "#b99ad6", "desc": "The robot lacks awareness that an arm may be stuck, which prevents further safe navigation." }
 ]

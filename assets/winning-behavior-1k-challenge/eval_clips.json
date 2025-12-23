@@ -2,13 +2,13 @@
   {
     "label": "Cook Hot Dogs #42",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_cook_hot_dogs_42_x10.mp4",
-    "note": "Struggle to grasp the first hotdog a bit but the rest is pretty smooth",
+    "note": "Robot struggled to grasp the first hotdog a bit but the rest is pretty smooth",
     "instruction": "Take the two hot dogs out of the refrigerator in the kitchen and cook them in the microwave until both are cooked."
   },
   {
     "label": "Cook Hot Dogs #72",
     "src": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/good_64500__eval_tricks_cook_hot_dogs_72_x10.mp4",
-    "note": "Struggle with picking but the rest is good",
+    "note": "Robot struggle with picking but the rest is good",
     "instruction": "Take the two hot dogs out of the refrigerator in the kitchen and cook them in the microwave until both are cooked."
   },
   {

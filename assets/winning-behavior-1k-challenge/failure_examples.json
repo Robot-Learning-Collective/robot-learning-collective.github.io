@@ -88,7 +88,7 @@
     "task": "Moving Boxes To Storage",
     "episode": 86,
     "reason": "confusion",
-    "note": "Robot cannot place/release the box, then started to share and tilting backwards"
+    "note": "Robot cannot place/release the box, then started to shake and tilting backwards"
   },
   {
     "video_path": "https://pub-a5638afed52c4226aac6a1e71ecc323c.r2.dev/behavior_report/picking_up_toys_120.mp4",
