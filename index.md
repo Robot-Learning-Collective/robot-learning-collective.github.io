@@ -20,7 +20,7 @@ Welcome to the Robot Learning Collective. We build and share research, benchmark
 
 ---
 
-## 🚀 Publications
+## 📚 Publications
 
 ### [Task adaptation of Vision-Language-Action model: 1st Place Solution for the 2025 BEHAVIOR Challenge](https://www.arxiv.org/abs/2512.06951)
 **Authors:** Ilia Larchenko, Gleb Zarin, Akash Karnatak  
