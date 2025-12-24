@@ -211,8 +211,10 @@ These results indicate that while temporal ensembling is unnecessary for PushT, 
 | OpenVLA-OFT | 7B | 94.3 | 95.2 | 91.7 | 86.5 | 91.9 |
 | pi0.5 - KI | 3.3B | 96.6 | 97.2 | 94.6 | 85.8 | 93.3 |
 | VLA0 | 3B | 97.0 | **97.8** | **96.2** | 87.6 | **94.7** |
-| VLA-0-Smol (Ours)| **0.5B** | **97.2** | 92.2 | 95.6 | **91.2** | 94.1 |
-<small>Source: [Goyal et al. (2024)](https://arxiv.org/abs/2510.13054)</small>
+| VLA-0-Smol (Ours)| 0.5B | **97.2** | 92.2 | 95.6 | **91.2** | 94.1 |
+
+<small>Source: [Goyal et al. (2025)](https://arxiv.org/abs/2510.13054)</small>
+
 ### Analysis
 
 A central question of this work is whether conclusions drawn from fast ablation on PushT transfer to a more complex benchmark. We find that most high-impact design choices identified on PushT generalize well to [LIBERO](https://libero-project.github.io/main.html). In particular, the learning rate, vision encoder fine-tuning, and masked action augmentation all remained necessary for strong performance when scaled to 3D, long-horizon tasks.
@@ -314,10 +316,10 @@ Balakhnov et al., "VLA-0-Smol: A Reproducible Recipe for High-Performance, Sub-B
 BibTeX citation:
 ```jsx
 @article{balakhnov2025vla0smol,
-  title={VLA-0-Smol: A Reproducible Recipe for High-Performance, Sub-Billion Parameter VLAs},
-  author={Balakhnov, Oleg and Skvortsov, Sergei and Zarin, Gleb},
+  title={VLA-0-Smol: A Reproducible Recipe for High-Performance, Sub-Billion Parameter VLAs},
+  author={Balakhnov, Oleg and Skvortsov, Sergei and Zarin, Gleb},
   year={2025},
   journal={Robot Learning Collective blog},
-  note={}
+  note={}
 }
 ```
