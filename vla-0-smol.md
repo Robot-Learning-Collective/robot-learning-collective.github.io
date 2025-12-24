@@ -203,11 +203,11 @@ These results indicate that while temporal ensembling is unnecessary for PushT, 
 | Model | Params | Object | Spatial | Goal | Long | Avg |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | Diffusion Policy | 0.15B | 78.3 | 92.5 | 68.3 | 50.5 | 72.4 |
-| pi0-FAST | ? | 87.0 | 63.0 | 89.0 | 48.0 | 71.8 |
+| pi0-FAST | 3B | 87.0 | 63.0 | 89.0 | 48.0 | 71.8 |
 | SmolVLA | 0.25B | 87.0 | 93.0 | 88.0 | 63.0 | 82.8 |
 | SmolVLA | 2.25B | 93.0 | 94.0 | 91.0 | 77.0 | 88.8 |
-| OpenVLA-OFT | ? | 94.3 | 95.2 | 91.7 | 86.5 | 91.9 |
-| pi0.5 - KI | ? | 96.6 | 97.2 | 94.6 | 85.8 | 93.3 |
+| OpenVLA-OFT | 7B | 94.3 | 95.2 | 91.7 | 86.5 | 91.9 |
+| pi0.5 - KI | 3.3B | 96.6 | 97.2 | 94.6 | 85.8 | 93.3 |
 | VLA0 | 3B | 97.0 | **97.8** | **96.2** | 87.6 | **94.7** |
 | **VLA-0-Smol (Ours)** | **0.5B** | **97.2** | 92.2 | 95.6 | **91.2** | 94.1 |
 
