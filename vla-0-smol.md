@@ -309,12 +309,12 @@ We would like to thank [Nebius](https://nebius.com) for providing the GPU resour
 
 Please cite as:
 
-```jsx
+```txt
 Balakhnov et al., "VLA-0-Smol: A Reproducible Recipe for High-Performance, Sub-Billion Parameter VLAs", Robot Learning Collective blog, 2025.
 ```
 
 BibTeX citation:
-```jsx
+```txt
 @article{balakhnov2025vla0smol,
   title={VLA-0-Smol: A Reproducible Recipe for High-Performance, Sub-Billion Parameter VLAs},
   author={Balakhnov, Oleg and Skvortsov, Sergei and Zarin, Gleb},
