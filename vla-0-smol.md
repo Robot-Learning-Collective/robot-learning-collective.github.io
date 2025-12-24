@@ -180,10 +180,10 @@ Having identified the most impactful design choices on PushT, we next ask whethe
 
 Success is measured by the agent's ability to complete long-horizon tasks and maintain its performance on previously learned tasks after acquiring new ones. Following the VLA0 paper, we compared our model across four specific task suites:
 
-- **Libero_object:** Tests generalizable object recognition by varying the types of objects manipulated (e.g., "pick up the [ketchup/milk/juice] and put it in the basket").
-- **Libero_spatial:** Focuses on spatial relationships and layouts (e.g., "put the bowl on the plate" with varying initial object positions).
-- **Libero_goal:** Maintains the same object set but varies the end goal (e.g., "open the drawer" vs. "put the mug in the drawer").
-- **Libero_10:** Emphasizes long-horizon, procedural sequences (e.g., "open the microwave and put the bowl in it"). This requires the agent to chain multiple behaviors together to complete complex, multi-step goals.
+- **Object:** Tests generalizable object recognition by varying the types of objects manipulated (e.g., "pick up the [ketchup/milk/juice] and put it in the basket").
+- **Spatial:** Focuses on spatial relationships and layouts (e.g., "put the bowl on the plate" with varying initial object positions).
+- **Goal:** Maintains the same object set but varies the end goal (e.g., "open the drawer" vs. "put the mug in the drawer").
+- **Long:** Emphasizes long-horizon, procedural sequences (e.g., "open the microwave and put the bowl in it"). This requires the agent to chain multiple behaviors together to complete complex, multi-step goals.
 
 
 ### Training Setup
@@ -200,7 +200,7 @@ Without ensembling, the average success rate on LIBERO drops to **90.7%**, a *
 
 These results indicate that while temporal ensembling is unnecessary for PushT, it provides a clear benefit on LIBERO. In contrast, other high-impact design choices identified on PushT — such as learning rate, vision encoder fine-tuning, and action masking — transfer cleanly to the LIBERO setting.
 
-| Model | Params | Libero_object | Libero_spatial | Libero_goal | Libero_10 | Avg |
+| Model | Params | Object | Spatial | Goal | Long | Avg |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | Diffusion Policy | 0.15B | 78.3 | 92.5 | 68.3 | 50.5 | 72.4 |
 | pi0-FAST | ? | 87.0 | 63.0 | 89.0 | 48.0 | 71.8 |
@@ -209,7 +209,7 @@ These results indicate that while temporal ensembling is unnecessary for PushT, 
 | OpenVLA-OFT | ? | 94.3 | 95.2 | 91.7 | 86.5 | 91.9 |
 | pi0.5 - KI | ? | 96.6 | 97.2 | 94.6 | 85.8 | 93.3 |
 | VLA0 | 3B | 97.0 | **97.8** | **96.2** | 87.6 | **94.7** |
-| **Smol-VLA0 (Ours)** | **0.5B** | **97.2** | 92.2 | 95.6 | **91.2** | 94.1 |
+| **VLA-0-Smol (Ours)** | **0.5B** | **97.2** | 92.2 | 95.6 | **91.2** | 94.1 |
 
 ### Analysis
 
