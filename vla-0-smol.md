@@ -101,6 +101,8 @@ The results show that learning rate has a dramatic impact on performance. The tw
 
 At `5×10⁻⁵`, we observed the best performance with a final success rate of 57.8%. The highest learning rate (`1×10⁻⁴`) showed slightly worse performance, suggesting we may be approaching the upper bound of stable learning rates for this task.
 
+<img src="assets/vla-0-smol/pusht_lr.png" alt="drawing" width="500"/>
+
 ### Vision Encoder Freezing
 
 A common question in fine-tuning large models is whether you can get away with freezing some components. For VLMs, the vision encoder is an obvious candidate — it's large, and freezing it would speed up training and reduce memory usage. However, vision encoders in VLMs are typically trained on natural images, not robotics scenes, so it's unclear if their frozen features are sufficient for manipulation tasks.
@@ -110,6 +112,8 @@ We compared training the full model (vision encoder + connector + language model
 **Freezing the vision encoder drops success rate from 57.8% to 25%** — a 32 percentage point decrease. This suggests that the features learned by pre-trained vision encoders on natural images are not directly suitable for robotic manipulation, and the model benefits significantly from adapting the visual representations during fine-tuning.
 
 This result is somewhat disappointing from a practical standpoint. We had hoped that frozen vision encoders would be sufficient, which would make training faster and potentially preserve performance on other vision-language tasks. However, the data clearly shows that vision encoder fine-tuning is necessary for good performance on manipulation tasks.
+
+<img src="assets/vla-0-smol/pusht_freeze.png" alt="drawing" width="500"/>
 
 ### State and Action Representations
 
@@ -128,6 +132,7 @@ The results show clear trends:
 - **Adding State Information**: Including the discretized state vector in the prompt also improved performance, though the effect was less dramatic than the action representation choice. This is somewhat surprising — we expected the model might be able to infer the relevant state information from the image alone. The improvement suggests that explicit state information helps the model, even when that information should theoretically be extractable from visual observations.
 - **Combined Effect**: The best performance came from using both relative actions and state information, suggesting these design choices are complementary rather than redundant.
 
+<img src="assets/vla-0-smol/pusht_reps.png" alt="drawing" width="500"/>
 
 ### System Prompt
 
@@ -137,11 +142,13 @@ We compared training with and without the system prompt, keeping all other param
 
 ### Masked Action Augmentation
 
-Adding action masking improved the success rate from **57.8% to 78.1%**. This significant jump validates the hypothesis we set out to test: that preventing the model from relying on character-level auto-completion results in a stronger policy. It also confirms that the benefits of action masking, originally reported by the [VLA-0](https://arxiv.org/abs/2510.13054) authors, transfer effectively to the smaller [SmolVLM2](https://huggingface.co/blog/smolvlm2) architecture and our specific whole-action masking strategy.
+Adding action masking improved the success rate from **70.3% to 78.1%**. This significant jump validates the hypothesis we set out to test: that preventing the model from relying on character-level auto-completion results in a stronger policy. It also confirms that the benefits of action masking, originally reported by the [VLA-0](https://arxiv.org/abs/2510.13054) authors, transfer effectively to the smaller [SmolVLM2](https://huggingface.co/blog/smolvlm2) architecture and our specific whole-action masking strategy.
+
+<img src="assets/vla-0-smol/pusht_mask.png" alt="drawing" width="500"/>
 
 ### Ensemble Prediction
 
-VLA0 employs temporal ensembling across $N$ tokens to smooth out action sequences. For the PushT task, we experimented with a standard $n$-tokens ahead approach, where we predicted and executed a fixed chunk of $N=5$ tokens.
+VLA0 employs temporal ensembling across N tokens to smooth out action sequences. For the PushT task, we experimented with a standard n-tokens ahead approach, where we predicted and executed a fixed chunk of N=5 tokens.
 
 When comparing these two methods, we found that temporal ensembling yielded no significant performance boost for PushT. Therefore, to optimize computational efficiency and inference speed, we opted for the 5-tokens ahead approach.
 
@@ -196,7 +203,7 @@ One notable deviation concerns **action representation**. Although relative act
 
 ### Results
 
-We evaluated the final model using two inference-time protocols. Following VLA-0, we ensemble predictions across **8 future action tokens**. For comparison, we also report results using a standard **n-tokens-ahead prediction** with n=8, matching the evaluation setup used in our PushT ablations.
+We evaluated the final model using two inference-time protocols. Following [VLA-0](https://arxiv.org/abs/2510.13054), we ensemble predictions across **8 future action tokens**. For comparison, we also report results using a standard **n-tokens-ahead prediction** with n=8, matching the evaluation setup used in our PushT ablations.
 
 Without ensembling, the average success rate on [LIBERO](https://libero-project.github.io/main.html) drops to **90.7%**, a **3.4 percentage point decrease** relative to the ensembled evaluation. This differs from our PushT results, where temporal ensembling had no measurable impact on performance.
 
@@ -243,16 +250,16 @@ Our analysis of the [LIBERO](https://libero-project.github.io/main.html) results
 - **Model size.** Our 0.5B parameter model achieved performance close to the 3B parameter model used in the original VLA-0 work. This result suggests that, for [LIBERO](https://libero-project.github.io/main.html), careful design and training choices can compensate for reduced model capacity. While larger models are typically expected to generalize better, our findings indicate diminishing returns from scale alone under this evaluation setup. We discuss broader implications of this observation in the Discussion section.
 
 ## Conclusion
-The development of VLA-0-Smol demonstrates that massive scale is not the only path to high-performance robotic policies. By distilling the design principles of the VLA-0 architecture into a sub-billion parameter footprint, we have shown that a 500M parameter model can achieve results on par with models six times its size on established benchmarks like LIBERO.
+The development of `VLA-0-Smol` demonstrates that massive scale is not the only path to high-performance robotic policies. By distilling the design principles of the [VLA-0](https://arxiv.org/abs/2510.13054) architecture into a sub-billion parameter footprint, we have shown that a 500M parameter model can achieve results on par with models six times its size on established benchmarks like [LIBERO](https://libero-project.github.io/main.html).
 
-Our systematic ablations highlight a clear hierarchy of importance for training VLAs: fine-tuning the vision encoder, adopting relative action representations, and implementing whole-action masking are not just optimizations—they are fundamental to achieving policy robustness. Conversely, we found that complex system prompts and heavy temporal ensembling often provide diminishing returns in simpler or task-specific domains.
+Our systematic ablations highlight a clear hierarchy of importance for training VLAs: fine-tuning the vision encoder, adopting relative action representations, and implementing whole-action masking are not just optimizations — they are fundamental to achieving policy robustness. Conversely, we found that complex system prompts and heavy temporal ensembling often provide diminishing returns in simpler or task-specific domains.
 
-Perhaps most importantly, VLA-0-Smol serves as a reproducible recipe for the community. By lowering the hardware barrier to consumer-grade GPUs, we hope to enable more researchers to experiment with Vision-Language-Action models without the need for massive industrial compute clusters.
+Perhaps most importantly, `VLA-0-Smol` serves as a reproducible recipe for the community. By lowering the hardware barrier to consumer-grade GPUs, we hope to enable more researchers to experiment with Vision-Language-Action models without the need for massive industrial compute clusters.
 
 ## Discussions
 
 ### Future steps
-While VLA-0-Smol marks a significant step toward accessible robotics research, there is much work to be done to bridge the gap between simulation and the real world:
+While `VLA-0-Smol` marks a significant step toward accessible robotics research, there is much work to be done to bridge the gap between simulation and the real world:
 
 - **Real-World Deployment**: Our primary focus is transitioning from the LIBERO simulator to physical hardware, specifically the SO100 ARM platform. We aim to test how the "memorization" we observed in simulation translates to the noisy, unpredictable environments of real-world manipulation.
 
@@ -260,7 +267,7 @@ While VLA-0-Smol marks a significant step toward accessible robotics research, t
 
 - **Addressing Generalization**: Following the insights from LIBERO-Plus, we intend to introduce more stochasticity and visual variety during training. Our goal is to move beyond trajectory memorization and toward a model that truly understands spatial relationships and linguistic intent.
 
-- **Data Efficiency**: We are interested in exploring how few-shot fine-tuning can be used to adapt VLA-0-Smol to entirely new tasks using only a handful of human demonstrations.
+- **Data Efficiency**: We are interested in exploring how few-shot fine-tuning can be used to adapt `VLA-0-Smol` to entirely new tasks using only a handful of human demonstrations.
 
 ### Performance
 
@@ -274,7 +281,7 @@ Recent research from [LIBERO-Plus](https://arxiv.org/abs/2510.13626) and [LIB
 
 This explains why our tiny 0.5B model was able to perform just as well as the big 3B model. It seems the standard [LIBERO](https://libero-project.github.io/main.html) benchmark is mostly testing memory, not skill. Since even small models can memorize things well, the difference in model size didn't matter as much as we expected. We know this means our high scores might not fully prove our model is ready for the real world just yet. To fix this, we want to move beyond simulation and start experimenting on a real robot, where the "messiness" of the real world will act as the ultimate test of our model's true skills
 
-## Acknowledgments
+# Acknowledgments
 <a href="https://nebius.com/" target="_blank">
   <img src="assets/winning-behavior-1k-challenge/idOGJsi66K_logos.webp" alt="Nebius Logo" style="height: 32px; width: auto; margin: 10px 0;">
 </a>
@@ -305,7 +312,22 @@ We would like to thank [Nebius](https://nebius.com) for providing the GPU resour
   </div>
 </div>
 
-## Citation information 
+# References
+1. Ankit Goyal, Hugo Hadfield, Xuning Yang, Valts Blukis, and Fabio Ramos. “VLA-0: Building State-of-the-Art VLAs with Zero Modification.” arXiv preprint arXiv:2510.13054 (2025). Available at: https://arxiv.org/abs/2510.13054.
+
+2. Bo Liu, Yifeng Zhu, Chongkai Gao, Yihao Feng, Qiang Liu, Yuke Zhu, and Peter Stone. “LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning.” arXiv preprint arXiv:2306.03310 (2023). Available at: https://libero-project.github.io/main.html.
+
+3. Andrés Marafioti et al. “SmolVLM: Redefining small and efficient multimodal models.” arXiv preprint arXiv:2504.05299 (2025). Available at: https://huggingface.co/blog/smolvlm2.
+
+4. Shuai Bai et al. “Qwen2.5-VL Technical Report.” arXiv preprint arXiv:2502.13923 (2025). Available at: https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct.
+
+5. Senyu Fei et al. “LIBERO-Plus: In-depth Robustness Analysis of Vision-Language-Action Models.” arXiv preprint arXiv:2510.13626 (2025). Available at: https://arxiv.org/abs/2510.13626.
+
+6. Xueyang Zhou et al. “LIBERO-PRO: Towards Robust and Fair Evaluation of Vision-Language-Action Models Beyond Memorization.” arXiv preprint arXiv:2510.03827 (2025). Available at: https://arxiv.org/abs/2510.03827.
+
+7. Cheng Chi et al. “Diffusion Policy: Visuomotor Policy Learning via Action Diffusion.” arXiv preprint arXiv:2303.04137 (2023). Available at: https://arxiv.org/abs/2303.04137
+
+# Citation 
 
 Please cite as:
 
