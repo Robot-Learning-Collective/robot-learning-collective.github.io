@@ -123,7 +123,7 @@ This result is somewhat disappointing from a practical standpoint. We had hoped 
 
 The robotics literature shows considerable variation in how actions and states are represented. We tested four combinations to understand their individual and combined effects:
 
-<div align="center">
+<center>
 
 | Configuration	| State	| Actions	| Success Rate |
 | :--- | :--- | :--- | :--- |
@@ -132,7 +132,7 @@ The robotics literature shows considerable variation in how actions and states a
 | + State	| Yes	| Absolute	| 45.3% |
 | Full	| Yes	| Relative |	70.3% |
 
-</div>
+</center>
 
 </br>
 
@@ -223,7 +223,7 @@ Without ensembling, the average success rate on [LIBERO](https://libero-project.
 
 These results indicate that while temporal ensembling is unnecessary for PushT, it provides a clear benefit on [LIBERO](https://libero-project.github.io/main.html). In contrast, other high-impact design choices identified on PushT — such as learning rate, vision encoder fine-tuning, and action masking — transfer cleanly to the [LIBERO](https://libero-project.github.io/main.html) setting.
 
-<div align="center">
+<center>
 
 | Model | Params | Object | Spatial | Goal | Long | Avg |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -233,12 +233,12 @@ These results indicate that while temporal ensembling is unnecessary for PushT, 
 | SmolVLA | 2.25B | 93.0 | 94.0 | 91.0 | 77.0 | 88.8 |
 | OpenVLA-OFT | 7B | 94.3 | 95.2 | 91.7 | 86.5 | 91.9 |
 | pi0.5 - KI | 3.3B | 96.6 | 97.2 | 94.6 | 85.8 | 93.3 |
-| VLA0 | 3B | 97.0 | **97.8** | **96.2** | 87.6 | **94.7** |
+| VLA-0 | 3B | 97.0 | **97.8** | **96.2** | 87.6 | **94.7** |
 | VLA-0-Smol (Ours)| 0.5B | **97.2** | 92.2 | 95.6 | **91.2** | 94.1 |
 
 <small>Source: [Goyal et al. (2025)](https://arxiv.org/abs/2510.13054)</small>
 
-</div>
+</center>
 
 ### Analysis
 
