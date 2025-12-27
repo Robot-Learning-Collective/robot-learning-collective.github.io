@@ -6,7 +6,7 @@ header_links:
   - text: View on GitHub
     url: https://github.com/Robot-Learning-Collective/lerobot-experiments
   - text: Model weights
-    url: https://huggingface.co/olegbalakhnov/libero_vla0_final
+    url: https://huggingface.co/Robot-Learning-Collective/VLA-0-Smol
 ---
 
 # VLA-0-Smol: A Reproducible Recipe for High-Performance, Sub-Billion Parameter VLAs
@@ -101,7 +101,9 @@ The results show that learning rate has a dramatic impact on performance. The tw
 
 At `5×10⁻⁵`, we observed the best performance with a final success rate of 57.8%. The highest learning rate (`1×10⁻⁴`) showed slightly worse performance, suggesting we may be approaching the upper bound of stable learning rates for this task.
 
-<img src="assets/vla-0-smol/pusht_lr.png" alt="drawing" width="500"/>
+<div style="text-align: center;">
+  <img src="assets/vla-0-smol/pusht_lr.png" alt="drawing" width="500"/>
+</div>
 
 ### Vision Encoder Freezing
 
@@ -113,11 +115,15 @@ We compared training the full model (vision encoder + connector + language model
 
 This result is somewhat disappointing from a practical standpoint. We had hoped that frozen vision encoders would be sufficient, which would make training faster and potentially preserve performance on other vision-language tasks. However, the data clearly shows that vision encoder fine-tuning is necessary for good performance on manipulation tasks.
 
-<img src="assets/vla-0-smol/pusht_freeze.png" alt="drawing" width="500"/>
+<div style="text-align: center;">
+  <img src="assets/vla-0-smol/pusht_freeze.png" alt="drawing" width="500"/>
+</div>
 
 ### State and Action Representations
 
 The robotics literature shows considerable variation in how actions and states are represented. We tested four combinations to understand their individual and combined effects:
+
+<div align="center">
 
 | Configuration	| State	| Actions	| Success Rate |
 | :--- | :--- | :--- | :--- |
@@ -126,13 +132,19 @@ The robotics literature shows considerable variation in how actions and states a
 | + State	| Yes	| Absolute	| 45.3% |
 | Full	| Yes	| Relative |	70.3% |
 
+</div>
+
+</br>
+
+<div style="text-align: center;">
+  <img src="assets/vla-0-smol/pusht_reps.png" alt="drawing" width="500"/>
+</div>
+
 The results show clear trends:
 
 - **Relative vs. Absolute Actions**: Switching from absolute to relative actions provided the largest single improvement. This aligns with common practice in robot learning — relative actions are often easier to learn because they're invariant to the absolute position in the workspace and typically have smaller magnitudes.
 - **Adding State Information**: Including the discretized state vector in the prompt also improved performance, though the effect was less dramatic than the action representation choice. This is somewhat surprising — we expected the model might be able to infer the relevant state information from the image alone. The improvement suggests that explicit state information helps the model, even when that information should theoretically be extractable from visual observations.
 - **Combined Effect**: The best performance came from using both relative actions and state information, suggesting these design choices are complementary rather than redundant.
-
-<img src="assets/vla-0-smol/pusht_reps.png" alt="drawing" width="500"/>
 
 ### System Prompt
 
@@ -144,7 +156,9 @@ We compared training with and without the system prompt, keeping all other param
 
 Adding action masking improved the success rate from **70.3% to 78.1%**. This significant jump validates the hypothesis we set out to test: that preventing the model from relying on character-level auto-completion results in a stronger policy. It also confirms that the benefits of action masking, originally reported by the [VLA-0](https://arxiv.org/abs/2510.13054) authors, transfer effectively to the smaller [SmolVLM2](https://huggingface.co/blog/smolvlm2) architecture and our specific whole-action masking strategy.
 
-<img src="assets/vla-0-smol/pusht_mask.png" alt="drawing" width="500"/>
+<div style="text-align: center;">
+  <img src="assets/vla-0-smol/pusht_mask.png" alt="drawing" width="500"/>
+</div>
 
 ### Ensemble Prediction
 
@@ -209,6 +223,8 @@ Without ensembling, the average success rate on [LIBERO](https://libero-project.
 
 These results indicate that while temporal ensembling is unnecessary for PushT, it provides a clear benefit on [LIBERO](https://libero-project.github.io/main.html). In contrast, other high-impact design choices identified on PushT — such as learning rate, vision encoder fine-tuning, and action masking — transfer cleanly to the [LIBERO](https://libero-project.github.io/main.html) setting.
 
+<div align="center">
+
 | Model | Params | Object | Spatial | Goal | Long | Avg |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | Diffusion Policy | 0.15B | 78.3 | 92.5 | 68.3 | 50.5 | 72.4 |
@@ -221,6 +237,8 @@ These results indicate that while temporal ensembling is unnecessary for PushT, 
 | VLA-0-Smol (Ours)| 0.5B | **97.2** | 92.2 | 95.6 | **91.2** | 94.1 |
 
 <small>Source: [Goyal et al. (2025)](https://arxiv.org/abs/2510.13054)</small>
+
+</div>
 
 ### Analysis
 
@@ -313,19 +331,23 @@ We would like to thank [Nebius](https://nebius.com) for providing the GPU resour
 </div>
 
 # References
-1. Ankit Goyal, Hugo Hadfield, Xuning Yang, Valts Blukis, and Fabio Ramos. “VLA-0: Building State-of-the-Art VLAs with Zero Modification.” arXiv preprint arXiv:2510.13054 (2025). Available at: https://arxiv.org/abs/2510.13054.
+1. Ankit Goyal, Hugo Hadfield, Xuning Yang, Valts Blukis, and Fabio Ramos. "VLA-0: Building State-of-the-Art VLAs with Zero Modification." arXiv preprint arXiv:2510.13054 (2025).
 
-2. Bo Liu, Yifeng Zhu, Chongkai Gao, Yihao Feng, Qiang Liu, Yuke Zhu, and Peter Stone. “LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning.” arXiv preprint arXiv:2306.03310 (2023). Available at: https://libero-project.github.io/main.html.
+2. Bo Liu, Yifeng Zhu, Chongkai Gao, Yihao Feng, Qiang Liu, Yuke Zhu, and Peter Stone. "LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning." arXiv preprint arXiv:2306.03310 (2023).
 
-3. Andrés Marafioti et al. “SmolVLM: Redefining small and efficient multimodal models.” arXiv preprint arXiv:2504.05299 (2025). Available at: https://huggingface.co/blog/smolvlm2.
+3. Andrés Marafioti et al. "SmolVLM: Redefining small and efficient multimodal models." arXiv preprint arXiv:2504.05299 (2025).
 
-4. Shuai Bai et al. “Qwen2.5-VL Technical Report.” arXiv preprint arXiv:2502.13923 (2025). Available at: https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct.
+4. Shuai Bai et al. "Qwen2.5-VL Technical Report." arXiv preprint arXiv:2502.13923 (2025).
 
-5. Senyu Fei et al. “LIBERO-Plus: In-depth Robustness Analysis of Vision-Language-Action Models.” arXiv preprint arXiv:2510.13626 (2025). Available at: https://arxiv.org/abs/2510.13626.
+5. Senyu Fei et al. "LIBERO-Plus: In-depth Robustness Analysis of Vision-Language-Action Models." arXiv preprint arXiv:2510.13626 (2025).
 
-6. Xueyang Zhou et al. “LIBERO-PRO: Towards Robust and Fair Evaluation of Vision-Language-Action Models Beyond Memorization.” arXiv preprint arXiv:2510.03827 (2025). Available at: https://arxiv.org/abs/2510.03827.
+6. Xueyang Zhou et al. "LIBERO-PRO: Towards Robust and Fair Evaluation of Vision-Language-Action Models Beyond Memorization." arXiv preprint arXiv:2510.03827 (2025).
 
-7. Cheng Chi et al. “Diffusion Policy: Visuomotor Policy Learning via Action Diffusion.” arXiv preprint arXiv:2303.04137 (2023). Available at: https://arxiv.org/abs/2303.04137
+7. Cheng Chi et al. "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion." arXiv preprint arXiv:2303.04137 (2023).
+
+8. Zhao, T. Z., Kumar, V., Levine, S., & Finn, C. "Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware." arXiv preprint arXiv:2304.13705 (2023).
+
+9. TheRobotStudio. (2024). SO-ARM100 [GitHub Repository]. GitHub. Available at: https://github.com/TheRobotStudio/SO-ARM100
 
 # Citation 
 
