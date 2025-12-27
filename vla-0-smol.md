@@ -132,10 +132,6 @@ The robotics literature shows considerable variation in how actions and states a
 | Full	| Yes	| Relative |	70.3% |
 
 
-<div style="text-align: center;">
-  <img src="assets/vla-0-smol/pusht_reps.png" alt="drawing" width="500"/>
-</div>
-
 The results show clear trends:
 
 - **Relative vs. Absolute Actions**: Switching from absolute to relative actions provided the largest single improvement. This aligns with common practice in robot learning — relative actions are often easier to learn because they're invariant to the absolute position in the workspace and typically have smaller magnitudes.
