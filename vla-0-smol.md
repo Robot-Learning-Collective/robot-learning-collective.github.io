@@ -14,16 +14,16 @@ We present a compact VLA model (500M params) that achieves a high score on simul
 
 # Intro
 
-Growing interest in Vision Language Action models for robotics applications currently faces a very high barrier to entry due to their complexity. This is especially hard for the learning community, where the requirement to rent cloud GPUs and set up distributed training poses an additional hurdle on top of existing challenges such as robot hardware, data collection, and model training. As a result, we observed an unfortunate trend where users obtain significantly worse results compared to much more basic models like ACT, which at least exhibit predictive spatial generalisation.
+Growing interest in Vision Language Action models for robotics applications currently faces a very high barrier to entry due to their complexity. This is especially hard for the learning community, where the requirement to rent cloud GPUs and set up distributed training poses an additional hurdle on top of existing challenges such as robot hardware, data collection, and model training. As a result, we observed an unfortunate trend where users obtain significantly worse results compared to much more basic models like [ACT](https://arxiv.org/abs/2304.13705), which at least exhibit predictive spatial generalisation.
 
-To address this issue, we decided to implement a VLA model based on a compact Vision Language Model that can be fine tuned and run for inference on a consumer grade GPU. In particular, our requirement to keep the model below 1B parameters left us with an almost unchallenged choice of [SmolVLM2](https://huggingface.co/blog/smolvlm2). In a sense, we are following in the steps of SmolVLA, but with a different set of design choices.
+To address this issue, we decided to implement a VLA model based on a compact Vision Language Model that can be fine tuned and run for inference on a consumer grade GPU. In particular, our requirement to keep the model below 1B parameters left us with an almost unchallenged choice of [SmolVLM2](https://huggingface.co/blog/smolvlm2). In a sense, we are following in the steps of [SmolVLA](https://arxiv.org/abs/2506.01844), but with a different set of design choices.
 
 Another gap we aimed to address is the lack of clear recipes for reproducing claimed results. Combined with the unclear impact of various design choices, this creates a situation that is difficult to untangle.
 
 To this end, we implemented one of the most straightforward action discretisation mechanisms from [VLA-0](https://arxiv.org/abs/2510.13054) and conducted a careful study of key design choices on established simulation benchmarks. Our resulting model achieved one of the highest scores on the [LIBERO](https://libero-project.github.io/main.html) benchmark, which mostly reflects current limitations of simulation benchmarks rather than the unique capabilities of our model. We plan to address this issue and adapt our model to real world problems in future work.
 
 
-# Design choices oblation and finding best params for VLA-0
+# Design choices ablation and finding best params for VLA-0
 
 ## What We Did
 We ran systematic ablations on PushT to isolate what matters for training VLAs. We tested:
@@ -61,6 +61,11 @@ The original authors use a system prompt to describe the task and guide the mode
 As part of our training pipeline, we use masked action augmentation, a data augmentation technique in which random characters in the target action string are masked during training.
 
 Previous work on [VLA-0](https://arxiv.org/abs/2510.13054) demonstrated that action masking significantly improves success rates on the [LIBERO](https://libero-project.github.io/main.html) benchmark. We adopted this technique with a modification: instead of masking individual characters, we mask the entire action value. This augmentation aims to mitigate the model's reliance on auto-completing numerical sequences, thereby enforcing stronger dependence on visual observations. We hypothesized that character-level masking might still allow for implicit completion; whole-action masking eliminates this possibility.
+
+| Strategy | Masking level | Original Action | Training Input |
+| :--- | :--- | :--- | :--- |
+| **VLA-0** | Character | `425 180 090` | `4[MASK]5 18[MASK] 090` |
+| **VLA-0-Smol** | Action | `425 180 090` | `[MASK] 180 [MASK]` |
 
 ### Grammar Enforcing
 
@@ -177,7 +182,6 @@ Our ablation study on PushT reveals a clear hierarchy of importance for VLA trai
 
 - **System prompts**: After fine-tuning, the model learns output formats from data. Carefully crafted prompts add no value during training.
 - **Temporal Ensembling:** Temporal ensembling did not improve performance on PushT, suggesting it is unnecessary for short-horizon, planar manipulation tasks.
-
 
 ## LIBERO
 
@@ -319,23 +323,25 @@ We would like to thank [Nebius](https://nebius.com) for providing the GPU resour
 </div>
 
 # References
-1. Ankit Goyal, Hugo Hadfield, Xuning Yang, Valts Blukis, and Fabio Ramos. "VLA-0: Building State-of-the-Art VLAs with Zero Modification." arXiv preprint arXiv:2510.13054 (2025).
+1. Shukor, M., Aubakirova, D., Capuano, F., Kooijmans, P., Palma, S., Zouitine, A., ... & Cadene, R. SmolVLA: A Vision-Language-Action Model for Affordable and Efficient Robotics. arXiv preprint arXiv:2506.01844 (2025).
+   
+2. Zhao, T. Z., Kumar, V., Levine, S., & Finn, C. "Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware." arXiv preprint arXiv:2304.13705 (2023).
+  
+3. Ankit Goyal, Hugo Hadfield, Xuning Yang, Valts Blukis, and Fabio Ramos. "VLA-0: Building State-of-the-Art VLAs with Zero Modification." arXiv preprint arXiv:2510.13054 (2025).
 
-2. Bo Liu, Yifeng Zhu, Chongkai Gao, Yihao Feng, Qiang Liu, Yuke Zhu, and Peter Stone. "LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning." arXiv preprint arXiv:2306.03310 (2023).
+4. Bo Liu, Yifeng Zhu, Chongkai Gao, Yihao Feng, Qiang Liu, Yuke Zhu, and Peter Stone. "LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning." arXiv preprint arXiv:2306.03310 (2023).
 
-3. Andrés Marafioti et al. "SmolVLM: Redefining small and efficient multimodal models." arXiv preprint arXiv:2504.05299 (2025).
+5. Andrés Marafioti et al. "SmolVLM: Redefining small and efficient multimodal models." arXiv preprint arXiv:2504.05299 (2025).
 
-4. Shuai Bai et al. "Qwen2.5-VL Technical Report." arXiv preprint arXiv:2502.13923 (2025).
+6. Shuai Bai et al. "Qwen2.5-VL Technical Report." arXiv preprint arXiv:2502.13923 (2025).
 
-5. Senyu Fei et al. "LIBERO-Plus: In-depth Robustness Analysis of Vision-Language-Action Models." arXiv preprint arXiv:2510.13626 (2025).
+7. Senyu Fei et al. "LIBERO-Plus: In-depth Robustness Analysis of Vision-Language-Action Models." arXiv preprint arXiv:2510.13626 (2025).
 
-6. Xueyang Zhou et al. "LIBERO-PRO: Towards Robust and Fair Evaluation of Vision-Language-Action Models Beyond Memorization." arXiv preprint arXiv:2510.03827 (2025).
+8. Xueyang Zhou et al. "LIBERO-PRO: Towards Robust and Fair Evaluation of Vision-Language-Action Models Beyond Memorization." arXiv preprint arXiv:2510.03827 (2025).
 
-7. Cheng Chi et al. "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion." arXiv preprint arXiv:2303.04137 (2023).
+9.  Cheng Chi et al. "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion." arXiv preprint arXiv:2303.04137 (2023).
 
-8. Zhao, T. Z., Kumar, V., Levine, S., & Finn, C. "Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware." arXiv preprint arXiv:2304.13705 (2023).
-
-9. TheRobotStudio. (2024). SO-ARM100 [GitHub Repository]. GitHub. Available at: https://github.com/TheRobotStudio/SO-ARM100
+10. TheRobotStudio. (2024). SO-ARM100 [GitHub Repository]. GitHub. Available at: https://github.com/TheRobotStudio/SO-ARM100
 
 # Citation 
 
