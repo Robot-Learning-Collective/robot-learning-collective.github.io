@@ -12,15 +12,38 @@ header_links:
 # VLA-0-Smol: A Reproducible Recipe for High-Performance, Sub-Billion Parameter VLAs
 We present a compact VLA model (500M params) that achieves a high score on simulation benchmarks with a clear recipe to reproduce results and a detailed ablation study showing the impact of key design choices.
 
-# Intro
+# Introduction
 
-Growing interest in Vision Language Action models for robotics applications currently faces a very high barrier to entry due to their complexity. This is especially hard for the learning community, where the requirement to rent cloud GPUs and set up distributed training poses an additional hurdle on top of existing challenges such as robot hardware, data collection, and model training. As a result, we observed an unfortunate trend where users obtain significantly worse results compared to much more basic models like [ACT](https://arxiv.org/abs/2304.13705), which at least exhibit predictive spatial generalisation.
+We really like the [LeRobot](https://huggingface.co/lerobot) project and its community. It lowers the barrier to entry for learning-based robotics in a big way and makes it much easier to start experimenting with real robot learning systems.
 
-To address this issue, we decided to implement a VLA model based on a compact Vision Language Model that can be fine tuned and run for inference on a consumer grade GPU. In particular, our requirement to keep the model below 1B parameters left us with an almost unchallenged choice of [SmolVLM2](https://huggingface.co/blog/smolvlm2). In a sense, we are following in the steps of [SmolVLA](https://arxiv.org/abs/2506.01844), but with a different set of design choices.
+But software alone is not enough. You still need to know how to train a model, and this is where many people get stuck. On one side, you have great software tools. On the other, you have research papers that describe new methods and ideas. But turning a paper into a working system is often not straightforward. Many important details are missing because they were not the focus of the paper or because they seem “obvious” to the authors. In practice, you need experience to fill in those gaps and that makes learning robotics much harder than it needs to be.
 
-Another gap we aimed to address is the lack of clear recipes for reproducing claimed results. Combined with the unclear impact of various design choices, this creates a situation that is difficult to untangle.
+Another big issue is model size. Most recent vision–language–action (VLA) models are in the 3–7B parameter range. That’s reasonable for big labs, but it’s a lot for the broader community. Training such models usually requires multiple GPUs, distributed setups, and a lot of engineering effort. They are also slow and expensive to run, which makes local inference and real-robot experiments much harder.
 
-To this end, we implemented one of the most straightforward action discretisation mechanisms from [VLA-0](https://arxiv.org/abs/2510.13054) and conducted a careful study of key design choices on established simulation benchmarks. Our resulting model achieved one of the highest scores on the [LIBERO](https://libero-project.github.io/main.html) benchmark, which mostly reflects current limitations of simulation benchmarks rather than the unique capabilities of our model. We plan to address this issue and adapt our model to real world problems in future work.
+This project started with a simple goal:
+
+<div style="
+  background: rgba(59,130,246,0.08);
+  border-left: 6px solid #3b82f6;
+  padding: 16px 20px;
+  margin: 24px 0;
+  border-radius: 8px;
+">
+  We want to provide a clear, reproducible path with code, configs, pretrained checkpoints (under 1B parameters), and ablation results so that someone can take 100 demonstrations, use the LeRobot framework, and actually train a working robot policy.
+</div>
+
+
+When we found the [VLA-0](https://arxiv.org/abs/2510.13054) paper, we loved it. It showed that you can get strong robotic performance with only small changes to a standard vision–language model. At the same time, it was also a perfect example of the problem we mentioned above: the idea is simple, the paper is well written, but it assumes you already know how to work with VLMs in practice. It is not always clear what really matters, what can be changed, and what can be ignored.
+
+So we decided to integrate VLA-0 into the LeRobot framework. Our requirement to keep the model under 1B parameters left us with an almost unchallenged choice: [SmolVLM2-500M](HuggingFaceTB/SmolVLM2-500M-Video-Instruct). In that sense, we are following in the steps of [SmolVLA](https://arxiv.org/abs/2506.01844), but with a different set of design choices.
+
+Our first milestone was LIBERO, the most common benchmark for VLA models and the same benchmark used by the VLA-0 authors. In this post, we describe our path to that milestone: the design choices we made, the ablations we ran, and what we learned from them.
+
+Our final model reaches performance close to much larger systems ([π<sub>0.5</sub>](https://arxiv.org/abs/2504.16054), [OpenVLA-OFT](https://arxiv.org/abs/2502.19645)) even though it is about six times smaller. We are happy and a bit proud of that. But there is always a “but”. 
+
+We are aware that LIBERO has limitations. It does not always test true generalization, and it uses much more data than the low-data scenarios we ultimately care about. So we do not see this as the end goal. We see it as a first step: a validated, lightweight starting point that we can now use to explore smaller datasets and real-world robots. 
+
+With that, we now switch from motivation to the technical details. We hope the rest of this post is useful and that it helps more people experiment with and build vision–language–action systems.
 
 
 # Design choices ablation and finding best params for VLA-0
@@ -282,18 +305,25 @@ Perhaps most importantly, `VLA-0-Smol` serves as a reproducible recipe for the c
 
 ## Discussions
 
-### Future steps
-While `VLA-0-Smol` marks a significant step toward accessible robotics research, there is much work to be done to bridge the gap between simulation and the real world:
+### **Future Steps**
 
-- **Real-World Deployment**: Our primary focus is transitioning from the LIBERO simulator to physical hardware, specifically the SO100 ARM platform. We aim to test how the "memorization" we observed in simulation translates to the noisy, unpredictable environments of real-world manipulation.
+While VLA-0-Smol is a meaningful step toward more accessible robotics research, it is only a first step. Our main goal is still the same: to create a clear and practical path, with code, configs, pretrained checkpoints (under 1B parameters), and ablation results, that allows anyone to train a robotics model from around 100 demonstrations using the LeRobot framework.
 
-- **Data Efficiency**: We are interested in exploring how few-shot fine-tuning can be used to adapt `VLA-0-Smol` to entirely new tasks using only a handful of human demonstrations.
+There are two main directions we want to focus on next.
 
-### Performance
+**Real-World Deployment.**
 
-Since we are utilizing a very small model, we want to enable it to run locally on consumer devices and mid-range GPUs. Specifically, we aim to optimize the model for **real-time inference** on user-grade GPUs and hardware such as the **SO100 ARM** robotic platform.
+Our primary focus is moving beyond simulation and onto real hardware, specifically the SO100 ARM platform. We want to understand how much of the “memorization” we observed in simulation transfers to the real world, where observations are noisy, lighting changes, and physical interactions are far less predictable. 
 
-Additionally, we believe that action prediction can be significantly accelerated by applying **speculative decoding**. Because inference is currently in a **memory-bound regime** and actions typically consist of only a few tokens followed by a space, these sequences can be efficiently predicted by smaller **draft models** to reduce latency.
+**Data Efficiency.**
+
+One of the promises of VLA-style approaches is that they should work well with very limited data. In this work, however, we trained on the full LIBERO dataset with 1693 demonstrations. We do not yet know whether it is possible to achieve reasonable performance with only ~100 demonstrations, which is the regime we ultimately care about. A key goal of our future work is to systematically study how performance scales with data and to identify what the true minimum data requirement is for useful learning.
+
+### **Performance**
+
+Although we significantly reduced model size, inference is still relatively slow due to the autoregressive nature of the model. This currently prevents real-time operation on many consumer devices and mid-range GPUs. One of our practical goals is therefore to optimize the model for real-time inference on user-grade hardware, including platforms like the SO100 ARM robot.
+
+We believe that a large part of this can be addressed through [speculative decoding](https://arxiv.org/abs/2401.15077). Since action sequences are short, structured, and memory-bound, they are good candidates for prediction by smaller draft models. Using speculative decoding could substantially reduce latency without sacrificing output quality, making real-time control more feasible on affordable hardware.
 
 ### LIBERO
 
@@ -352,6 +382,14 @@ We would like to thank [Nebius](https://nebius.com) for providing the GPU resour
 9.  Cheng Chi et al. "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion." arXiv preprint arXiv:2303.04137 (2023).
 
 10. TheRobotStudio. (2024). SO-ARM100 [GitHub Repository]. GitHub. Available at: https://github.com/TheRobotStudio/SO-ARM100
+
+11. TRI LBM Team et al. “A Careful Examination of Large Behavior Models for Multitask Dexterous Manipulation” arXiv preprint arXiv:2507.05331 (2025).
+
+12. Yuhui Li et al. "EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty" arXiv preprint arXiv:2401.15077  (2024).
+
+13. Physical Intelligence et al. “π<sub>0.5</sub>: a Vision-Language-Action Model with Open-World Generalization” arXiv preprint arXiv:2504.16054
+
+14. Moo Jin Kim et al. "Fine-Tuning Vision-Language-Action Models: Optimizing Speed and Success" arXiv preprint arXiv:2502.19645v2 (2025).
 
 # Citation 
 
