@@ -75,16 +75,21 @@ Specifically, we construct a chat-style prompt that includes the image observati
 
 When used, the state is discretized into N bins and appended to the input as a sequence of integer tokens represented in text form. Similarly, a chunk of actions is discretized into M bins, flattened into a time-ordered sequence, and provided to the model also as text.
 
-<div style="font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef; overflow-x: auto; line-height: 2.2;">
-    <span style="background: #e2e8f0; color: #475569; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; margin-right: 5px; white-space: nowrap;">&lt;|im_start|&gt;User:</span>
-    <span style="background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; margin-right: 5px; border: 1px solid #93c5fd; white-space: nowrap;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-        [Image Embeddings (64 patches)]
-    </span>
-    <span style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; margin-right: 5px; border: 1px solid #86efac; white-space: nowrap;">Task: Description of the task to be performed,</span>
-    <span style="background: #ffedd5; color: #9a3412; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; margin-right: 5px; border: 1px solid #fdba74; white-space: nowrap;">State: 124 241,</span>
-    <span style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; margin-right: 5px; border: 1px solid #fca5a5; font-weight: bold; white-space: nowrap;">Actions: 512, 123, 4, 156, 65</span>
-    <span style="background: #e2e8f0; color: #475569; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; white-space: nowrap;">&lt;end_of_utterance&gt;</span>
+<div style="font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; background: #ffffff; padding: 24px; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; line-height: 2.4; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+  <div style="margin-bottom: 12px; border-left: 4px solid #94a3b8; padding-left: 12px;">
+    <span style="background: #f1f5f9; color: #475569; padding: 4px 8px; border-radius: 4px; #93c5fd; font-size: 0.9em; margin-right: 4px;">&lt;|im_start|&gt;User:</span>
+    <span style="background: #eff6ff; color: #1e40af; padding: 4px 8px; border-radius: 4px; border: 1px solid #bfdbfe; font-size: 0.9em; margin-right: 4px;">&lt;fake_token_around_image&gt;&lt;global-img&gt;</span>
+    <span style="background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 4px; border: 1px solid #93c5fd; font-size: 0.9em; margin-right: 4px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 2px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> [Image Embeddings (64 patches)]</span> <span style="background: #eff6ff; color: #1e40af; padding: 4px 8px; border-radius: 4px; border: 1px solid #bfdbfe; font-size: 0.9em; margin-right: 8px;">&lt;fake_token_around_image&gt;</span>
+    <span style="background: #f0fdf4; color: #166534; padding: 4px 8px; border-radius: 4px; border: 1px solid #bbf7d0; font-size: 0.9em; margin-right: 4px;">Task: Description of the task to be performed,</span>
+    <span style="background: #fff7ed; color: #9a3412; padding: 4px 8px; border-radius: 4px; border: 1px solid #ffedd5; font-size: 0.9em; margin-right: 4px;">State: 341 182,</span>
+    <span style="background: #fff1f2; color: #be123c; padding: 4px 8px; border-radius: 4px; border: 1px solid #fecdd3; font-size: 0.9em; margin-right: 4px; font-size: 0.9em;">Actions:</span>
+    <span style="background: #f1f5f9; color: #475569; padding: 4px 8px; border-radius: 4px; font-size: 0.9em;">&lt;end_of_utterance&gt;</span>
+  </div>
+  <div style="border-left: 4px solid #818cf8; padding-left: 12px;">
+    <span style="background: #eef2ff; color: #3730a3; padding: 4px 8px; border-radius: 4px; margin-right: 8px; font-size: 0.9em; ">Assistant:</span>
+    <span style="background: #f5f3ff; color: #5b21b6; padding: 4px 8px; border-radius: 4px; border: 1px solid #ddd6fe; font-size: 0.9em;">227 232 223 191</span> <span style="background: #f1f5f9; color: #475569; padding: 4px 8px; border-radius: 4px; font-size: 0.9em; margin-left: 6px;">&lt;end_of_utterance&gt; &lt;|im_end|&gt;</span>
+  </div>
 </div>
 <p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Figure 1: The multimodal input sequence formatted for the SmolVLM2 chat template.</em></p>
 
