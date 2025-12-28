@@ -52,7 +52,18 @@ Specifically, we construct a chat-style prompt that includes the image observati
 
 When used, the state is discretized into N bins and appended to the input as a sequence of integer tokens represented in text form. Similarly, a chunk of actions is discretized into M bins, flattened into a time-ordered sequence, and provided to the model also as text.
 
-<mark>TODO: Picture with input</mark>
+<div style="font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef; overflow-x: auto; line-height: 2.2;">
+    <span style="background: #e2e8f0; color: #475569; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; margin-right: 5px; white-space: nowrap;">&lt;|im_start|&gt;User:</span>
+    <span style="background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; margin-right: 5px; border: 1px solid #93c5fd; white-space: nowrap;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        [Image Embeddings (64 patches)]
+    </span>
+    <span style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; margin-right: 5px; border: 1px solid #86efac; white-space: nowrap;">Task: Description of the task to be performed,</span>
+    <span style="background: #ffedd5; color: #9a3412; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; margin-right: 5px; border: 1px solid #fdba74; white-space: nowrap;">State: 124 241,</span>
+    <span style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; margin-right: 5px; border: 1px solid #fca5a5; font-weight: bold; white-space: nowrap;">Actions: 512, 123, 4, 156, 65</span>
+    <span style="background: #e2e8f0; color: #475569; padding: 4px 8px; border-radius: 6px; font-size: 0.9em; white-space: nowrap;">&lt;end_of_utterance&gt;</span>
+</div>
+<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Figure 1: The multimodal input sequence formatted for the SmolVLM2 chat template.</em></p>
 
 The original authors use a system prompt to describe the task and guide the model’s behaviour. Since it was unclear how critical this component is, we ablated it by evaluating the model both with and without the system prompt.
 
@@ -76,6 +87,7 @@ Although the model generally converges on the correct output format, the limited
 We discovered that our model is primarily CPU bound. This means the overhead of placing a CUDA kernel call takes more time than the actual execution on the GPU. Model compilation is typically the best solution for this; however, we encountered compatibility issues when using it within the LeRobot framework alongside the Accelerate library. 
 
 ![Performance trace](assets/vla-0-smol/performance_trace.png)
+<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Figure 2: VLA execution trace on the GPU.</em></p>
 
 - **Mixed Precision:** We found that training in `float16` leads to gradient explosions. Switching to `bfoat16` completely resolved this issue.
 - **Loss Calculation:** Calculating loss in mixed precision resulted in slight performance degradation. To fix this, we convert our logits to full precision before computing the loss. This approach provides nearly the same accuracy as full-precision training but is almost twice as fast.
@@ -109,6 +121,7 @@ At `5×10⁻⁵`, we observed the best performance with a final success rate of 
 <div style="text-align: center;">
   <img src="assets/vla-0-smol/pusht_lr.png" alt="drawing" width="500"/>
 </div>
+<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Figure 3: Impact of learning rate on the success rate in the PushT task.</em></p>
 
 ### Vision Encoder Freezing
 
@@ -123,6 +136,7 @@ This result is somewhat disappointing from a practical standpoint. We had hoped 
 <div style="text-align: center;">
   <img src="assets/vla-0-smol/pusht_freeze.png" alt="drawing" width="500"/>
 </div>
+<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Figure 4: Impact of freezing vision encoder on the success rate in the PushT task.</em></p>
 
 ### State and Action Representations
 
@@ -156,6 +170,7 @@ Adding action masking improved the success rate from **70.3% to 78.1%**. This s
 <div style="text-align: center;">
   <img src="assets/vla-0-smol/pusht_mask.png" alt="drawing" width="500"/>
 </div>
+<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Figure 5: Impact of masking actions on the success rate in the PushT task.</em></p>
 
 ### Ensemble Prediction
 
@@ -256,7 +271,6 @@ Our analysis of the [LIBERO](https://libero-project.github.io/main.html) results
   </figure>
 </div>
 
-
 - **Model size.** Our 0.5B parameter model achieved performance close to the 3B parameter model used in the original VLA-0 work. This result suggests that, for [LIBERO](https://libero-project.github.io/main.html), careful design and training choices can compensate for reduced model capacity. While larger models are typically expected to generalize better, our findings indicate diminishing returns from scale alone under this evaluation setup. We discuss broader implications of this observation in the Discussion section.
 
 ## Conclusion
@@ -272,10 +286,6 @@ Perhaps most importantly, `VLA-0-Smol` serves as a reproducible recipe for the c
 While `VLA-0-Smol` marks a significant step toward accessible robotics research, there is much work to be done to bridge the gap between simulation and the real world:
 
 - **Real-World Deployment**: Our primary focus is transitioning from the LIBERO simulator to physical hardware, specifically the SO100 ARM platform. We aim to test how the "memorization" we observed in simulation translates to the noisy, unpredictable environments of real-world manipulation.
-
-- **Breaking the CPU Bottleneck**: To achieve true real-time performance, we plan to address the current CPU-bound limitations. This includes exploring more robust model compilation techniques and potentially implementing speculative decoding, where a smaller "draft" model predicts action tokens to reduce inference latency.
-
-- **Addressing Generalization**: Following the insights from LIBERO-Plus, we intend to introduce more stochasticity and visual variety during training. Our goal is to move beyond trajectory memorization and toward a model that truly understands spatial relationships and linguistic intent.
 
 - **Data Efficiency**: We are interested in exploring how few-shot fine-tuning can be used to adapt `VLA-0-Smol` to entirely new tasks using only a handful of human demonstrations.
 
