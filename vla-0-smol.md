@@ -1,7 +1,8 @@
 ---
 layout: default
 title: VLA-0-Smol
-description: A Reproducible Recipe for High-Performance, Sub-Billion Parameter VLAs
+description: A Reproducible Recipe for High-Performance, Sub-Billion Parameter VLA
+og_image: /assets/vla-0-smol/vla-0-smol.jpg
 header_links:
   - text: View on GitHub
     url: https://github.com/Robot-Learning-Collective/lerobot-experiments
@@ -9,14 +10,13 @@ header_links:
     url: https://huggingface.co/Robot-Learning-Collective/VLA-0-Smol
 ---
 
-# VLA-0-Smol: A Reproducible Recipe for High-Performance, Sub-Billion Parameter VLAs
 We present a compact VLA model (500M params) that achieves a high score on simulation benchmarks with a clear recipe to reproduce results and a detailed ablation study showing the impact of key design choices.
 
 # Introduction
 
 We really like the [LeRobot](https://huggingface.co/lerobot) project and its community. It lowers the barrier to entry for learning-based robotics in a big way and makes it much easier to start experimenting with real robot learning systems.
 
-But software alone is not enough. You still need to know how to train a model, and this is where many people get stuck. On one side, you have great software tools. On the other, you have research papers that describe new methods and ideas. But turning a paper into a working system is often not straightforward. Many important details are missing because they were not the focus of the paper or because they seem “obvious” to the authors. In practice, you need experience to fill in those gaps and that makes learning robotics much harder than it needs to be.
+But code alone is not enough. You still need to know how to train a model, and this is where many people get stuck. On one side, you have great software tools. On the other, you have research papers that describe new methods and ideas. But turning a paper into a working system is often not straightforward. Many important details are missing because they were not the focus of the paper or because they seem “obvious” to the authors. In practice, you need experience to fill in those gaps and that makes learning robotics much harder than it needs to be.
 
 Another big issue is model size. Most recent vision–language–action (VLA) models are in the 3–7B parameter range. That’s reasonable for big labs, but it’s a lot for the broader community. Training such models usually requires multiple GPUs, distributed setups, and a lot of engineering effort. They are also slow and expensive to run, which makes local inference and real-robot experiments much harder.
 
@@ -29,13 +29,13 @@ This project started with a simple goal:
   margin: 24px 0;
   border-radius: 8px;
 ">
-  We want to provide a clear, reproducible path with code, configs, pretrained checkpoints (under 1B parameters), and ablation results so that someone can take 100 demonstrations, use the LeRobot framework, and actually train a working robot policy.
+  We want to provide a clear, reproducible path with code, configs, pretrained checkpoints and ablation results, while staying under 1B parameters, so that anyone can collect ~100 demonstrations, use the LeRobot framework, and actually train a working robot policy.
 </div>
 
 
 When we found the [VLA-0](https://arxiv.org/abs/2510.13054) paper, we loved it. It showed that you can get strong robotic performance with only small changes to a standard vision–language model. At the same time, it was also a perfect example of the problem we mentioned above: the idea is simple, the paper is well written, but it assumes you already know how to work with VLMs in practice. It is not always clear what really matters, what can be changed, and what can be ignored.
 
-So we decided to integrate VLA-0 into the LeRobot framework. Our requirement to keep the model under 1B parameters left us with an almost unchallenged choice: [SmolVLM2-500M](HuggingFaceTB/SmolVLM2-500M-Video-Instruct). In that sense, we are following in the steps of [SmolVLA](https://arxiv.org/abs/2506.01844), but with a different set of design choices.
+So we decided to integrate VLA-0 into the LeRobot framework. Our requirement to keep the model under 1B parameters left us with an almost unchallenged choice: [SmolVLM2-500M](HuggingFaceTB/SmolVLM2-500M-Video-Instruct). In that sense, we are following in the steps of [SmolVLA](https://arxiv.org/abs/2506.01844) work, but with a different set of design choices.
 
 Our first milestone was LIBERO, the most common benchmark for VLA models and the same benchmark used by the VLA-0 authors. In this post, we describe our path to that milestone: the design choices we made, the ablations we ran, and what we learned from them.
 
@@ -43,7 +43,7 @@ Our final model reaches performance close to much larger systems ([π<sub>0.5</s
 
 We are aware that LIBERO has limitations. It does not always test true generalization, and it uses much more data than the low-data scenarios we ultimately care about. So we do not see this as the end goal. We see it as a first step: a validated, lightweight starting point that we can now use to explore smaller datasets and real-world robots. 
 
-With that, we now switch from motivation to the technical details. We hope the rest of this post is useful and that it helps more people experiment with and build vision–language–action systems.
+With that, we now switch from motivation to the technical details.
 
 
 # Design choices ablation and finding best params for VLA-0
@@ -57,16 +57,16 @@ We ran systematic ablations on PushT to isolate what matters for training VLAs. 
 
 We made two pragmatic choices:
 - Use [SmolVLM2](https://huggingface.co/blog/smolvlm2) (sub-billion params) to keep experiments on consumer GPUs.
-- Start with PushT for faster iteration and clearer signal than full [LIBERO](https://libero-project.github.io/main.html).
+- Start with [PushT](https://github.com/huggingface/gym-pusht) for faster iteration and clearer signal than full [LIBERO](https://libero-project.github.io/main.html).
 
 # Method
 
 This chapter describes the key design components of [VLA-0](https://arxiv.org/abs/2510.13054) and highlights the specific modifications we introduced in our implementation. Rather than re-deriving the full method, we focus on the architectural choices, input representations, training augmentations, and system-level considerations that are most relevant for understanding how our setup differs from the original approach. These design decisions provide the context needed to interpret the ablation results and performance analyses presented in the following sections.
 
 ## Model Architecture
-The [VLA-0](https://arxiv.org/abs/2510.13054) authors use [Qwen-VL-2.5-3B](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct) as the vision–language backbone. In contrast, we chose a smaller model to enable inference on a laptop equipped with a consumer-grade GPU, with the goal of eventually evaluating the system on a real robot. For this reason, we focused on sub-billion-parameter models and selected [SmolVLM2-500M](HuggingFaceTB/SmolVLM2-500M-Video-Instruct). This model offers solid documentation and an accompanying paper that clearly explains its design, and it has been evaluated for robotic applications in the SmolVLA work.
+The [VLA-0](https://arxiv.org/abs/2510.13054) authors use [Qwen-VL-2.5-3B](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct) as the vision–language backbone. In contrast, we chose a smaller model to enable inference on a laptop equipped with a consumer-grade GPU, with the goal of eventually evaluating the system on a real robot. For this reason, we focused on sub-billion-parameter models and selected [SmolVLM2-500M](https://huggingface.co/HuggingFaceTB/SmolVLM2-500M-Video-Instruct). This model comes with solid documentation, has been trainend on tasks requared spacial understanding and it has been evaluated for robotic applications in the SmolVLA work.
 
-We use the standard [SmolVLM2](https://huggingface.co/blog/smolvlm2) implementation from the Transformers library with one key modification. In the original setup, the authors employ an image tiling strategy in which both the original image and an upscaled version split into 16 tiles are passed to the image encoder. While effective, this approach significantly increases computational cost and is impractical for real-time robotic applications. Instead, we pass only the original image to the image encoder. This simplification matches the approach used in SmolVLA and makes the model more suitable for deployment on resource-constrained robotic systems.
+We use the standard SmolVLM2 implementation from the Transformers library with one key modification. In the original setup, the authors employ an image tiling strategy in which both the original image and an upscaled version split into 16 tiles are passed to the image encoder. While effective, this approach significantly increases computational cost and is impractical for real-time robotic applications. Instead, we pass only the original image to the image encoder. This simplification matches the approach used in SmolVLA and makes the model more suitable for deployment on resource-constrained robotic systems.
 
 ### Model Input
 We largely follow the approach of the original paper, with minor modifications to accommodate the [SmolVLM2](https://huggingface.co/blog/smolvlm2) chat template.
@@ -115,7 +115,7 @@ Although the model generally converges on the correct output format, the limited
 We discovered that our model is primarily CPU bound. This means the overhead of placing a CUDA kernel call takes more time than the actual execution on the GPU. Model compilation is typically the best solution for this; however, we encountered compatibility issues when using it within the LeRobot framework alongside the Accelerate library. 
 
 ![Performance trace](assets/vla-0-smol/performance_trace.png)
-<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Figure 2: VLA execution trace on the GPU.</em></p>
+<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Model's execution trace on the GPU.</em></p>
 
 - **Mixed Precision:** We found that training in `float16` leads to gradient explosions. Switching to `bfoat16` completely resolved this issue.
 - **Loss Calculation:** Calculating loss in mixed precision resulted in slight performance degradation. To fix this, we convert our logits to full precision before computing the loss. This approach provides nearly the same accuracy as full-precision training but is almost twice as fast.
@@ -131,25 +131,26 @@ For ablations we were using PushT task. The task is performed in a 2D space, mak
   </div>
   <div style="flex:1 1 320px; min-width:280px; max-width:480px; text-align:center;">
     <img src="/assets/vla-0-smol/687474703a2f2f72656d69636164656e652e636f6d2f6173736574732f6769662f70757368745f646966667573696f6e2e676966.gif" alt="PushT demo" style="width:100%; height:auto; border-radius:4px;">
+    <p style="font-size: 0.9rem; color: #667; margin-top: 8px;"><em>Example of successful demonstration</em></p>
   </div>
 </div>
 
 We evaluate all models purely on success rate: the percentage of episodes where the T-block reaches the target pose within tolerance. Each evaluation runs 64 episodes and we report the success rate at the best checkpoint unless otherwise specified.
 
-For completeness and reproducibility, we provide the full set of hyperparameters and training details for every experiment in our public Weights & Biases workspace ([wandb](https://wandb.ai/sergeyskv/rlc_public?nw=nwusersergeyskv)).
+For completeness and reproducibility, we provide the full set of hyperparameters and training details for every experiment in our public Weights & Biases [workspace](https://wandb.ai/sergeyskv/rlc_public?nw=nwusersergeyskv).
 
 ### Learning Rate
 
 Learning rate is often treated as a hyperparameter to tune, but its importance for VLA fine-tuning was unclear. We tested four learning rates `5×10⁻⁶`, `1×10⁻⁵`, `5×10⁻⁵`, and `1×10⁻⁴`, keeping all other parameters constant (relative actions, no state, full model training).
 
-The results show that learning rate has a dramatic impact on performance. The two smallest learning rates (`5×10⁻⁶` and `1×10⁻⁵`) completely failed to learn, achieving 0% success rate throughout training. This suggests that [VLA-0](https://arxiv.org/abs/2510.13054)'s choice of `5×10⁻⁶` may have worked for their 100,000 training steps but is too conservative for our 30,000 step training regime.
+The results show that learning rate has a dramatic impact on performance. The two smallest learning rates (`5×10⁻⁶` and `1×10⁻⁵`) completely failed to learn, achieving 0% success rate throughout training. This suggests that VLA-0's choice of `5×10⁻⁶` may have worked for their 100,000 training steps but is too conservative for our 30,000 step training regime.
 
 At `5×10⁻⁵`, we observed the best performance with a final success rate of 57.8%. The highest learning rate (`1×10⁻⁴`) showed slightly worse performance, suggesting we may be approaching the upper bound of stable learning rates for this task.
 
 <div style="text-align: center;">
   <img src="assets/vla-0-smol/pusht_lr.png" alt="drawing" width="500"/>
 </div>
-<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Figure 3: Impact of learning rate on the success rate in the PushT task.</em></p>
+<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Impact of learning rate on the success rate in the PushT task.</em></p>
 
 ### Vision Encoder Freezing
 
@@ -164,7 +165,7 @@ This result is somewhat disappointing from a practical standpoint. We had hoped 
 <div style="text-align: center;">
   <img src="assets/vla-0-smol/pusht_freeze.png" alt="drawing" width="500"/>
 </div>
-<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Figure 4: Impact of freezing vision encoder on the success rate in the PushT task.</em></p>
+<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Impact of freezing vision encoder on the success rate in the PushT task.</em></p>
 
 ### State and Action Representations
 
@@ -187,22 +188,22 @@ The results show clear trends:
 
 ### System Prompt
 
-[VLA-0](https://arxiv.org/abs/2510.13054) uses a structured system prompt that explicitly describes the output format. We tested whether this prompt provides any benefit after fine-tuning, since one might expect that during fine-tuning, the model learns the desired output format from the data itself.
+VLA-0 uses a structured system prompt that explicitly describes the output format. We tested whether this prompt provides any benefit after fine-tuning, since one might expect that during fine-tuning, the model learns the desired output format from the data itself.
 
 We compared training with and without the system prompt, keeping all other parameters constant. **The results show no difference in performance** — both conditions achieved the same success rate. This suggests that after fine-tuning on task-specific data, the system prompt becomes redundant. The model learns the output format from the training examples themselves.
 
 ### Masked Action Augmentation
 
-Adding action masking improved the success rate from **70.3% to 78.1%**. This significant jump validates the hypothesis we set out to test: that preventing the model from relying on character-level auto-completion results in a stronger policy. It also confirms that the benefits of action masking, originally reported by the [VLA-0](https://arxiv.org/abs/2510.13054) authors, transfer effectively to the smaller [SmolVLM2](https://huggingface.co/blog/smolvlm2) architecture and our specific whole-action masking strategy.
+Adding action masking improved the success rate from **70.3% to 78.1%**. This significant jump validates the hypothesis we set out to test: that preventing the model from relying on character-level auto-completion results in a stronger policy. It also confirms that the benefits of action masking, originally reported by the VLA-0 authors, transfer effectively to the smaller SmolVLM2 architecture and our specific whole-action masking strategy.
 
 <div style="text-align: center;">
   <img src="assets/vla-0-smol/pusht_mask.png" alt="drawing" width="500"/>
 </div>
-<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Figure 5: Impact of masking actions on the success rate in the PushT task.</em></p>
+<p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Impact of masking actions on the success rate in the PushT task.</em></p>
 
 ### Ensemble Prediction
 
-VLA0 employs temporal ensembling across N tokens to smooth out action sequences. For the PushT task, we experimented with a standard n-tokens ahead approach, where we predicted and executed a fixed chunk of N=5 tokens.
+VLA-0 employs temporal ensembling across N tokens to smooth out action sequences. For the PushT task, we experimented with a standard n-tokens ahead approach, where we predicted and executed a fixed chunk of `N=5` tokens.
 
 When comparing these two methods, we found that temporal ensembling yielded no significant performance boost for PushT. Therefore, to optimize computational efficiency and inference speed, we opted for the 5-tokens ahead approach.
 
@@ -234,6 +235,7 @@ Having identified the most impactful design choices on PushT, we next ask whethe
   </div>
   <div style="flex:1 1 320px; min-width:280px; max-width:480px; text-align:center;">
     <img src="/assets/vla-0-smol/media_videos_eval_video_100000_90766c2977b1eb305cd3.gif" alt="Libero demo" style="width:100%; height:auto; border-radius:4px;">
+    <p style="font-size: 0.9rem; color: #667; margin-top: 8px;"><em>Example of successful demonstration of table-top robot arm performing pick-and-place task</em></p>
   </div>
 </div>
 
@@ -242,7 +244,7 @@ Having identified the most impactful design choices on PushT, we next ask whethe
 
 Success is measured by the agent's ability to complete long-horizon tasks and maintain its performance on previously learned tasks after acquiring new ones. Following the VLA0 paper, we compared our model across four specific task suites:
 
-- **Object:** Tests generalizable object recognition by varying the types of objects manipulated (e.g., "pick up the [ketchup/milk/juice] and put it in the basket").
+- **Object:** Tests generalizable object recognition by varying the types of objects manipulated (e.g., "pick up the `ketchup/milk/juice` and put it in the basket").
 - **Spatial:** Focuses on spatial relationships and layouts (e.g., "put the bowl on the plate" with varying initial object positions).
 - **Goal:** Maintains the same object set but varies the end goal (e.g., "open the drawer" vs. "put the mug in the drawer").
 - **Long:** Emphasizes long-horizon, procedural sequences (e.g., "open the microwave and put the bowl in it"). This requires the agent to chain multiple behaviors together to complete complex, multi-step goals.
@@ -250,17 +252,17 @@ Success is measured by the agent's ability to complete long-horizon tasks and ma
 
 ### Training Setup
 
-Our [LIBERO](https://libero-project.github.io/main.html) experiments largely follow the configuration identified as optimal on PushT. We used the same learning rate, enabled action masking, and applied image cropping. The model was trained for **100,000 steps** (approximately 70 epochs) with a **batch size of 192**, using mixed-precision training in **bf16**.
+Our LIBERO experiments largely follow the configuration identified as optimal on PushT. We used the same learning rate, enabled action masking, and applied image cropping. The model was trained for **100,000 steps** (approximately 70 epochs) with a **batch size of 192**, using mixed-precision training in **bf16**.
 
-One notable deviation concerns **action representation**. Although relative actions provided a significant performance boost on PushT, we found them difficult to apply reliably to [LIBERO](https://libero-project.github.io/main.html) due to differences in input structure and task dynamics. As a result, all [LIBERO](https://libero-project.github.io/main.html) experiments were conducted using absolute actions.
+One notable deviation concerns **action representation**. Although relative actions provided a significant performance boost on PushT, we found them difficult to apply reliably to LIBERO due to differences in input structure and task dynamics. As a result, all LIBERO experiments were conducted using absolute actions.
 
 ### Results
 
-We evaluated the final model using two inference-time protocols. Following [VLA-0](https://arxiv.org/abs/2510.13054), we ensemble predictions across **8 future action tokens**. For comparison, we also report results using a standard **n-tokens-ahead prediction** with n=8, matching the evaluation setup used in our PushT ablations.
+We evaluated the final model using two inference-time protocols. Following VLA-0, we ensemble predictions across **8 future action tokens**. For comparison, we also report results using a standard **n-tokens-ahead prediction** with n=8, matching the evaluation setup used in our PushT ablations.
 
-Without ensembling, the average success rate on [LIBERO](https://libero-project.github.io/main.html) drops to **90.7%**, a **3.4 percentage point decrease** relative to the ensembled evaluation. This differs from our PushT results, where temporal ensembling had no measurable impact on performance.
+Without ensembling, the average success rate on LIBERO drops to **90.7%**, a **3.4 percentage point decrease** relative to the ensembled evaluation. This differs from our PushT results, where temporal ensembling had no measurable impact on performance.
 
-These results indicate that while temporal ensembling is unnecessary for PushT, it provides a clear benefit on [LIBERO](https://libero-project.github.io/main.html). In contrast, other high-impact design choices identified on PushT — such as learning rate, vision encoder fine-tuning, and action masking — transfer cleanly to the [LIBERO](https://libero-project.github.io/main.html) setting.
+These results indicate that while temporal ensembling is unnecessary for PushT, it provides a clear benefit on LIBERO. In contrast, other high-impact design choices identified on PushT — such as learning rate, vision encoder fine-tuning, and action masking — transfer cleanly to the LIBERO setting.
 
 | Model | Params | Object | Spatial | Goal | Long | Avg |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -277,10 +279,10 @@ These results indicate that while temporal ensembling is unnecessary for PushT, 
 
 ### Analysis
 
-A central question of this work is whether conclusions drawn from fast ablation on PushT transfer to a more complex benchmark. We find that most high-impact design choices identified on PushT generalize well to [LIBERO](https://libero-project.github.io/main.html). In particular, the learning rate, vision encoder fine-tuning, and masked action augmentation all remained necessary for strong performance when scaled to 3D, long-horizon tasks.
-However, not all conclusions transferred directly. Temporal ensembling, which had no measurable effect on PushT, provided a clear improvement during [LIBERO](https://libero-project.github.io/main.html) evaluation. This indicates that while PushT is effective for identifying many critical training decisions, it does not fully capture the requirements of long-horizon task execution.
+A central question of this work is whether conclusions drawn from fast ablation on PushT transfer to a more complex benchmark. We find that most high-impact design choices identified on PushT generalize well to LIBERO. In particular, the learning rate, vision encoder fine-tuning, and masked action augmentation all remained necessary for strong performance when scaled to 3D, long-horizon tasks.
+However, not all conclusions transferred directly. Temporal ensembling, which had no measurable effect on PushT, provided a clear improvement during LIBERO evaluation. This indicates that while PushT is effective for identifying many critical training decisions, it does not fully capture the requirements of long-horizon task execution.
 
-Our analysis of the [LIBERO](https://libero-project.github.io/main.html) results highlighted two primary areas of interest:
+Our analysis of the LIBERO results highlighted two primary areas of interest:
 
 - **Overfitting.** During evaluation, we observed that the model performs near-perfectly on some tasks while failing on others that are visually and logically similar. This suggests that the model may be overfitting to specific task trajectories rather than learning fully generalizable behaviors.
 
@@ -299,10 +301,10 @@ Our analysis of the [LIBERO](https://libero-project.github.io/main.html) results
   </figure>
 </div>
 
-- **Model size.** Our 0.5B parameter model achieved performance close to the 3B parameter model used in the original VLA-0 work. This result suggests that, for [LIBERO](https://libero-project.github.io/main.html), careful design and training choices can compensate for reduced model capacity. While larger models are typically expected to generalize better, our findings indicate diminishing returns from scale alone under this evaluation setup. We discuss broader implications of this observation in the Discussion section.
+- **Model size.** Our 0.5B parameter model achieved performance close to the 3B parameter model used in the original VLA-0 work. This result suggests that, for LIBERO, careful design and training choices can compensate for reduced model capacity. While larger models are typically expected to generalize better, our findings indicate diminishing returns from scale alone under this evaluation setup. We discuss broader implications of this observation in the Discussion section.
 
 ## Conclusion
-The development of `VLA-0-Smol` demonstrates that massive scale is not the only path to high-performance robotic policies. By distilling the design principles of the [VLA-0](https://arxiv.org/abs/2510.13054) architecture into a sub-billion parameter footprint, we have shown that a 500M parameter model can achieve results on par with models six times its size on established benchmarks like [LIBERO](https://libero-project.github.io/main.html).
+The development of `VLA-0-Smol` demonstrates that massive scale is not the only path to high-performance robotic policies. By distilling the design principles of the VLA-0 architecture into a sub-billion parameter footprint, we have shown that a 500M parameter model can achieve results on par with models six times its size on established benchmarks like LIBERO.
 
 Our systematic ablations highlight a clear hierarchy of importance for training VLAs: fine-tuning the vision encoder, adopting relative action representations, and implementing whole-action masking are not just optimizations — they are fundamental to achieving policy robustness. Conversely, we found that complex system prompts and heavy temporal ensembling often provide diminishing returns in simpler or task-specific domains.
 
@@ -332,9 +334,9 @@ We believe that a large part of this can be addressed through [speculative deco
 
 ### LIBERO
 
-Recent research from [LIBERO-Plus](https://arxiv.org/abs/2510.13626) and [LIBERO-PRO](https://arxiv.org/abs/2510.03827) confirms what we suspected: high scores on [LIBERO](https://libero-project.github.io/main.html) don't always mean the model is "smart". These papers found that many models, even huge ones, are often just memorizing the training data instead of truly understanding the task. When researchers made small changes — like moving objects slightly, changing the lighting, or even messing up the text instructions — the models often failed completely. In some cases, the models ignored the language instructions entirely and just repeated the exact same movement they learned during training.
+Recent research from [LIBERO-Plus](https://arxiv.org/abs/2510.13626) and [LIBERO-PRO](https://arxiv.org/abs/2510.03827) confirms what we suspected: high scores on LIBERO don't always mean the model is "smart". These papers found that many models, even huge ones, are often just memorizing the training data instead of truly understanding the task. When researchers made small changes — like moving objects slightly, changing the lighting, or even messing up the text instructions — the models often failed completely. In some cases, the models ignored the language instructions entirely and just repeated the exact same movement they learned during training.
 
-This explains why our tiny 0.5B model was able to perform just as well as the big 3B model. It seems the standard [LIBERO](https://libero-project.github.io/main.html) benchmark is mostly testing memory, not skill. Since even small models can memorize things well, the difference in model size didn't matter as much as we expected. We know this means our high scores might not fully prove our model is ready for the real world just yet. To fix this, we want to move beyond simulation and start experimenting on a real robot, where the "messiness" of the real world will act as the ultimate test of our model's true skills
+This explains why our tiny 0.5B model was able to perform just as well as the big 3B model. It seems the standard LIBERO benchmark is mostly testing memory, not skill. Since even small models can memorize things well, the difference in model size didn't matter as much as we expected. We know this means our high scores might not fully prove our model is ready for the real world just yet. To fix this, we want to move beyond simulation and start experimenting on a real robot, where the "messiness" of the real world will act as the ultimate test of our model's true skills
 
 # Acknowledgments
 <a href="https://nebius.com/" target="_blank">
