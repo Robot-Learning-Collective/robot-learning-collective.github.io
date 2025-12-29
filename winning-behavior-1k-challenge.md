@@ -2,6 +2,7 @@
 layout: default
 title: Winning the BEHAVIOR-1K Challenge (NeurIPS 2025)
 description: Can one robotics model trained via Imitation Learning solve 50 household tasks?
+og_image: /assets/winning-behavior-1k-challenge/preview.jpg
 header_links:
   - text: View on GitHub
     url: https://github.com/IliaLarchenko/behavior-1k-solution
