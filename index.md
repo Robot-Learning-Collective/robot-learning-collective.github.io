@@ -1,29 +1,22 @@
 ---
 layout: default
 title: Robot Learning Collective
-description: Open-sourcing AI models for robots
+description: Open-sourcing AI models for robotics
+og_image: /assets/winning-behavior-1k-challenge/RLC.jpeg
+header_links:
+  - text: GitHub
+    url: https://github.com/Robot-Learning-Collective
+  - text: Discord
+    url: https://discord.gg/w4mAmaNa
 ---
 
-# Robot Learning Collective
+Welcome to the Robot Learning Collective. We are an independent community sharing research in embodied AI. We care about individuality, curiosity, and practical mindset. Our goal is to bring passionate people together, do cool and impactful projects, and share what we learn with the wider community.
 
-Welcome to the Robot Learning Collective. We build and share research, benchmarks, and tooling across robot learning, vision-language-action models, and embodied AI.
 
-[GitHub](https://github.com/Robot-Learning-Collective/lerobot-experiments) • [Discord](https://discord.gg/w4mAmaNa) • [Mission](#)
+# 🚀 Our projects
 
----
+## [VLA-0-Smol](vla-0-smol.md)
+We present a compact VLA model that achieves a high score on simulation benchmarks with a clear recipe to reproduce results and a detailed ablation study showing the impact of key design choices.
 
-## 🚀 Blog
-
-### [Winning Behavior 1K Challenge](winning-behavior-1k-challenge.md)
-**Authors:** Ilia Larchenko, Gleb Zarin, Akash Karnatak  
-**Description:** We achieved **1st place** in the NeurIPS 2025 BEHAVIOR-1K Challenge. Our solution enables a single VLA policy to solve 50 diverse household tasks by introducing **correlated noise flow matching** and **System 2 stage tracking**.
-
----
-
-## 📚 Publications
-
-### [Task adaptation of Vision-Language-Action model: 1st Place Solution for the 2025 BEHAVIOR Challenge](https://www.arxiv.org/abs/2512.06951)
-**Authors:** Ilia Larchenko, Gleb Zarin, Akash Karnatak  
-*NeurIPS 2025 Competition Track*
-
----
+## [Winning Behavior 1K Challenge](winning-behavior-1k-challenge.md)
+We took **1st place** in the NeurIPS 2025 BEHAVIOR Challenge, the largest VLA simulation competition. The task was to solve 50 diverse household activities by imitating human behavior. Everything we built is fully open, including the code, models, and analysis.
