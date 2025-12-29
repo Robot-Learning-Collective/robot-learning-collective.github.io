@@ -35,7 +35,7 @@ This project started with a simple goal:
 
 When we found the [VLA-0](https://arxiv.org/abs/2510.13054) paper, we loved it. It showed that you can get strong robotic performance with only small changes to a standard vision–language model. At the same time, it was also a perfect example of the problem we mentioned above: the idea is simple, the paper is well written, but it assumes you already know how to work with VLMs in practice. It is not always clear what really matters, what can be changed, and what can be ignored.
 
-So we decided to integrate VLA-0 into the LeRobot framework. Our requirement to keep the model under 1B parameters left us with an almost unchallenged choice: [SmolVLM2-500M](HuggingFaceTB/SmolVLM2-500M-Video-Instruct). In that sense, we are following in the steps of [SmolVLA](https://arxiv.org/abs/2506.01844) work, but with a different set of design choices.
+So we decided to integrate VLA-0 into the LeRobot framework. Our requirement to keep the model under 1B parameters left us with an almost unchallenged choice: [SmolVLM2-500M](https://huggingface.co/HuggingFaceTB/SmolVLM2-500M-Video-Instruct). In that sense, we are following in the steps of the [SmolVLA](https://arxiv.org/abs/2506.01844) work, but with a different set of design choices.
 
 Our first milestone was LIBERO, the most common benchmark for VLA models and the same benchmark used by the VLA-0 authors. In this post, we describe our path to that milestone: the design choices we made, the ablations we ran, and what we learned from them.
 
@@ -64,7 +64,7 @@ We made two pragmatic choices:
 This chapter describes the key design components of [VLA-0](https://arxiv.org/abs/2510.13054) and highlights the specific modifications we introduced in our implementation. Rather than re-deriving the full method, we focus on the architectural choices, input representations, training augmentations, and system-level considerations that are most relevant for understanding how our setup differs from the original approach. These design decisions provide the context needed to interpret the ablation results and performance analyses presented in the following sections.
 
 ## Model Architecture
-The [VLA-0](https://arxiv.org/abs/2510.13054) authors use [Qwen-VL-2.5-3B](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct) as the vision–language backbone. In contrast, we chose a smaller model to enable inference on a laptop equipped with a consumer-grade GPU, with the goal of eventually evaluating the system on a real robot. For this reason, we focused on sub-billion-parameter models and selected [SmolVLM2-500M](https://huggingface.co/HuggingFaceTB/SmolVLM2-500M-Video-Instruct). This model comes with solid documentation, has been trainend on tasks requared spacial understanding and it has been evaluated for robotic applications in the SmolVLA work.
+The [VLA-0](https://arxiv.org/abs/2510.13054) authors use [Qwen-VL-2.5-3B](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct) as the vision–language backbone. In contrast, we chose a smaller model to enable inference on a laptop equipped with a consumer-grade GPU, with the goal of eventually evaluating the system on a real robot. For this reason, we focused on sub-billion-parameter models and selected [SmolVLM2-500M](https://huggingface.co/HuggingFaceTB/SmolVLM2-500M-Video-Instruct). This model comes with solid documentation and has been trained on tasks that require spatial understanding; it has also been evaluated for robotic applications in the SmolVLA work.
 
 We use the standard SmolVLM2 implementation from the Transformers library with one key modification. In the original setup, the authors employ an image tiling strategy in which both the original image and an upscaled version split into 16 tiles are passed to the image encoder. While effective, this approach significantly increases computational cost and is impractical for real-time robotic applications. Instead, we pass only the original image to the image encoder. This simplification matches the approach used in SmolVLA and makes the model more suitable for deployment on resource-constrained robotic systems.
 
@@ -112,12 +112,12 @@ Although the model generally converges on the correct output format, the limited
 
 ### Performance
 
-We discovered that our model is primarily CPU bound. This means the overhead of placing a CUDA kernel call takes more time than the actual execution on the GPU. Model compilation is typically the best solution for this; however, we encountered compatibility issues when using it within the LeRobot framework alongside the Accelerate library. 
+We discovered that our model is primarily CPU-bound. This means the overhead of placing a CUDA kernel call takes more time than the actual execution on the GPU. Model compilation is typically the best solution for this; however, we encountered compatibility issues when using it within the LeRobot framework alongside the Accelerate library. 
 
 ![Performance trace](assets/vla-0-smol/performance_trace.png)
 <p style="text-align: center; font-size: 0.9rem; color: #667; margin-top: 10px;"><em>Model's execution trace on the GPU.</em></p>
 
-- **Mixed Precision:** We found that training in `float16` leads to gradient explosions. Switching to `bfoat16` completely resolved this issue.
+- **Mixed Precision:** We found that training in `float16` leads to gradient explosions. Switching to `bfloat16` completely resolved this issue.
 - **Loss Calculation:** Calculating loss in mixed precision resulted in slight performance degradation. To fix this, we convert our logits to full precision before computing the loss. This approach provides nearly the same accuracy as full-precision training but is almost twice as fast.
 - **FlashAttention:** We chose not to use FlashAttention as it provides no performance boost. This is due to our relatively small sequence lengths (usually under 512 tokens), where standard attention implementation is already highly efficient.
 
@@ -127,11 +127,11 @@ Having outlined the core components of [VLA-0](https://arxiv.org/abs/2510.13054)
 
 <div style="display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-start;">
   <div style="flex:1 1 320px; min-width:280px; max-width:640px;" markdown="1">
-For ablations we were using PushT task. The task is performed in a 2D space, making it simpler than 3D manipulation while still requiring the agent to learn accurate pushing motions. The agent observes the scene through RGB images and controls a 2D end-effector position. Success is measured by whether the T-block’s final pose matches the target within a specified tolerance.
+For ablations, we used the PushT task. The task is performed in a 2D space, making it simpler than 3D manipulation while still requiring the agent to learn accurate pushing motions. The agent observes the scene through RGB images and controls a 2D end-effector position. Success is measured by whether the T-block’s final pose matches the target within a specified tolerance.
   </div>
   <div style="flex:1 1 320px; min-width:280px; max-width:480px; text-align:center;">
     <img src="/assets/vla-0-smol/687474703a2f2f72656d69636164656e652e636f6d2f6173736574732f6769662f70757368745f646966667573696f6e2e676966.gif" alt="PushT demo" style="width:100%; height:auto; border-radius:4px;">
-    <p style="font-size: 0.9rem; color: #667; margin-top: 8px;"><em>Example of successful demonstration</em></p>
+    <p style="font-size: 0.9rem; color: #667; margin-top: 8px;"><em>Example of a successful demonstration</em></p>
   </div>
 </div>
 
@@ -235,14 +235,14 @@ Having identified the most impactful design choices on PushT, we next ask whethe
   </div>
   <div style="flex:1 1 320px; min-width:280px; max-width:480px; text-align:center;">
     <img src="/assets/vla-0-smol/media_videos_eval_video_100000_90766c2977b1eb305cd3.gif" alt="Libero demo" style="width:100%; height:auto; border-radius:4px;">
-    <p style="font-size: 0.9rem; color: #667; margin-top: 8px;"><em>Example of successful demonstration of table-top robot arm performing pick-and-place task</em></p>
+    <p style="font-size: 0.9rem; color: #667; margin-top: 8px;"><em>Example of a successful demonstration of a tabletop robot arm performing a pick-and-place task</em></p>
   </div>
 </div>
 
 
 [**LIBERO**](https://libero-project.github.io/main.html) is a 3D robotic manipulation suite designed to evaluate how agents transfer and retain skills across a diverse range of tasks. In this environment, an agent operates a 7-DOF robotic arm within kitchen or tabletop settings, observing the scene via RGB images from both a workspace camera and a wrist-mounted camera.
 
-Success is measured by the agent's ability to complete long-horizon tasks and maintain its performance on previously learned tasks after acquiring new ones. Following the VLA0 paper, we compared our model across four specific task suites:
+Success is measured by the agent's ability to complete long-horizon tasks and maintain its performance on previously learned tasks after acquiring new ones. Following the VLA-0 paper, we compared our model across four specific task suites:
 
 - **Object:** Tests generalizable object recognition by varying the types of objects manipulated (e.g., "pick up the `ketchup/milk/juice` and put it in the basket").
 - **Spatial:** Focuses on spatial relationships and layouts (e.g., "put the bowl on the plate" with varying initial object positions).
