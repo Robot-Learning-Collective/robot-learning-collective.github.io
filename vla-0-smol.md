@@ -8,6 +8,8 @@ header_links:
     url: https://github.com/Robot-Learning-Collective/lerobot-experiments
   - text: Model weights
     url: https://huggingface.co/Robot-Learning-Collective/VLA-0-Smol
+  - text: Discord
+    url: https://discord.gg/TAFGuV2tE4
 ---
 
 We present a compact VLA model (500M params) that achieves a high score on simulation benchmarks with a clear recipe to reproduce results and a detailed ablation study showing the impact of key design choices.
