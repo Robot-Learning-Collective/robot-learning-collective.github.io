@@ -3,6 +3,14 @@ layout: default
 title: VLA-0-Smol
 description: A Reproducible Recipe for High-Performance, Sub-Billion Parameter VLA
 og_image: /assets/vla-0-smol/vla-0-smol.jpg
+
+citation_title: "VLA-0-Smol: A Reproducible Recipe for High-Performance, Sub-Billion Parameter VLAs"
+citation_authors: 
+  - "Oleg Balakhnov"
+  - "Sergei Skvortsov"
+  - "Gleb Zarin"
+citation_date: "2025/12/29"
+
 header_links:
   - text: View on GitHub
     url: https://github.com/Robot-Learning-Collective/lerobot-experiments
