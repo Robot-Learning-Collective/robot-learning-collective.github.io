@@ -10,6 +10,8 @@ header_links:
     url: https://arxiv.org/abs/2512.06951
   - text: Challenge
     url: https://behavior.stanford.edu/index.html
+  - text: Discord
+    url: https://discord.gg/Jr8tcnVNGw
 ---
 
 We present a vision-action policy that achieved first place in the 2025 BEHAVIOR Challenge, a large-scale benchmark of 50 long-horizon household tasks in photo-realistic simulation requiring bimanual manipulation, navigation, and object interaction.

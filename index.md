@@ -7,7 +7,7 @@ header_links:
   - text: GitHub
     url: https://github.com/Robot-Learning-Collective
   - text: Discord
-    url: https://discord.gg/w4mAmaNa
+    url: https://discord.gg/QD5ecmqU4R
 ---
 
 Welcome to the Robot Learning Collective. We are an independent community sharing research in embodied AI. We care about individuality, curiosity, and practical mindset. Our goal is to bring passionate people together, do cool and impactful projects, and share what we learn with the wider community.
