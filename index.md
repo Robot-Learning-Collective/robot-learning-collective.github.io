@@ -20,3 +20,6 @@ We present a compact VLA model that achieves a high score on simulation benchmar
 
 ## [Winning Behavior 1K Challenge](winning-behavior-1k-challenge.md)
 We took **1st place** in the NeurIPS 2025 BEHAVIOR Challenge, the largest VLA simulation competition. The task was to solve 50 diverse household activities by imitating human behavior. Everything we built is fully open, including the code, models, and analysis.
+
+## [pusht-slim](pusht-slim.md)
+A ~600-line, single-file imitation-learning recipe for PushT, nanoGPT-style — a 200M-parameter DiT trained with flow matching that reaches 0.6–0.7 success rate in 3.5 hours on one GPU, and a growing log of architecture ablations run as diffs against it.
