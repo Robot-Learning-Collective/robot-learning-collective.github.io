@@ -78,7 +78,7 @@ export async function createPlayer() {
     sim.step(...action);
     steps++;
     success = sim.coverage() >= successThreshold();
-    done = success || steps >= 300;
+    done = success;
     return snapshot();
   }
   reset();
