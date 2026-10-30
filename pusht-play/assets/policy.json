@@ -1,0 +1,181 @@
+{
+  "hidden": 256,
+  "layers": 3,
+  "horizon": 16,
+  "chunk": 8,
+  "denoise_steps": 10,
+  "training_step": 170000,
+  "tensors": {
+    "time_freq": {
+      "offset": 0,
+      "length": 8,
+      "shape": [
+        8
+      ]
+    },
+    "input.weight": {
+      "offset": 8,
+      "length": 13824,
+      "shape": [
+        256,
+        54
+      ]
+    },
+    "input.bias": {
+      "offset": 13832,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.0.0.weight": {
+      "offset": 14088,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.0.0.bias": {
+      "offset": 14344,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.0.1.weight": {
+      "offset": 14600,
+      "length": 65536,
+      "shape": [
+        256,
+        256
+      ]
+    },
+    "blocks.0.1.bias": {
+      "offset": 80136,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.0.3.weight": {
+      "offset": 80392,
+      "length": 65536,
+      "shape": [
+        256,
+        256
+      ]
+    },
+    "blocks.0.3.bias": {
+      "offset": 145928,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.1.0.weight": {
+      "offset": 146184,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.1.0.bias": {
+      "offset": 146440,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.1.1.weight": {
+      "offset": 146696,
+      "length": 65536,
+      "shape": [
+        256,
+        256
+      ]
+    },
+    "blocks.1.1.bias": {
+      "offset": 212232,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.1.3.weight": {
+      "offset": 212488,
+      "length": 65536,
+      "shape": [
+        256,
+        256
+      ]
+    },
+    "blocks.1.3.bias": {
+      "offset": 278024,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.2.0.weight": {
+      "offset": 278280,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.2.0.bias": {
+      "offset": 278536,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.2.1.weight": {
+      "offset": 278792,
+      "length": 65536,
+      "shape": [
+        256,
+        256
+      ]
+    },
+    "blocks.2.1.bias": {
+      "offset": 344328,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "blocks.2.3.weight": {
+      "offset": 344584,
+      "length": 65536,
+      "shape": [
+        256,
+        256
+      ]
+    },
+    "blocks.2.3.bias": {
+      "offset": 410120,
+      "length": 256,
+      "shape": [
+        256
+      ]
+    },
+    "output.weight": {
+      "offset": 410376,
+      "length": 8192,
+      "shape": [
+        32,
+        256
+      ]
+    },
+    "output.bias": {
+      "offset": 418568,
+      "length": 32,
+      "shape": [
+        32
+      ]
+    }
+  },
+  "checkpoint_sha256": "d06ad582a8ddb07e7019c5a0740ba150859f8823d492aa9ec569cdd79b5108f2",
+  "weights_sha256": "1e6058b87567682cea9dfdc1abbc8be5e9410832a06c31e78690b34a5b923302"
+}

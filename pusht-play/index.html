@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PushT · State policy player</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#e6ecf7;background:#0d121d;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0}main{width:min(100%,620px);margin:auto;padding:24px 18px}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+h1{font-size:20px;font-weight:600;margin:0}
+.actions{display:flex;gap:8px}
+button{font:inherit;font-size:14px;border:1px solid #394861;border-radius:8px;padding:8px 18px;background:#202d41;color:#e6ecf7;cursor:pointer}button:hover{background:#2d405a}button:disabled{opacity:.4;cursor:default}
+.board{position:relative;background:#fff;border-radius:12px;overflow:hidden;transition:box-shadow .3s}canvas{display:block;width:100%;height:auto}
+#world{touch-action:pan-y}#world.interactive{touch-action:none;cursor:crosshair}
+.hint{font-size:12px;color:#a7b5ca;margin:10px 0 0}.hint span{display:inline-block;width:8px;height:8px;background:#e44848;border-radius:50%;margin-right:6px}
+.board.won{box-shadow:0 0 0 3px #9ae5cb,0 0 32px #9ae5cb55}
+#celebration{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.confetti{position:absolute;top:-16px;width:7px;height:12px;border-radius:2px;animation:fall 1.8s ease-in both}
+@keyframes fall{from{transform:translateY(-20px) rotate(0);opacity:1}to{transform:translate(var(--drift),640px) rotate(var(--spin));opacity:0}}
+@media(prefers-reduced-motion:reduce){.board{transition:none}.confetti{display:none}}
+.coverage{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:14px;color:#a7b5ca}.coverage strong{font-weight:500;color:#eef4ff;font-variant-numeric:tabular-nums}
+.meter{height:5px;border-radius:10px;background:#2b384c;overflow:hidden;margin-top:8px}.meter span{display:block;height:100%;background:#9ae5cb;width:0;transition:width .1s}
+.error{color:#ffb3b3;font-size:13px;margin:12px 0}.error:empty{display:none}
+</style>
+<main>
+<header><h1>PushT mobile</h1><div class="actions"><button id="join" disabled>Play with</button><button id="reset" disabled>Loading…</button></div></header>
+<div class="board" id="board"><canvas id="world" width="1024" height="1024" aria-label="Live PushT mobile environment: agent, T block, and target"></canvas><div id="celebration" aria-hidden="true"></div></div>
+<div class="coverage"><span>Coverage</span><strong id="coverage">—</strong></div>
+<div class="meter"><span id="meter"></span></div>
+<p class="hint" id="hint" hidden><span aria-hidden="true"></span>Hold and drag to move the red robot.</p>
+<div id="error" class="error" role="alert"></div>
+</main>
+<script type="module">
+import { createPlayer } from './browser-api.js';
+const backendPromise=createPlayer();
+const $=id=>document.getElementById(id), ctx=$('world').getContext('2d');
+let state=null, playing=false, busy=false, resetting=false, joining=false, generation=0, timer=null;
+let pendingStep=Promise.resolve();
+let humanTarget=null, pointerId=null;
+const world=$('world');
+function pointFromEvent(event){
+  const rect=world.getBoundingClientRect(), size=state?.world||512;
+  return [Math.max(0,Math.min(size,(event.clientX-rect.left)/rect.width*size)),
+          Math.max(0,Math.min(size,(event.clientY-rect.top)/rect.height*size))];
+}
+function releasePointer(){
+  if(pointerId!==null&&world.hasPointerCapture(pointerId))world.releasePointerCapture(pointerId);
+  pointerId=null;humanTarget=null;
+}
+world.addEventListener('pointerdown',event=>{
+  if(pointerId!==null||event.button!==0||!state||!state.human_pos||state.done||resetting||joining)return;
+  event.preventDefault();pointerId=event.pointerId;world.setPointerCapture(pointerId);humanTarget=pointFromEvent(event);
+});
+world.addEventListener('pointermove',event=>{if(event.pointerId===pointerId)humanTarget=pointFromEvent(event)});
+for(const name of ['pointerup','pointercancel','lostpointercapture'])world.addEventListener(name,event=>{if(event.pointerId===pointerId)releasePointer()});
+window.addEventListener('blur',releasePointer);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)releasePointer()});
+async function api(path, data){
+  const backend=await backendPromise;
+  return backend.request(path,data);
+}
+function controls(){
+  $('reset').disabled=resetting||joining;
+  $('join').disabled=!state||state.done||!!state.human_pos||resetting||joining;
+  $('join').textContent=joining?'Joining…':'Play with';
+  $('hint').hidden=!state?.human_pos;
+  world.classList.toggle('interactive',!!state?.human_pos);
+  $('reset').textContent=resetting?'Resetting…':'Reset';
+}
+function draw(s){
+  ctx.setTransform(2,0,0,2,0,0);ctx.fillStyle='#fff';ctx.fillRect(0,0,s.world,s.world);
+  function shape(pose, color){ctx.save();ctx.translate(pose[0],pose[1]);ctx.rotate(pose[2]);ctx.scale(s.scale,s.scale);ctx.beginPath();s.outline.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();ctx.fillStyle=color;ctx.fill();ctx.restore()}
+  shape(s.goal,'lightgreen');shape(s.state.slice(2),'gray');
+  if(s.plan.length){ctx.beginPath();ctx.moveTo(s.state[0],s.state[1]);s.plan.forEach(p=>ctx.lineTo(...p));ctx.strokeStyle='#ef925177';ctx.lineWidth=1.5;ctx.setLineDash([4,5]);ctx.stroke();ctx.setLineDash([])}
+  ctx.beginPath();ctx.arc(s.state[0],s.state[1],s.agent_radius,0,Math.PI*2);ctx.fillStyle='royalblue';ctx.fill();
+  if(s.human_pos){ctx.beginPath();ctx.arc(...s.human_pos,s.agent_radius,0,Math.PI*2);ctx.fillStyle='#e44848';ctx.fill()}
+  if(s.action){const [x,y]=s.action;ctx.strokeStyle='#df7831';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,6,0,Math.PI*2);ctx.moveTo(x-10,y);ctx.lineTo(x+10,y);ctx.moveTo(x,y-10);ctx.lineTo(x,y+10);ctx.stroke()}
+}
+function showSuccess(success){
+  const firstWin=success&&!$('board').classList.contains('won');
+  $('board').classList.toggle('won',success);
+  $('world').setAttribute('aria-label',success?'PushT mobile environment: goal reached':'Live PushT mobile environment: agent, T block, and target');
+  if(!success){$('celebration').replaceChildren();return}
+  if(!firstWin||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  for(let i=0;i<36;i++){
+    const piece=document.createElement('i');piece.className='confetti';
+    piece.style.left=(Math.random()*100)+'%';
+    piece.style.background=['#35b989','#9ae5cb','#f3c76a','#6697ed'][i%4];
+    piece.style.animationDelay=(Math.random()*.35)+'s';
+    piece.style.setProperty('--drift',(Math.random()*140-70)+'px');
+    piece.style.setProperty('--spin',(Math.random()*720-360)+'deg');
+    piece.addEventListener('animationend',()=>piece.remove(),{once:true});
+    $('celebration').append(piece);
+  }
+}
+function update(s){
+  state=s;draw(s);
+  showSuccess(s.success);
+  $('coverage').textContent=(100*s.coverage).toFixed(1)+'%';
+  $('meter').style.width=(100*s.coverage)+'%';
+  if(s.done){playing=false;releasePointer()}
+  controls();
+}
+function fail(error){playing=false;clearTimeout(timer);$('error').textContent=error.message;controls()}
+async function advance(){
+  if(!playing||busy||resetting||joining||!state||state.done)return;
+  const version=generation, start=performance.now();busy=true;
+  try{
+    pendingStep=api('/api/step',{episode:state.episode,human_target:humanTarget});
+    const next=await pendingStep;
+    if(version===generation)update(next);
+  }catch(error){if(version===generation)fail(error)}finally{busy=false}
+  if(playing&&version===generation)timer=setTimeout(advance,Math.max(0,1000/state.control_hz-(performance.now()-start)));
+}
+async function reset(join=false){
+  if(resetting||joining)return;
+  generation++;playing=false;resetting=!join;joining=join;clearTimeout(timer);controls();$('error').textContent='';
+  releasePointer();
+  showSuccess(false);
+  try{
+    // Finish the previous request before starting the new episode.
+    await pendingStep.catch(()=>{});
+    update(await api(join?'/api/join':'/api/reset',join?{episode:state.episode}:{}));
+    playing=!state.done;
+  }catch(error){fail(error)}finally{resetting=false;joining=false;controls()}
+  if(playing)advance();
+}
+$('reset').onclick=()=>reset();
+$('join').onclick=()=>reset(true);
+api('/api/state').then(s=>{
+  update(s);
+  if(s.done)reset();
+  else{playing=true;advance()}
+}).catch(fail);
+</script>
+</html>
