@@ -32,14 +32,14 @@ function buildStateLanes() {
   }
 }
 function renderAlignmentLadder() {
-  el('diagramTitle').textContent='Alignment attempts: approach, probe, reassess';
+  el('diagramTitle').textContent='Alignment attempts';
   const definitions=[
     [1300.41004,'Approach','Turn base toward the wall'],[1317.70213,'Approach','Move to a stand-off from the nail'],[1421.55138,'Approach','Raise poster with a feasible joint target'],[1440.29039,'Approach','Move toward the nail; reserve clearance'],
     [1459.87793,'Seating probes','40 mm normal approach'],[1476.25931,'Seating probes','25 mm normal approach'],[1491.89893,'Seating probes','Another 25 mm approach'],[1512.31812,'Seating probes','20 mm seating probe'],[1525.18191,'Seating probes','Lower 10 mm while advancing'],[1538.72266,'Seating probes','15 mm seating probe'],[1551.86561,'Seating probes','Another 15 mm probe'],
     [1581.54137,'Reassessment','Back off 15 mm and hold joint targets'],[1594.42607,'Reassessment','Lower 20 mm with a short advance'],[1620.89799,'Reassessment','Probe at the revised height'],[1655.12795,'Reassessment','Retreat 40 mm; reset wrist pitch'],
     [1763.94673,'Fresh geometry','Lower poster 180 mm to expose nail'],[1808.41781,'Fresh geometry','Apply the refined alignment target']
   ];
-  const intro=make('p','The sequence moves from repeated small seating commands to retreat and remeasurement. Select a row to inspect the robot result, or its command to read the intended action.','ladderIntro');
+  const intro=make('p','Select a row for the result, or “Command” for the intended action.','ladderIntro');
   const head=make('div',undefined,'ladderHead');head.append(make('span','Wall / commanded action'),make('span','Controller'),make('span','Attachment'));
   const ladder=make('div',undefined,'attemptLadder');ladder.append(head);let stage='';
   for(const [t,group,title] of definitions){const r=recordAt('robot',t);if(!r)throw Error('Missing alignment robot call '+t);
@@ -52,7 +52,7 @@ function renderAlignmentLadder() {
   }
   const footer=make('div',undefined,'ladderEvidence');footer.append(sourceButton('refine','Recompute from fresh RGB-D','Writes alignment_refined.json'),sourceButton('final','Send the revised joint target','Reads alignment_refined.json'));
   el('diagramBody').append(intro,ladder,footer);
-  el('diagramCaption').textContent='Controller “reached” means the commanded robot target was reached. Attachment is the separate evaluator predicate at call completion. The final call closes after the predicate becomes true.';
+  el('diagramCaption').textContent='“Reached” refers to the robot target. Attachment is measured separately by the evaluator.';
 }
 function setupStory() {
   setupClockInspection();

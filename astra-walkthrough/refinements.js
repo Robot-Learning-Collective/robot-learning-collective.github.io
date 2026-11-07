@@ -17,7 +17,7 @@ function setupClockInspection(){
   el('clockInspector').addEventListener('keydown',e=>{let t=inspectedWall;if(e.key==='ArrowLeft')t-=e.shiftKey?10:1;else if(e.key==='ArrowRight')t+=e.shiftKey?10:1;else if(e.key==='Home')t=0;else if(e.key==='End')t=TRACE.duration;else return;e.preventDefault();setClockInspection(Math.max(0,Math.min(TRACE.duration,t)));});
 }
 function renderOrientationZoom(){
-  el('diagramTitle').textContent='Orientation correction · clock detail';
+  el('diagramTitle').textContent='Computation at one frame';
   const start=900,end=950,low=34,high=40,svg=chart('Video time against wall time, 15:00–15:50',330),x=t=>80+(t-start)/(end-start)*860,y=f=>255-(f/30-low)/(high-low)*165;
   svg.append(svgNode('rect',{x:x(sources.orientation.t),y:85,width:x(moments[0].end)-x(sources.orientation.t),height:170,class:'segmentBand'}));
   for(const seconds of [34,36,38,40]){const yy=y(seconds*30);line(svg,80,yy,940,yy,'grid');label(svg,65,yy+4,`${seconds} s`,'chartText','end');}
@@ -31,7 +31,7 @@ function renderOrientationZoom(){
     eventPoint(svg,key,xx,yy,text,`${time(r.t)} wall`,{anchor:i===0?'start':i===3?'end':'middle',dy:-58});
   });
   label(svg,940,317,'WALL TIME','chartText','end');
-  el('diagramCaption').textContent=`Between 15:00 and 15:50 wall time, computation precedes the next motion. Frame 1065 (35.5 s of video) persists for ${(interval.end-interval.start).toFixed(1)} s; the four record starts fall on this flat stretch.`;
+  el('diagramCaption').textContent=`Four records start at frame 1065 (35.5 s of video), which persists for ${(interval.end-interval.start).toFixed(1)} wall seconds.`;
 }
 function renderObservationComparison(before,after){
   const root=el('observations');root.replaceChildren();
@@ -43,7 +43,7 @@ function renderObservationComparison(before,after){
   const update=()=>{stage.style.setProperty('--split',`${slider.value}%`);slider.setAttribute('aria-valuetext',`${slider.value} percent before, ${100-Number(slider.value)} percent after`);};
   slider.addEventListener('input',update);let dragging=false;const move=e=>{const box=stage.getBoundingClientRect();slider.value=String(Math.round(Math.max(0,Math.min(100,(e.clientX-box.left)/box.width*100))));update();};
   stage.addEventListener('pointerdown',e=>{dragging=true;stage.setPointerCapture(e.pointerId);move(e);});stage.addEventListener('pointermove',e=>{if(dragging)move(e);});stage.addEventListener('pointerup',()=>dragging=false);stage.addEventListener('lostpointercapture',()=>dragging=false);
-  const controls=make('div',undefined,'comparisonControls');controls.append(make('label','Drag to compare · original camera layout'));controls.firstChild.htmlFor=slider.id;controls.append(slider);
+  const controls=make('div',undefined,'comparisonControls');controls.append(make('label','Drag to compare'));controls.firstChild.htmlFor=slider.id;controls.append(slider);
   const captions=make('div',undefined,'comparisonCaptions');for(const [r,name] of [[before,'Before'],[after,'After']]){const link=make('a',`${name} · returned ${time(r.end)} wall · open original ↗`);link.href=mediaURL(r.images[0]);link.target='_blank';link.rel='noreferrer';captions.append(link);}
   root.append(stage,controls,captions);
 }

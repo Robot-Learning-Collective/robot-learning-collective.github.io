@@ -27,7 +27,7 @@ robot call has an unknown terminal acknowledgement despite evaluator success.
 
 - `index.html`, `case.css`: compact title and agent loop, then video, a short
   chapter explanation and one supporting figure. Camera comparisons, the
-  full-episode clock chart and trace explorer open on demand; methods remain
+  full-episode clock chart and trace explorer open on demand; sources and timing remain
   in a separate disclosure. Selecting an agent-loop step opens its evidence.
 - `agent-loop.js`: four source-linked steps in the orientation correction.
 - `case.js`: selected segment, source records, video and URL state.
@@ -53,7 +53,7 @@ iframe with a descriptive title and an accompanying full-page link.
 
 Open the four segments, select a source, follow its fragment URL, scrub the
 video, inspect the clock chart with arrow keys, drag the comparison slider,
-filter the trace and open Data and methods. Check at desktop and mobile widths.
+filter the trace and open Sources and timing. Check at desktop and mobile widths.
 Run `node --check` on each JavaScript file after edits.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the proposed Anjana handoff and the

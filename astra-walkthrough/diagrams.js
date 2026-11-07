@@ -38,7 +38,7 @@ function renderEpisodeDiagram(index) {
   if(index===0) {
     renderOrientationZoom();
   } else if(index===1) {
-    title.textContent='Both hands hold the poster before release';
+    title.textContent='Grasp transfer';
     const m=moments[index],svg=chart(title.textContent,280),x=f=>125+(f-m.startFrame)/(m.endFrame-m.startFrame)*750;
     const states=TRACE.states.filter(s=>s.frame>=m.startFrame&&s.frame<=m.endFrame);
     [['left','Left hand',132],['right','Right hand',174]].forEach(([key,text,y])=>{
@@ -54,11 +54,11 @@ function renderEpisodeDiagram(index) {
     label(svg,125,112,`Video ${time(m.startFrame/30)}`,'chartText');label(svg,875,112,time(m.endFrame/30),'chartText','end');
     const legend=make('div',undefined,'graspLegend');legend.append(make('span','Holding poster','heldKey'),make('span','No grasp','emptyKey'),make('span','Evaluator measurements'));el('diagramBody').append(legend);
     const frames=sources.right.frame-sources.both.frame;
-    caption.textContent=`The two-handed grasp lasts ${frames} frames (${(frames/30).toFixed(2)} s of video), spanning ${(sources.right.t-sources.both.t).toFixed(2)} s of wall time. Horizontal position follows video frames; bars show measured grasp states, not gripper commands.`;
+    caption.textContent=`Both hands hold for ${frames} frames (${(frames/30).toFixed(2)} video seconds; ${(sources.right.t-sources.both.t).toFixed(2)} wall seconds). Bars show evaluator grasp states on a video-frame axis.`;
   } else if(index===2) {
     renderAlignmentLadder();
   } else {
-    title.textContent='Goal satisfaction precedes call closure';
+    title.textContent='Attachment before call closure';
     const svg=chart(title.textContent),start=sources.final.t,end=sources.robot.end,x=t=>90+(t-start)/(end-start)*820;
     svg.append(svgNode('rect',{x:x(sources.robot.t),y:112,width:910-x(sources.robot.t),height:26,class:'callSpan'}));
     label(svg,110,130,'Final robot call','spanLabel');
@@ -68,7 +68,7 @@ function renderEpisodeDiagram(index) {
     eventPoint(svg,'final',90,90,'Command issued',time(sources.final.t)+' wall',{anchor:'start'});
     eventPoint(svg,'goal',gx,90,'Goal satisfied',time(sources.goal.t)+' wall',{anchor:'end'});
     eventPoint(svg,'robot',910,90,'Call closes',time(end)+' wall',{anchor:'end'});
-    caption.textContent='Horizontal position shows wall time. The evaluator reports success during the final robot call. That call closes with an unknown terminal acknowledgement; the task outcome and call status are separate records.';
+    caption.textContent='Wall-time axis. Evaluator success and the unknown robot acknowledgement are separate records.';
   }
 }
 function syncDiagramSource(r) {
