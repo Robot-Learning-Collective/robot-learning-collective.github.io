@@ -51,3 +51,16 @@
 #timingAnalysis,#segmentAnalysis,#cameraAnalysis{border-top:1px solid var(--line);padding-top:26px;margin-top:26px}
 #traceDisclosure{margin-top:22px}#traceDisclosure .explorerGrid{margin-top:12px}
 @media(max-width:760px){.hero.compactTitle{display:block;padding:22px 0 18px}.hero.compactTitle h1{font-size:24px;letter-spacing:-.2px}.hero.compactTitle .status{margin-top:12px}.mast nav{gap:12px;font-size:11px}.mast .brand{font-size:11px;letter-spacing:.07em}.agentIntro{font-size:14px}.agentLoop h2{font-size:23px}}
+
+/* One chapter explanation and figure; supporting evidence opens on demand. */
+.loopDisclosure{border:1px solid var(--line);border-top:0}
+.loopDisclosure>summary{padding:12px 18px;font-size:13px;color:var(--accent);cursor:pointer}
+.loopDisclosure .loopEvidence{min-height:0;padding-top:8px}
+.loopSteps{margin-top:14px}.loopStep{padding:14px 18px;gap:6px}
+.agentLoop{padding-bottom:0}.momentnav{margin-top:20px}
+#segmentAnalysis{margin-top:0;padding-top:20px}
+#cameraDisclosure{margin-top:24px}
+#cameraDisclosure #cameraAnalysis{border:0;margin:0;padding:0 0 24px}
+#episodeExploration #timingAnalysis{border:0;margin-top:0;padding-top:8px}
+#episodeExploration #traceExplorer{padding-bottom:24px}
+@media(max-width:760px){.loopStep{padding:12px}.loopDisclosure>summary{padding:12px 14px}}

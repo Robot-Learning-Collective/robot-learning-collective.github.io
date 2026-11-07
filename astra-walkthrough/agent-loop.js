@@ -12,11 +12,11 @@ function showLoopStep(index,{select=false}={}){
   document.querySelectorAll('.loopStep').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));
   el('loopEvidenceLabel').textContent=`${item.detail} · ${time(index===3?r.end:r.t)} wall · ${index===0?'verbatim excerpt':index===3?'verbatim result line':'recorded command'}`;
   el('loopEvidenceText').textContent=item.evidence();
-  if(select)chooseMoment(0,{source:r});
+  if(select){chooseMoment(0,{source:r});el('loopEvidenceDisclosure').open=true;}
 }
 loopExample.forEach((item,index)=>{
   const button=make('button',undefined,'loopStep');
-  button.append(make('small',`0${index+1} / ${item.detail}`),make('strong',item.label),make('span',item.text));
+  button.append(make('small',`0${index+1} / ${item.detail}`),make('strong',item.label));
   button.addEventListener('click',()=>showLoopStep(index,{select:true}));el('loopSteps').append(button);
 });
 function revealTarget(target){

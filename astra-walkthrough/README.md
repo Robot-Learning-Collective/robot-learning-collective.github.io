@@ -25,8 +25,10 @@ robot call has an unknown terminal acknowledgement despite evaluator success.
 
 ## Structure
 
-- `index.html`, `case.css`: compact title, agent loop, video and narrative,
-  then timing and alignment graphics, trace explorer and methods disclosure.
+- `index.html`, `case.css`: compact title and agent loop, then video, a short
+  chapter explanation and one supporting figure. Camera comparisons, the
+  full-episode clock chart and trace explorer open on demand; methods remain
+  in a separate disclosure. Selecting an agent-loop step opens its evidence.
 - `agent-loop.js`: four source-linked steps in the orientation correction.
 - `case.js`: selected segment, source records, video and URL state.
 - `diagrams.js`, `story.js`, `refinements.js`: clock charts, alignment attempts,

@@ -22,7 +22,7 @@ function renderOrientationZoom(){
   svg.append(svgNode('rect',{x:x(sources.orientation.t),y:85,width:x(moments[0].end)-x(sources.orientation.t),height:170,class:'segmentBand'}));
   for(const seconds of [34,36,38,40]){const yy=y(seconds*30);line(svg,80,yy,940,yy,'grid');label(svg,65,yy+4,`${seconds} s`,'chartText','end');}
   for(const t of [900,910,920,930,940,950])label(svg,x(t),289,time(t).slice(0,5),'chartText',t===900?'start':t===950?'end':'middle');
-  label(svg,80,30,'VIDEO TIME · SAME EVALUATOR CURVE','chartText');
+  label(svg,80,30,'VIDEO TIME · EVALUATOR TIMESTAMPS','chartText');
   let d=`M80,${y(stateAtWall(start).frame)}`;for(const s of TRACE.states.filter(s=>s.t>start&&s.t<=end))d+=`H${x(s.t)}V${y(s.frame)}`;d+=`H940`;
   svg.append(svgNode('path',{d,class:'curve'}));
   const interval=intervals[1065];line(svg,x(interval.start),y(1065),x(interval.end),y(1065),'plateau');
@@ -31,7 +31,7 @@ function renderOrientationZoom(){
     eventPoint(svg,key,xx,yy,text,`${time(r.t)} wall`,{anchor:i===0?'start':i===3?'end':'middle',dy:-58});
   });
   label(svg,940,317,'WALL TIME','chartText','end');
-  el('diagramCaption').textContent=`Zoom of the timing overview, 15:00–15:50 wall time. Frame 1065 (35.5 s of video) persists for ${(interval.end-interval.start).toFixed(1)} s; the four record starts fall on this flat stretch.`;
+  el('diagramCaption').textContent=`Between 15:00 and 15:50 wall time, computation precedes the next motion. Frame 1065 (35.5 s of video) persists for ${(interval.end-interval.start).toFixed(1)} s; the four record starts fall on this flat stretch.`;
 }
 function renderObservationComparison(before,after){
   const root=el('observations');root.replaceChildren();
