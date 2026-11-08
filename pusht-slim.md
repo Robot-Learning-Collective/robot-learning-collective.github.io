@@ -45,7 +45,11 @@ The architecture is pulled pretty directly from the DiT policy paper [[3]](https
 
 However, we decided to use flow matching instead of diffusion. Apart from it being 'cooler' (Gleb Zarin 2026) it also allows for faster inference, and it is what π₀ uses.
 
-It is a fair question whether a two-year-old, comparatively tiny architecture is worth building around in 2026. We would say yes, and we are not alone: a more recent scaling study from X-Square and Amazon [8]<!-- TODO: link the actual paper, don't have a confirmed citation for this one --> directly compares ACT-style policies against VLAs at matched training budgets, and ACT keeps up right up until you are willing to spend a lot of compute. If your budget is small, because you are an independent collective and frankly a bit broke, or because you need to iterate fast on a real robot, the simple architecture is still the right call.
+It is a fair question whether a comparatively small architecture from 2023 is worth building around in 2026. We would say yes, and we are not alone. A recent large-scale study from UC Berkeley, Amazon FAR and collaborators [[8]](https://arxiv.org/abs/2606.27375) compares a diffusion transformer (DiT) policy against a VLA built on a Gemma 3 4B vision-language model. At smaller batch sizes and compute budgets the DiT does better, and it is more FLOP-efficient throughout. The VLA only pulls ahead in real-world performance at the largest batch sizes, which means a lot more compute. If your budget is small, because you are an independent collective and frankly a bit broke, or because you need to iterate fast on a real robot, the simpler architecture is still the right call.
+
+![Real-world strict success and task progress against training FLOPs for a DiT policy (blue) and a VLA (red) at batch sizes of roughly 1.5k, 4.6k and 9.2k: the DiT is ahead at equal compute, and the VLA only reaches higher performance at about 10^22 FLOPs](assets/pusht-slim/abc-dit-vs-vla-flops.png)
+
+*DiT vs VLA, real-world success against training FLOPs. Figure from [[8]](https://arxiv.org/abs/2606.27375) (CC BY 4.0).*
 
 # How it works
 
@@ -258,7 +262,7 @@ That is the point of keeping this small. Removing SpatialSoftmax was a 30-line d
 
 [7] T. Z. Zhao, V. Kumar, S. Levine, and C. Finn, "Learning fine-grained bimanual manipulation with low-cost hardware," arXiv:2304.13705, 2023.
 
-[8] X-Square and Amazon, scaling comparison of ACT-style policies vs. VLAs at matched training budgets. *Citation pending, we do not have a confirmed arXiv link for this one yet.*
+[8] A. Allshire et al., "Scalable behavior cloning with open data, training, and evaluation," arXiv:2606.27375, 2026.
 
 [9] Hugging Face, "lerobot/pusht," Hugging Face Datasets. [Online]. Available: [https://huggingface.co/datasets/lerobot/pusht](https://huggingface.co/datasets/lerobot/pusht)
 
