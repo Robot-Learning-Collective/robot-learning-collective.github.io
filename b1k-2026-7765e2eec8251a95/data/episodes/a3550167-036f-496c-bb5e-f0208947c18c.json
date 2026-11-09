@@ -1,0 +1,1 @@
+{"id":"a3550167-036f-496c-bb5e-f0208947c18c","task":"vacuuming_floors","instance":309,"q":0,"steps":3618,"fps":30.0,"video_url":"https://storage.googleapis.com/rlc-behavior-2026-submission-step199999/videos/vacuuming_floors_309_0.mp4","goals":["the following is NOT true:\n    floor1 is covered dust1"],"events":[],"holds":[],"stages":[{"frame":0,"value":0}],"reason":""}

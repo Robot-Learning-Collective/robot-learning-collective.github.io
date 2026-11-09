@@ -1,0 +1,1 @@
+{"id":"f542d745-bef5-4d6e-b586-48e025ca0460","task":"clean_a_patio","instance":302,"q":0,"steps":18107,"fps":30.0,"video_url":"https://storage.googleapis.com/rlc-behavior-2026-submission-step199999/videos/clean_a_patio_302_0.mp4","goals":["the following is NOT true:\n    floor1 is covered mud1"],"events":[],"holds":[],"stages":[{"frame":0,"value":0}],"reason":""}

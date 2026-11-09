@@ -1,0 +1,1 @@
+{"id":"b7836353-01e9-4ee8-98be-75891b915d82","task":"attach_a_camera_to_a_tripod","instance":303,"q":0,"steps":5868,"fps":30.0,"video_url":"https://storage.googleapis.com/rlc-behavior-2026-submission-step199999/videos/attach_a_camera_to_a_tripod_303_0.mp4","goals":["digital_camera1 is attached camera_tripod1"],"events":[],"holds":[],"stages":[{"frame":0,"value":0}],"reason":""}

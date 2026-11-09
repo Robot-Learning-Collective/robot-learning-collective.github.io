@@ -1,0 +1,1 @@
+{"id":"a47ce0a6-4060-4f1b-abca-16def14ffa08","task":"installing_a_scanner","instance":306,"q":0,"steps":6388,"fps":30.0,"video_url":"https://storage.googleapis.com/rlc-behavior-2026-submission-step199999/videos/installing_a_scanner_306_0.mp4","goals":["scanner1 is toggled_on","scanner1 is next to laptop1"],"events":[],"holds":[],"stages":[{"frame":0,"value":0}],"reason":""}
