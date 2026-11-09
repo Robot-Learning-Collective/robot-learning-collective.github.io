@@ -64,3 +64,15 @@
 #episodeExploration #timingAnalysis{border:0;margin-top:0;padding-top:8px}
 #episodeExploration #traceExplorer{padding-bottom:24px}
 @media(max-width:760px){.loopStep{padding:12px}.loopDisclosure>summary{padding:12px 14px}}
+
+/* Overview: plain-language intro under the title */
+.overview{padding:4px 0 26px}
+.overviewTitle{font:600 12px/1.4 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.overviewLead{max-width:760px;font-size:18px;line-height:1.55;margin:0 0 20px}
+.overviewFacts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:0 0 18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.overviewFacts>div{padding:14px 20px 14px 0}
+.overviewFacts>div+div{padding-left:20px;border-left:1px solid var(--line)}
+.overviewFacts dt{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.overviewFacts dd{margin:0;font-size:15px;line-height:1.5}
+.overviewGuide{max-width:760px;font-size:14px;line-height:1.6;color:var(--muted);margin:0}
+@media(max-width:760px){.overviewLead{font-size:17px}.overviewFacts{grid-template-columns:1fr}.overviewFacts>div,.overviewFacts>div+div{padding:12px 0;border-left:0}.overviewFacts>div+div{border-top:1px solid var(--line)}}

@@ -1,0 +1,186 @@
+/* Visual refresh: light, high-contrast theme and larger type.
+   Loaded after case.css so it can be reviewed or reverted on its own. */
+:root{
+  color-scheme:light;
+  --paper:#ffffff;--ink:#16201a;--muted:#46564c;--line:#cdd9d0;
+  --accent:#1d6a49;--soft:#f0f5f1;
+  --model:#9a5a14;--tool:#245f8c;--robot:#23704f;--context:#6f4f92;
+}
+html{-webkit-text-size-adjust:100%}
+body{font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--paper)}
+
+/* Text size: nothing below 14px */
+.eyebrow,.mast,.mast small,.status,.moment span,.sectionlabel h3,.sectionlabel span,.figcaption,.clockNote,.interpretation strong,.momentlinks,.evidenceStep .n,.evidenceStep small,.legend,.axis,.lane>span,.diagramSelection,.diagramOverline,.chartScrollHint,.graspLegend,.source .type,.source a,.source summary,.methodsDisclosure>summary>span,.method p,footer,.searchLabel,.recordRow small,.fileEvent span,.fileEvent small,.ladderStage,.ladderHead,.attemptEvent small,.controllerResult,.attachmentResult,.commandLink,.provenanceKey,.source pre{font-size:14px}
+.source .summary,.recordRow span,.explanation .question,.interpretation p,.evidenceStep b,.fileEvent strong,.attemptEvent,.ladderIntro{font-size:15px}
+.eyebrow{letter-spacing:.06em}
+.eyebrow,.mast small,.moment span,.sectionlabel span,.legend,.axis,.lane>span,.provenanceKey,.status{text-transform:none}
+.agentIntro,.overviewGuide{font-size:16px;color:var(--ink)}
+.overviewLead{font-size:21px}
+.overviewFacts dt,.overviewTitle{font-size:13px;font-weight:700;color:var(--muted)}
+.overviewFacts dd{font-size:16px}
+
+/* Headings: obvious levels */
+.hero.compactTitle h1{font:700 36px/1.15 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:-.01em}
+.sectionlabel h2,.chaptersHead h2,.agentLoop h2,.clockHero h2,.trace h2{font:700 26px/1.25 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:-.005em;color:var(--ink)}
+.sectionlabel h3{font-weight:700;color:var(--ink)}
+.segmentTitle,.explanation h2,.explanation h3{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:700}
+.sectionlabel span{color:var(--muted)}
+
+/* Header, status badge */
+.mast{border-bottom:1px solid var(--line)}
+.brand{color:var(--ink);font-weight:800}
+.mast nav a,a{color:var(--accent)}
+.status{background:#e6f3ec;border-color:#9ccbb3;color:#14553a;font-weight:600}
+.status::before{background:#23704f}
+
+/* Panels */
+.loopSteps,.loopDisclosure,.overviewFacts,.momentnav{border-color:var(--line)}
+.loopStep{background:var(--paper);color:var(--ink)}
+.loopStep[aria-pressed="true"]{background:#e3f1e8;border-top-color:var(--accent)}
+.loopEvidence{background:var(--soft)}
+.moment{color:var(--muted)}
+.moment[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.moment strong{font-size:16px;line-height:1.35}
+.screen,.screen video{background:#000}
+.screen label{background:rgba(0,0,0,.72);color:#fff}
+
+/* Video scrubber and chapter bands */
+.videoBand{background:#c8dfd1;border-color:#7fa690}
+.videoBand.active{background:var(--accent);border-color:var(--ink)}
+#videoSeek::-webkit-slider-runnable-track{background:linear-gradient(to right,#c2d1c6 0 var(--segment-start),var(--accent) var(--segment-start) var(--segment-end),#c2d1c6 var(--segment-end) 100%)}
+#videoSeek::-moz-range-track{background:linear-gradient(to right,#c2d1c6 0 var(--segment-start),var(--accent) var(--segment-start) var(--segment-end),#c2d1c6 var(--segment-end) 100%)}
+
+/* Buttons, disclosures */
+button,summary{color:var(--ink)}
+summary{cursor:pointer}
+.transport button,.loopEvidence button,.segmentQuote button{background:var(--paper);border:1px solid #8a9a8f;color:var(--ink)}
+.transport button:hover{background:var(--soft)}
+.analysisDisclosure>summary,.methodsDisclosure>summary{font-size:17px;font-weight:600}
+
+@media(max-width:760px){
+  body{font-size:16px}
+  .hero.compactTitle h1{font-size:28px}
+  .sectionlabel h2,.chaptersHead h2,.agentLoop h2,.clockHero h2,.trace h2{font-size:22px}
+  .overviewLead{font-size:18px}
+}
+
+/* Leftover dark-theme text colours */
+.explanation .question,.takeaway p{color:var(--ink);font-size:17px;line-height:1.6}
+.error{color:#a43c26}
+.controllerResult.timeout{color:#8a5a00}
+
+/* Chart and panel titles: real headings, sentence case */
+.sectionlabel h3{font:700 20px/1.3 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:0;text-transform:none;color:var(--ink)}
+.episodeDiagram,.observationSection{padding-top:8px}
+.analysisDisclosure{border-top:1px solid var(--line)}
+
+/* Remaining dark surfaces: timeline lanes, state bars, filters, search, raw records */
+.track,.stateFalse,.emptyKey::before{background:#e1e8e3}
+.cursor{background:#cde6d6}
+.filterChip{background:var(--paper);color:var(--ink);border:1px solid #8a9a8f}
+.filterChip[aria-pressed=true]{background:#e3f1e8;border-color:var(--accent);color:var(--ink)}
+#traceSearch{background:var(--paper);color:var(--ink);border:1px solid #8a9a8f}
+#traceSearch::placeholder{color:var(--muted)}
+.recordRow:hover{background:var(--soft)}
+.source pre{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+.error{background:#fdecea;border-color:#e3a79b}
+
+/* ---- Section clarity: tinted page, white section cards, large navy headings ---- */
+:root{--head:#17402f;--page:#e0ece4;--card-line:#b8cfbf}
+body{background:var(--page)}
+
+/* every major section is a card */
+.overview,.agentLoop,.episodeDiagram,.analysisDisclosure,.methodsDisclosure,.momentnav,.mainfigure{
+  background:var(--paper);border:1px solid var(--card-line);border-radius:12px;
+  padding:26px 30px;margin:0 0 22px;box-shadow:0 1px 2px rgba(23,64,47,.09)}
+/* chapter tabs and video read as one card */
+.momentnav{margin-bottom:0;border-bottom:0;border-radius:12px 12px 0 0;padding:18px 30px 0}
+.mainfigure{margin-top:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px}
+/* collapsible sections: padding goes on the summary so the whole bar is the click target */
+.analysisDisclosure,.methodsDisclosure{padding:0 30px}
+.analysisDisclosure>summary,.methodsDisclosure>summary{padding:20px 0}
+.analysisDisclosure[open]>summary,.methodsDisclosure[open]>summary{border-bottom:1px solid var(--line);margin-bottom:20px}
+.analysisDisclosure{border-top:1px solid var(--card-line)}
+.overview{padding-top:24px}
+
+/* headings: bigger, deep navy */
+.hero.compactTitle h1{font-size:42px;color:var(--head)}
+.overviewTitle{color:var(--head);font-size:14px}
+.sectionlabel h2,.chaptersHead h2,.agentLoop h2,.clockHero h2,.trace h2{font-size:32px;color:var(--head)}
+.sectionlabel h3,.episodeDiagram h3,.observationSection h3,.explanation h2,.explanation h3{font-size:26px;color:var(--head)}
+.analysisDisclosure>summary,.methodsDisclosure>summary{font-size:24px;font-weight:700;color:var(--head)}
+.method h3{color:var(--head);font-size:18px}
+.mast{border-bottom-color:var(--card-line)}
+
+@media(max-width:760px){
+  .overview,.agentLoop,.episodeDiagram,.mainfigure{padding:20px 16px;border-radius:10px}
+  .momentnav{padding:14px 16px 0}
+  .analysisDisclosure,.methodsDisclosure{padding:0 16px}
+  .hero.compactTitle h1{font-size:30px}
+  .sectionlabel h2,.chaptersHead h2,.agentLoop h2,.clockHero h2,.trace h2{font-size:26px}
+  .sectionlabel h3,.episodeDiagram h3,.explanation h2{font-size:22px}
+  .analysisDisclosure>summary,.methodsDisclosure>summary{font-size:20px}
+}
+
+/* A collapsible inside another card stays flat (no card-in-card) */
+.analysisDisclosure .analysisDisclosure{background:none;border:0;border-top:1px solid var(--line);border-radius:0;box-shadow:none;padding:0;margin:24px 0 0}
+.analysisDisclosure .analysisDisclosure>summary{font-size:22px}
+.analysisDisclosure .analysisDisclosure[open]>summary{border-bottom:0;margin-bottom:8px}
+
+/* Chapters: heading is the top of the chapters card (tabs and video sit below it) */
+.chaptersHead{background:var(--paper);border:1px solid var(--card-line);border-bottom:0;border-radius:12px 12px 0 0;padding:26px 30px 0;margin:0 0 0;box-shadow:none}
+.chaptersHead h2{font-size:32px;color:var(--head);margin:0}
+.chaptersHead+.momentnav{border-top:0;border-radius:0;padding-top:12px;box-shadow:none}
+@media(max-width:760px){.chaptersHead{padding:20px 16px 0;border-radius:10px 10px 0 0}.chaptersHead+.momentnav{padding-top:10px}}
+
+/* Chapter tabs: align to the top so differing label lengths don't stagger them */
+.momentnav{align-items:start}
+.moment{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;align-self:stretch}
+
+/* Narrower reading width: keeps cards, video and charts from stretching on large screens */
+.wrap{max-width:1100px}
+
+/* Playback speed selector */
+.speedControl{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-left:4px}
+.speedControl select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid #8a9a8f;border-radius:4px;padding:5px 8px;cursor:pointer}
+.speedControl select:hover{background:var(--soft)}
+
+/* Less text under the video: the clip caption, frame/wall readouts and "Two clocks" note are hidden
+   (still in the DOM because the scripts write into them). Current video time stays. */
+#scrubberCaption,#clipCaption,.clockNote,.clockDetail{display:none}
+/* Video and wall time sit side by side */
+.clocks>div{display:inline}
+.clocks>div+div::before{content:' · '}
+#wallClock{cursor:help}
+.playcontrols .clocks{margin-left:auto;text-align:right;font-size:14px}
+
+/* How Astra works: the step source is always visible at a fixed height, so the card never resizes between steps. */
+.loopDisclosure .loopEvidence{height:205px;min-height:0;align-items:flex-start;padding:16px 18px}
+.loopDisclosure .loopEvidence>div{flex:1;height:100%;display:flex;flex-direction:column}
+#loopEvidenceText{flex:1;max-height:none;min-height:0;overflow:auto}
+@media(max-width:760px){.loopDisclosure .loopEvidence{height:auto;display:block}.loopDisclosure .loopEvidence>div{height:190px}}
+
+/* Less clutter in the explorer: counts the page doesn't need to show. */
+#recordCount,.trace .legend{display:none}
+.sourceheader{justify-content:flex-start}
+
+/* Chapter and diagram clutter: links and captions that repeat what the page already shows. */
+.momentlinks,#diagramBody .diagramOverline{display:none}
+#diagramSelection{display:none}
+.commandLink,.attemptRow button{white-space:nowrap}
+/* Chapter 4 diagram: the call bar was dark with dark text. */
+.callSpan{fill:var(--accent);stroke:none}
+.spanLabel{fill:#fff;font-weight:600}
+
+/* Chart events that belong to the selected How Astra works step. */
+.diagramEvent.loopHi .eventDot{fill:var(--accent);stroke:var(--accent)}
+.diagramEvent.loopHi .eventHit{stroke:var(--accent);stroke-opacity:.35}
+.diagramEvent.loopHi .eventLabel{fill:var(--accent)}
+
+/* How Astra works and the chart under it read as one card (same pattern as the chapters). */
+.agentLoop{margin-bottom:0;border-bottom:0;border-radius:12px 12px 0 0;padding-bottom:6px}
+.episodeDiagram{margin-top:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px}
+@media(max-width:760px){.agentLoop{border-radius:10px 10px 0 0}.episodeDiagram{border-radius:0 0 10px 10px}}
+/* no dark focus box after clicking a chart point */
+.diagramEvent{-webkit-tap-highlight-color:transparent}
+.diagramEvent:focus:not(:focus-visible),.diagramEvent:focus:not(:focus-visible) *{outline:none}

@@ -1,5 +1,7 @@
 'use strict';
 const el=id=>document.getElementById(id);
+// Agent commands are Python fed to the shell as `python3 - <<'PY' … PY`; show just the Python.
+const pythonBody=c=>{const m=/^\s*python3?\s+-\s*<<\s*['"]?(\w+)['"]?\s*\n([\s\S]*?)\n\1\s*$/.exec(c||'');return m?m[2]:c;};
 const time=s=>{const n=Math.round(Math.max(0,s)*10);return `${String(Math.floor(n/600)).padStart(2,'0')}:${((n%600)/10).toFixed(1).padStart(4,'0')}`;};
 const make=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
 const byId=new Map(TRACE.records.map(r=>[r.id,r]));
@@ -19,20 +21,20 @@ let active=0,selected=sources.orientation,ready=false,playingMoment=false;
 const video=el('rollout');
 function getURL(){const p=new URLSearchParams();p.set('moment',moments[active].id);p.set('evidence',selected.id);return `#${p}`;}
 function updateURL(push){el('momentLink').href=getURL();if(push)history.pushState(null,'',getURL());}
-function refreshClock(){const frame=Math.min(2788,Math.max(0,Math.floor(video.currentTime*30+.0001)));const interval=intervals[frame];el('videoClock').textContent=time(video.currentTime);el('frameClock').textContent=String(frame);el('wallClock').textContent=interval?`${time(interval.start)}–${time(interval.end)}`:'Unavailable';el('videoSeek').value=String(frame);el('videoSeek').setAttribute('aria-valuetext',`${time(video.currentTime)} video, frame ${frame}`);}
+function refreshClock(){const frame=Math.min(2788,Math.max(0,Math.floor(video.currentTime*30+.0001)));const interval=intervals[frame];el('videoClock').textContent=time(video.currentTime);el('frameClock').textContent=String(frame);el('wallClock').textContent=interval?time(interval.start):'Unavailable';el('wallClock').title=interval?`This frame was on screen from ${time(interval.start)} to ${time(interval.end)} wall time`:'';el('videoSeek').value=String(frame);el('videoSeek').setAttribute('aria-valuetext',`${time(video.currentTime)} video, frame ${frame}`);}
 function selectSource(r,{seek=true,push=true}={}){selected=r;const m=moments[active];el('clipCaption').textContent=r.t<m.start-.01||r.t>m.end?`Inspecting ${time(r.t)} wall, outside the ${m.label.toLowerCase()} segment. Replay segment returns to its start.`:`Segment: ${time(m.startFrame/30)}–${time(m.endFrame/30)} video. Covers ${time(m.start)}–${time(m.end)} wall time.`;el('sourceType').textContent=r.kind==='state'?'EVALUATOR ONLY':r.kind==='summary'?'MODEL SUMMARY · VERBATIM':'RECORDED '+r.kind.toUpperCase();el('sourceTitle').textContent=r.kind==='summary'?(r.excerpt.match(/^\*\*(.*?)\*\*/)?.[1]||'Returned summary'):r.kind==='state'?'Measured grasp and goal state':r.title;
  el('sourceAnchor').textContent=`Wall ${time(r.t)} · video ${time(r.frame/30)} · frame ${r.frame}`;
- let description;if(r.kind==='summary')description=r.excerpt.replace(/^\*\*.*?\*\*\s*/, '');else if(r.kind==='state')description=`Left grasp: ${r.state.left?'poster':'none'}\nRight grasp: ${r.state.right?'poster':'none'}\nAttachment goal: ${r.state.goal===null?'not evaluated':r.state.goal?'satisfied':'unsatisfied'}`;else if(r.kind==='tool')description=r.raw.arguments?.command||`Read ${r.raw.arguments?.path||r.title}`;else description=typeof r.raw.result==='string'?r.raw.result:`${r.title} · ${r.status}`;
- el('sourceSummary').textContent=description;el('sourceRaw').textContent=JSON.stringify(r.raw,null,2);el('fullRecord').href='#sourceDetail';
+ let description;if(r.kind==='summary')description=r.excerpt.replace(/^\*\*.*?\*\*\s*/, '');else if(r.kind==='state')description=`Left grasp: ${r.state.left?'poster':'none'}\nRight grasp: ${r.state.right?'poster':'none'}\nAttachment goal: ${r.state.goal===null?'not evaluated':r.state.goal?'satisfied':'unsatisfied'}`;else if(r.kind==='tool')description=pythonBody(r.raw.arguments?.command)||`Read ${r.raw.arguments?.path||r.title}`;else description=typeof r.raw.result==='string'?r.raw.result:`${r.title} · ${r.status}`;
+ el('sourceSummary').textContent=description;el('sourceRaw').textContent=JSON.stringify(r.raw,null,2);
  document.querySelectorAll('[data-source]').forEach(n=>{const yes=n.dataset.source===r.id;n.classList.toggle('selected',yes);if(n.matches('.evidenceStep, .diagramEvent, .recordRow'))n.setAttribute('aria-pressed',String(yes));});
  document.querySelectorAll('.cursor').forEach(n=>n.style.left=`${r.t/TRACE.duration*100}%`);
- if(seek){video.pause();playingMoment=false;if(ready)video.currentTime=r.frame/30;else{el('videoClock').textContent=time(r.frame/30);el('frameClock').textContent=String(r.frame);const interval=intervals[r.frame];el('wallClock').textContent=interval?`${time(interval.start)}–${time(interval.end)}`:'Unavailable';}}
+ if(seek){video.pause();playingMoment=false;if(ready)video.currentTime=r.frame/30;else{el('videoClock').textContent=time(r.frame/30);el('frameClock').textContent=String(r.frame);const interval=intervals[r.frame];el('wallClock').textContent=interval?time(interval.start):'Unavailable';el('wallClock').title=interval?`This frame was on screen from ${time(interval.start)} to ${time(interval.end)} wall time`:'';}}
  syncDiagramSource(r);
  syncStorySelection(r);
  updateURL(push);
 }
 function observationFigure(r,label){const fig=make('figure');if(r){const a=make('a');a.href=mediaURL(r.images[0]);a.target='_blank';a.rel='noreferrer';const img=make('img');img.src=mediaURL(r.images[0]);img.alt=`${label}: tool observation returned at wall ${time(r.end)}`;a.append(img);fig.append(a);const caption=make('figcaption');caption.append(make('strong',label),document.createTextNode(`Returned ${time(r.end)} wall · open original image ↗`));fig.append(caption);}else fig.append(make('p','No observation was returned during this segment.'));return fig;}
-function chooseMoment(index,{push=true,source=null}={}){active=index;const m=moments[index];video.pause();playingMoment=false;el('momentLabel').textContent=`0${index+1} / 04 · SEGMENT`;el('momentTitle').textContent=m.title;el('momentQuestion').textContent=m.question;el('interpretation').textContent=m.interpretation;el('clipCaption').textContent=`Segment: ${time(m.startFrame/30)}–${time(m.endFrame/30)} video. Covers ${time(m.start)}–${time(m.end)} wall time.`;
+function chooseMoment(index,{push=true,source=null,follow=false}={}){active=index;const m=moments[index];if(!follow){video.pause();playingMoment=false;}el('momentLabel').textContent=`0${index+1} / 04 · SEGMENT`;el('momentTitle').textContent=m.title;el('momentQuestion').textContent=m.question;el('interpretation').textContent=m.interpretation;el('clipCaption').textContent=`Segment: ${time(m.startFrame/30)}–${time(m.endFrame/30)} video. Covers ${time(m.start)}–${time(m.end)} wall time.`;
  el('steps').replaceChildren();m.steps.forEach(([key,kind,claim],i)=>{const r=sources[key];const b=make('button',undefined,'evidenceStep');b.dataset.source=r.id;b.append(make('span',String(i+1).padStart(2,'0'),'n'));const box=make('span');box.append(make('b',claim),make('small',`${kind} · ${time(r.t)} wall ↗`));b.append(box);b.addEventListener('click',()=>selectSource(r));el('steps').append(b);});
  document.querySelectorAll('.moment').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));
  document.querySelectorAll('.window').forEach(n=>{n.style.left=`${m.start/TRACE.duration*100}%`;n.style.width=`${(m.end-m.start)/TRACE.duration*100}%`;});
@@ -41,17 +43,25 @@ function chooseMoment(index,{push=true,source=null}={}){active=index;const m=mom
  renderObservationComparison(before,after);
  renderMediaSegment();
  renderEpisodeDiagram(index);
- selectSource(source||sources[m.steps[0][0]],{push});
+ selectSource(source||sources[m.steps[0][0]],{push,seek:!follow});
 }
-moments.forEach((m,i)=>{const b=make('button',undefined,'moment');b.append(make('span',`0${i+1} / ${time(m.start)} WALL`),make('strong',m.label));b.addEventListener('click',()=>chooseMoment(i));el('moments').append(b);});
+const chapterTabs={orientation:'Fixes an upside-down poster',transfer:'Passes the poster to the right hand',alignment:'Retries until the poster lines up with the nail',completion:'Poster attaches and the goal is met'};
+const videoClock=f=>{const s=Math.round(f/30);return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;};
+moments.forEach((m,i)=>{const b=make('button',undefined,'moment');b.append(make('span',`Chapter ${i+1} · ${videoClock(m.startFrame)}`),make('strong',chapterTabs[m.id]||m.label));b.addEventListener('click',()=>chooseMoment(i));el('moments').append(b);});
 for(const [kind,label] of [['model','Model'],['tool','Tools'],['robot','Robot'],['context','Context']]){const row=make('div',undefined,'lane'),track=make('div',undefined,'track');row.dataset.kind=kind;row.append(make('span',label),track);track.append(make('div',undefined,'window'));for(const r of TRACE.records.filter(r=>r.kind===kind||(kind==='model'&&r.kind==='summary'))){const b=make('button',undefined,`traceMark ${kind}`);b.dataset.source=r.id;b.style.left=`${r.t/TRACE.duration*100}%`;b.style.width=`${Math.max(.12,((r.end??TRACE.duration)-r.t)/TRACE.duration*100)}%`;b.title=`${r.kind} · ${time(r.t)} wall`;b.setAttribute('aria-label',`${r.kind} at ${time(r.t)} wall; inspect record`);b.addEventListener('click',()=>{inspectRecord(r);el('selectedSource').scrollIntoView({behavior:'smooth',block:'center'});});track.append(b);}track.append(make('div',undefined,'cursor'));el('traceLanes').append(row);}
 function initializeMedia(){ready=Math.abs(video.duration-2789/30)<.25;if(!ready){el('mediaError').hidden=false;el('mediaError').textContent='Video duration does not match the source. Synchronized playback is disabled.';el('replay').disabled=true;return;}video.controls=false;for(const id of ['videoSeek','togglePlayback','videoFullscreen'])el(id).disabled=false;video.currentTime=selected.frame/30;refreshClock();}
 video.addEventListener('loadedmetadata',initializeMedia);
 if(video.readyState>=1)initializeMedia();
 video.addEventListener('error',()=>{for(const id of ['videoSeek','togglePlayback','videoFullscreen'])el(id).disabled=true;video.controls=true;ready=false;el('mediaError').hidden=false;el('replay').disabled=true;});
 el('replay').addEventListener('click',async()=>{if(!ready)return;video.currentTime=moments[active].startFrame/30;playingMoment=true;try{await video.play();}catch{playingMoment=false;}});
-video.addEventListener('timeupdate',()=>{if(playingMoment&&video.currentTime>=moments[active].endFrame/30){video.pause();video.currentTime=moments[active].endFrame/30;playingMoment=false;}refreshClock();});
+video.addEventListener('timeupdate',()=>{if(playingMoment&&video.currentTime>=moments[active].endFrame/30){video.pause();video.currentTime=moments[active].endFrame/30;playingMoment=false;}
+// Free playback: follow the chapter whose window the playhead is in (between chapters, the last one stays selected).
+if(!video.paused&&!playingMoment){const f=Math.floor(video.currentTime*30+.0001),i=moments.findIndex(m=>f>=m.startFrame&&f<m.endFrame);if(i>=0&&i!==active)chooseMoment(i,{push:false,follow:true});}
+refreshClock();});
 video.addEventListener('seeked',refreshClock);
+// Playback speed: slow motion for the short key moments, 2x to skip the long stretches. Persists across chapters.
+el('videoSpeed').addEventListener('change',()=>{video.playbackRate=Number(el('videoSpeed').value);});
+video.addEventListener('ratechange',()=>{el('videoSpeed').value=String(video.playbackRate);});
 function resolveSource(id){if(byId.has(id))return byId.get(id);if(/^state-\d+$/.test(id||'')){const step=Number(id.slice(6));if(TRACE.states.some(s=>s.step===step)){const r=stateRecord(step);byId.set(r.id,r);return r;}}}
 function restore(){const p=new URLSearchParams(location.hash.slice(1));if(location.hash&&!p.has('moment')&&!p.has('event')){if(!el('steps').children.length)chooseMoment(0,{push:false});return;}if(p.has('event')){chooseMoment(0,{push:false});const r=resolveSource(p.get('event'));if(r)inspectRecord(r,{push:false});return;}const i=moments.findIndex(m=>m.id===p.get('moment'));chooseMoment(i<0?0:i,{push:false,source:resolveSource(p.get('evidence'))});}
 window.addEventListener('popstate',restore);window.addEventListener('hashchange',restore);

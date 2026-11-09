@@ -1,6 +1,6 @@
 # Astra episode walkthrough
 
-Standalone, dark-mode research supplement for the BEHAVIOR 2026 blog. Open
+Standalone research supplement for the BEHAVIOR 2026 blog. Open
 `/astra-walkthrough/` after serving the repository with `python -m http.server 8000`.
 No framework, dependencies or build step. Jekyll copies this directory as static
 files; the HTML deliberately has no front matter and keeps its own layout.
@@ -13,7 +13,7 @@ general-purpose episode viewer or a performance comparison.
 
 The source is the already-public walkthrough at
 https://keertimanney.github.io/behavior/ (source commit
-`5b38be0efd9e6ad62eddabfc66c83047a7fa0a43`). This package carries its prepared
+`1bd3ceaddc3e580f5b3d07497500cfb16087ccbd`). This package carries its prepared
 trace and active page assets; it does not export any additional private portal
 data. The discarded design-research memo and older viewer variants are omitted.
 
@@ -25,10 +25,10 @@ robot call has an unknown terminal acknowledgement despite evaluator success.
 
 ## Structure
 
-- `index.html`, `case.css`: compact title and agent loop, then video, a short
-  chapter explanation and one supporting figure. Camera comparisons, the
-  full-episode clock chart and trace explorer open on demand; sources and timing remain
-  in a separate disclosure. Selecting an agent-loop step opens its evidence.
+- `index.html`, `case.css`, `theme.css`: overview, four chapter tabs,
+  synchronized video with speed controls, and a chart linked to the agent-loop
+  steps. Camera comparisons, the full-episode clock chart and trace explorer
+  open on demand; sources and timing remain in a separate disclosure.
 - `agent-loop.js`: four source-linked steps in the orientation correction.
 - `case.js`: selected segment, source records, video and URL state.
 - `diagrams.js`, `story.js`, `refinements.js`: clock charts, alignment attempts,

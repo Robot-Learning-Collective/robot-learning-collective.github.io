@@ -59,5 +59,4 @@ function setupStory() {
   document.querySelectorAll('.overviewEvent').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();chooseMoment(moments.findIndex(m=>m.id===a.dataset.moment));el('moments').scrollIntoView({block:'start',behavior:'smooth'});}));
   for(const [kind,label] of [['model','Model'],['tool','Tools'],['robot','Robot'],['context','Context']]){const b=make('button',label,`filterChip ${kind}`);b.setAttribute('aria-pressed','true');b.addEventListener('click',()=>{traceKinds.has(kind)?traceKinds.delete(kind):traceKinds.add(kind);b.setAttribute('aria-pressed',String(traceKinds.has(kind)));renderRecordList();});el('traceFilters').append(b);}
   el('traceSearch').addEventListener('input',renderRecordList);buildStateLanes();renderRecordList();
-  el('fullRecord').addEventListener('click',()=>el('sourceDetail').open=true);
 }
