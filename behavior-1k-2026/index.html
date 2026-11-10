@@ -3,10 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
   <title>BEHAVIOR-1K Challenge (CoRL 2026) · Robot Learning Collective</title>
-  <link rel="stylesheet" href="./blog.css">
-  <script src="./blog.js" defer></script>
+  <link rel="stylesheet" href="./blog.css?v=20261110-bucket">
+  <link rel="stylesheet" href="./agent_replay.css?v=20261110-bucket">
+  <script src="./blog.js?v=20261110-bucket" defer></script>
+  <script src="./failure_chart.js?v=20261110-bucket" defer></script>
+  <script src="./astra_chart.js?v=20261110-bucket" defer></script>
+  <script src="./astra_example.js?v=20261110-bucket" defer></script>
+  <script src="./agent_replay.js?v=20261110-bucket" defer></script>
+  <script src="./emergent_clips.js?v=20261110-bucket" defer></script>
 </head>
 <body>
   <header class="page-header">
@@ -14,13 +19,32 @@
     <p class="header-result">9th place overall · 1st among independent teams</p>
     <nav class="header-links" aria-label="Project links">
       <a href="https://github.com/Robot-Learning-Collective/behavior-1k-solution-2026">GitHub</a>
-      <span aria-disabled="true">arXiv</span>
+      <a href="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/reports/tech-report.pdf">Tech report</a>
       <a href="https://behavior.stanford.edu/challenge/index.html">Challenge</a>
       <a href="https://discord.gg/Jr8tcnVNGw">Discord</a>
     </nav>
   </header>
 
   <main class="main-content">
+    <nav class="page-guide" aria-label="On this page">
+      <button class="page-guide-toggle" type="button" aria-expanded="false" aria-controls="page-guide-links">On this page: <span id="page-guide-current">Overview</span><span aria-hidden="true">⌄</span></button>
+      <div id="page-guide-links" class="page-guide-links">
+        <span class="page-guide-label" aria-hidden="true">On this page</span>
+        <div class="page-guide-entry"><a href="#intro" data-guide-section>Overview</a></div>
+        <div class="page-guide-entry"><a href="#challenge" data-guide-section>Challenge</a></div>
+        <div class="page-guide-entry">
+          <a href="#method" data-guide-section>Method</a>
+          <div class="page-guide-sublist"><a href="#vla">VLA</a><a href="#agentic">Agentic</a></div>
+        </div>
+        <div class="page-guide-entry"><a href="#results" data-guide-section>Results</a></div>
+        <div class="page-guide-entry">
+          <a href="#summary" data-guide-section>Learned policy</a>
+          <div class="page-guide-sublist"><a href="#task-results">Results by task</a><a href="#failure-analysis">Failure analysis</a><a href="#emergent-behavior">Emergent behavior</a></div>
+        </div>
+        <div class="page-guide-entry"><a href="#astra-results" data-guide-section>Agentic approach</a></div>
+        <div class="page-guide-entry"><a href="#team" data-guide-section>Team</a></div>
+      </div>
+    </nav>
     <section id="intro" class="blog-intro">
       <p>The 2026 BEHAVIOR Challenge doubled in size to 100 household tasks. Our modified π0.5 policy won last year’s challenge. This year, we extended it into one learned policy for all tasks. Key changes were aligning stages with skill annotations, matching actions to teleoperation controls, excluding demonstration frames after task success, and lowering training variance.</p>
       <p>We also developed an agentic approach: a GPT-6 Astra agent that controls the robot through observation and motion tools, starting each evaluation from a frozen copy of its practice on training instances.</p>
@@ -51,14 +75,28 @@
 
     <section id="method" class="blog-section method-section" aria-labelledby="method-title">
       <h2 id="method-title">Method</h2>
+      <p>We extended our 2025 π<sub>0.5</sub> policy into one checkpoint for all 100 tasks. We aligned stages with demonstration skill annotations, initialized embeddings for new tasks from similar old ones, matched actions to teleoperation controls, and trained longer with lower-variance flow matching. For tasks where the learned policy struggled, we tried an agentic approach with GPT-6 Astra. The agent controls the robot through observation and motion tools, practices on training instances, studies failures, and starts evaluation from a frozen copy of its practice session.</p>
       <section id="vla" class="method-subsection" aria-labelledby="vla-title">
-        <h3 id="vla-title">VLA</h3>
-        <img src="./media/architecture.png" alt="Architecture of the learned policy">
+        <h3 id="vla-title">VLA (modified π<sub>0.5</sub>)</h3>
+        <div class="method-figure-scroll" aria-label="Interactive learned policy architecture diagram">
+          <div class="method-figure" data-svg="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/figures/architecture.svg">
+            <img src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/figures/architecture.svg" alt="Architecture of the learned policy: VLM, action expert, and task and stage conditioning">
+          </div>
+        </div>
       </section>
       <section id="agentic" class="method-subsection" aria-labelledby="agentic-title">
-        <h3 id="agentic-title">Agentic</h3>
-        <img src="./media/astra_policy.png" alt="Architecture of the agentic policy">
+        <h3 id="agentic-title">Agentic (GPT-6 Astra)</h3>
+        <div class="method-figure-scroll" aria-label="Interactive Astra policy diagram">
+          <div class="method-figure" data-svg="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/figures/astra_policy.svg">
+            <img src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/figures/astra_policy.svg" alt="Astra policy: practice on training instances, frozen context, and evaluation routing">
+          </div>
+        </div>
       </section>
+      <aside id="method-popover" class="method-popover" role="status" hidden>
+        <button id="method-popover-close" class="method-popover-close" type="button" aria-label="Close explanation">×</button>
+        <strong id="method-popover-title"></strong>
+        <p id="method-popover-detail"></p>
+      </aside>
     </section>
 
     <section id="results" class="blog-section" aria-labelledby="results-title">
@@ -88,9 +126,9 @@
     </section>
 
     <section id="summary" class="blog-section" aria-labelledby="summary-title">
-      <h2 id="summary-title">Summary</h2>
+      <h2 id="summary-title">Learned policy (π0.5)</h2>
       <div class="task-explorer">
-        <h3>π0.5 results by task</h3>
+        <h3 id="task-results">Results by task</h3>
         <p id="selected-task" class="selected-task" aria-live="polite">Loading task results…</p>
         <div class="task-chart-scroll" role="group" aria-label="Select a task by its π0.5 Q score">
           <div class="task-chart">
@@ -99,14 +137,133 @@
           </div>
         </div>
         <div class="task-chart-legend"><span class="prior-task-key"></span>2025 tasks <span class="new-task-key"></span>New in 2026</div>
-        <iframe id="episode-frame" class="episode-frame" title="Selected task episode" loading="lazy"></iframe>
+        <div class="episode-shell">
+          <iframe id="episode-frame" class="episode-frame" title="Selected task episode" loading="lazy" scrolling="no"></iframe>
+        </div>
       </div>
-      <h3>Learned recoveries</h3>
+      <section id="failure-analysis" class="failure-analysis" aria-labelledby="failure-analysis-title">
+        <h3 id="failure-analysis-title">Failure analysis</h3>
+        <p class="failure-intro">We manually labeled failures on ten tasks and compared the reasons with last year’s results.</p>
+        <div class="failure-chart-scroll">
+          <div id="failure-chart" class="failure-chart" role="group" aria-label="2025 versus 2026 failure reasons on ten shared tasks"></div>
+        </div>
+        <ul class="failure-takeaways">
+          <li><strong>Order:</strong> Sequencing errors dropped most. We now cut demonstrations at task success, excluding the post-success frames used in 2025 training. Better aligned semantic stages may also have helped, though we did not isolate their effect.</li>
+          <li><strong>Robot fell and stuck:</strong> Both became less common. Our action representation now matches the teleoperation controls and prevents torso configurations absent from the demonstrations. We observed fewer falls during deep squats; the same change may explain fewer stuck episodes.</li>
+          <li><strong>Dexterity:</strong> Its labels remained high, but rollout reviews showed better recovery from manipulation failures. With fewer early sequencing and stability failures, more episodes reach difficult manipulation steps, making dexterity limitations more visible.</li>
+        </ul>
+        <div id="failure-popover" class="failure-popover" hidden>
+          <p id="failure-popover-detail"></p>
+        </div>
+      </section>
+      <section id="emergent-behavior" aria-labelledby="emergent-behavior-title">
+        <h3 id="emergent-behavior-title">Emergent behavior</h3>
+        <p>Though trained only on successful demonstrations, the 2026 policy often recovers from mistakes and continues the task. Compared with last year, it attempts recovery more readily and adapts familiar actions to new situations, sometimes switching arms or changing the action sequence.</p>
+        <div class="emergent-clips">
+          <figure class="emergent-clip">
+            <div class="emergent-video">
+              <video id="beetroot-clip" controls playsinline preload="metadata" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/featured-clips/beetroot-recovery-301.mp4" aria-label="Beetroot recovery, episode 301"></video>
+              <span class="emergent-speed" aria-hidden="true">4×</span>
+            </div>
+            <figcaption class="emergent-dialogue">
+              <p id="beetroot-cue" class="emergent-cue" aria-live="polite">Struggles to pick up a beetroot.</p>
+              <div id="beetroot-steps" class="emergent-cue-steps" aria-hidden="true"><span class="is-active"></span><span></span><span></span><span></span></div>
+            </figcaption>
+          </figure>
+          <figure class="emergent-clip">
+            <div class="emergent-video">
+              <video id="bin-clip" controls playsinline preload="metadata" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/featured-clips/bin-shortcut-301.mp4" aria-label="Bin shortcut, episode 301"></video>
+              <span class="emergent-speed" aria-hidden="true">2×</span>
+            </div>
+            <figcaption class="emergent-dialogue">
+              <p id="bin-cue" class="emergent-cue" aria-live="polite">Places the bin prematurely, then approaches with the can.</p>
+              <div id="bin-steps" class="emergent-cue-steps" aria-hidden="true"><span class="is-active"></span><span></span></div>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+    </section>
+
+    <section id="astra-results" class="blog-section" aria-labelledby="astra-results-title">
+      <h2 id="astra-results-title">Agentic approach (GPT-6 Astra)</h2>
+      <p>Near the competition deadline, we saw Astra begin solving simulated robotics benchmarks (crucially, without a wall-time limit). We tried it on failures of our learned policy and found that it could recover from most of those we tested. We considered using it for online recovery, distilling its behavior into the policy, or as a System 2 controller. With time and budget running out, we chose direct control.</p>
+      <p>We routed 14 tasks where the learned policy struggled and Astra showed promise; time and API costs limited further practice and evaluation. On those tasks, Astra reached a mean Q of 0.639, compared with 0.108 for the learned policy.</p>
+      <figure class="astra-figure">
+        <div class="astra-legend"><span><i class="astra-policy-key"></i>Learned policy</span><span><i class="astra-gain-key"></i>Astra gain</span></div>
+        <div class="astra-chart-scroll"><div id="astra-q-chart" class="astra-q-chart" aria-live="polite">Loading task comparison…</div></div>
+        <figcaption>Per-task Q across all 100 tasks, sorted by learned-policy score. Astra results cover 2–10 public episodes per selected task.</figcaption>
+      </figure>
+      <figure id="cook-comparison" class="cook-comparison">
+        <figcaption><strong>Example: Cook cabbage.</strong> Both methods start from the same scene. The task requires many actions in a particular sequence, but gives no reward until diced cabbage and chili cook in the heated frying pan.</figcaption>
+        <div class="cook-comparison-videos">
+          <div class="cook-comparison-video">
+            <div class="cook-comparison-label"><strong>π0.5</strong><span class="cook-q cook-q-low">Q 0</span></div>
+            <video id="cook-policy-video" muted playsinline preload="metadata" tabindex="0" role="button" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/featured-clips/cook-cabbage-policy-head-303.mp4" aria-label="Play both videos from the π0.5 view"></video>
+          </div>
+          <div class="cook-comparison-video">
+            <div class="cook-comparison-label"><strong>Astra</strong><span class="cook-q cook-q-high">Q 1.00</span></div>
+            <video id="cook-astra-video" muted playsinline preload="metadata" tabindex="0" role="button" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/featured-clips/cook-cabbage-astra-head-303.mp4" aria-label="Play both videos from the Astra view"></video>
+          </div>
+        </div>
+        <div class="cook-transport">
+          <input id="cook-timeline" type="range" min="0" max="707.27" step="0.1" value="0" aria-label="Seek both videos">
+          <span id="cook-time">0:00 / 11:47</span>
+          <span class="cook-speed">8×</span>
+        </div>
+        <div class="emergent-dialogue cook-dialogue">
+          <p id="cook-cue" class="emergent-cue" aria-live="polite">π0.5 reaches the fridge and opens it faster than Astra.</p>
+          <div id="cook-steps" class="emergent-cue-steps" aria-hidden="true"><span class="is-active"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+      </figure>
+      <section id="agent-rollout" class="agent-rollout" aria-labelledby="agent-rollout-title">
+        <div class="agent-rollout-heading">
+          <h3 id="agent-rollout-title">Inside an Astra rollout</h3>
+          <select id="agent-episode" aria-label="Choose agent episode" hidden></select>
+        </div>
+        <p class="agent-rollout-intro">Step through the recorded model, tool, and robot actions. Times include model and tool waits.</p>
+        <div class="agent-replay" id="agent-replay">
+          <div id="agent-episode-result" class="agent-episode-result"></div>
+          <div class="agent-video-wrap">
+            <video id="agent-video" muted playsinline preload="metadata" tabindex="-1" aria-label="Agent evaluation episode"></video>
+            <span id="agent-video-note" class="agent-video-note"></span>
+          </div>
+          <div class="agent-progress-wrap">
+            <div id="agent-progress" class="agent-progress" role="slider" tabindex="0" aria-label="Jump to recorded step" aria-orientation="horizontal" aria-valuemin="1"></div>
+            <div class="agent-progress-legend" aria-hidden="true"><span class="model">Model</span><span class="tool">Tool</span><span class="robot">Robot</span><span class="context">Context</span></div>
+          </div>
+          <div class="agent-step-nav">
+            <button id="agent-previous" type="button" aria-label="Previous recorded step">← Previous</button>
+            <span id="agent-step-count" aria-live="polite">Loading episode…</span>
+            <button id="agent-next" type="button" aria-label="Next recorded step">Next →</button>
+          </div>
+          <article id="agent-step-detail" class="agent-step-detail" aria-live="polite"></article>
+        </div>
+      </section>
     </section>
 
     <section id="team" class="blog-section" aria-labelledby="team-title">
       <h2 id="team-title">Team</h2>
+      <ul class="team-contributions">
+        <li><strong>Ilia Larchenko:</strong> learned policy, overall setup and training.</li>
+        <li><strong>Gleb Zarin:</strong> learned policy and evaluation infrastructure.</li>
+        <li><strong>Atindra Nair:</strong> agentic control logic.</li>
+        <li><strong>Keerti Manney:</strong> evaluation infrastructure and agentic experiments.</li>
+        <li><strong>Vitaly Kleban:</strong> fundraising and model training.</li>
+        <li><strong>Anjana Yodaiken:</strong> hardware teleoperation device.</li>
+        <li><strong>Mirko Kiefer:</strong> model experiments and evaluations.</li>
+      </ul>
     </section>
   </main>
+  <footer class="team-footer" aria-label="Team profiles">
+    <div class="team-grid">
+      <a class="team-person" href="https://www.linkedin.com/in/larchenko/" target="_blank" rel="noopener noreferrer"><img class="team-avatar" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/team/ilia.jpg" alt=""><span>Ilia Larchenko</span></a>
+      <a class="team-person" href="https://www.linkedin.com/in/zaringleb/" target="_blank" rel="noopener noreferrer"><img class="team-avatar" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/team/gleb.jpeg" alt=""><span>Gleb Zarin</span></a>
+      <a class="team-person" href="https://www.linkedin.com/in/atindra-nair/" target="_blank" rel="noopener noreferrer"><img class="team-avatar" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/team/atindra.jpeg" alt=""><span>Atindra Nair</span></a>
+      <a class="team-person" href="https://www.linkedin.com/in/keerti-manney/" target="_blank" rel="noopener noreferrer"><img class="team-avatar" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/team/keerti.jpeg" alt=""><span>Keerti Manney</span></a>
+      <a class="team-person" href="https://www.linkedin.com/in/vkleban" target="_blank" rel="noopener noreferrer"><img class="team-avatar" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/team/vitaly.png" alt=""><span>Vitaly Kleban</span></a>
+      <a class="team-person" href="https://uk.linkedin.com/in/anjana-yodaiken" target="_blank" rel="noopener noreferrer"><img class="team-avatar" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/team/anjana.jpeg" alt=""><span>Anjana Yodaiken</span></a>
+      <a class="team-person" href="https://mirkokiefer.com/" target="_blank" rel="noopener noreferrer"><img class="team-avatar" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/team/mirko.png" alt=""><span>Mirko Kiefer</span></a>
+    </div>
+  </footer>
 </body>
 </html>

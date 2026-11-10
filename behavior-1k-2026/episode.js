@@ -24,13 +24,6 @@ function time(seconds) {
   return `${Math.floor(n / 60)}:${String(n % 60).padStart(2, "0")}`;
 }
 
-function qColor(value) {
-  if (value == null) return "var(--dim)";
-  const q = Math.min(1, Math.max(0, Number(value)));
-  const hue = q <= 0.5 ? q * 84 : 42 + (q - 0.5) * 206;
-  return `hsl(${hue} 75% 66%)`;
-}
-
 function frame() {
   return episode ? Math.min(episode.steps - 1, Math.max(0, Math.floor(video.currentTime * episode.fps))) : 0;
 }
@@ -63,9 +56,9 @@ function renderNavigation() {
     const name = document.createElement("span");
     name.textContent = `Instance ${item.instance}`;
     const q = document.createElement("span");
-    q.className = "q";
+    const score = item.q == null ? null : Number(item.q);
+    q.className = `q ${score == null ? "q-unknown" : score < 1 / 3 ? "q-low" : score < 2 / 3 ? "q-mid" : "q-high"}`;
     q.textContent = `Q ${item.q == null ? "—" : Number(item.q).toFixed(2)}`;
-    q.style.color = qColor(item.q);
     button.append(name, q);
     button.addEventListener("click", () => select(item.id).catch(showError));
     list.append(button);
@@ -146,11 +139,6 @@ async function select(id) {
   history.replaceState(null, "", url);
   document.title = `${data.task.replaceAll("_", " ")} · Instance ${data.instance} · BEHAVIOR-1K`;
   $("task-name").textContent = data.task.replaceAll("_", " ");
-  const q = document.createElement("span");
-  q.className = "q";
-  q.style.color = qColor(data.q);
-  q.textContent = `Q ${data.q == null ? "—" : Number(data.q).toFixed(2)}`;
-  $("episode-name").replaceChildren(`Instance ${data.instance} · `, q);
   video.src = data.video_url;
   video.playbackRate = speed;
   video.play().catch(() => {});
@@ -218,7 +206,7 @@ video.addEventListener("timeupdate", update);
 video.addEventListener("seeked", update);
 video.addEventListener("error", () => { if (episode) showError(new Error("Video could not be loaded")); });
 
-fetch("./data/manifest.json")
+fetch("https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/episodes/manifest.json")
   .then(response => { if (!response.ok) throw new Error("Public manifest could not be loaded"); return response.json(); })
   .then(data => {
     manifest = data.episodes || [];
