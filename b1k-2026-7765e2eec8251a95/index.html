@@ -2,111 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>BEHAVIOR-1K Challenge (CoRL 2026) · Robot Learning Collective</title>
-  <link rel="stylesheet" href="./blog.css">
-  <script src="./blog.js" defer></script>
+  <meta http-equiv="refresh" content="0; url=../behavior-1k-2026/">
+  <link rel="canonical" href="https://robot-learning-collective.github.io/behavior-1k-2026/">
+  <title>BEHAVIOR-1K 2026 · Moved</title>
+  <script>location.replace('../behavior-1k-2026/' + location.search + location.hash);</script>
 </head>
 <body>
-  <header class="page-header">
-    <h1>BEHAVIOR-1K Challenge (CoRL 2026)</h1>
-    <p class="header-result">9th place overall · 1st among independent teams</p>
-    <nav class="header-links" aria-label="Project links">
-      <a href="https://github.com/Robot-Learning-Collective/behavior-1k-solution-2026">GitHub</a>
-      <span aria-disabled="true">arXiv</span>
-      <a href="https://behavior.stanford.edu/challenge/index.html">Challenge</a>
-      <a href="https://discord.gg/Jr8tcnVNGw">Discord</a>
-    </nav>
-  </header>
-
-  <main class="main-content">
-    <section id="intro" class="blog-intro">
-      <p>The 2026 BEHAVIOR Challenge doubled in size to 100 household tasks. Our modified π0.5 policy won last year’s challenge. This year, we extended it into one learned policy for all tasks. Key changes were aligning stages with skill annotations, matching actions to teleoperation controls, excluding demonstration frames after task success, and lowering training variance.</p>
-      <p>We also developed an agentic approach: a GPT-6 Astra agent that controls the robot through observation and motion tools, starting each evaluation from a frozen copy of its practice on training instances.</p>
-    </section>
-
-    <section id="challenge" class="blog-section" aria-labelledby="challenge-title">
-      <h2 id="challenge-title">Challenge</h2>
-      <div class="training-examples">
-        <h3>Training Examples</h3>
-        <p><em>Each task comes with 200 demonstrations recorded via teleoperation. Video: robot head camera 8× speed.</em></p>
-        <div id="example-tabs" class="example-tabs" role="tablist" aria-label="Training examples"></div>
-        <div id="example-panel" role="tabpanel" aria-label="Training example">
-          <video id="example-video" controls autoplay muted playsinline preload="metadata"></video>
-          <p id="example-instruction" class="example-instruction"></p>
-        </div>
-      </div>
-      <p>The Challenge includes 100 tasks set in multiple house-like environments. The main difficulties are:</p>
-      <ul>
-        <li><strong>Long-horizon execution:</strong> Human demonstrations average 5.9 minutes; evaluation allows up to 1.5× each task’s mean human duration.</li>
-        <li><strong>Bimanual manipulation:</strong> Coordinated control of two 7-DOF arms with parallel jaw grippers.</li>
-        <li><strong>Mobile navigation:</strong> Operation in realistic indoor and outdoor environments.</li>
-        <li><strong>Non-Markovian states:</strong> Many states are visually ambiguous. Without memory of past actions or explicit stage tracking, the policy cannot distinguish between these states and may take incorrect actions.</li>
-        <li><strong>No recovery demonstrations:</strong> The training set contains only successful demonstrations, spanning a very narrow manifold of possible trajectories.</li>
-        <li><strong>Data:</strong> Each task provides 200 demonstrations. Public evaluation uses 10 additional instances per task.</li>
-        <li><strong>High compute requirements:</strong> Training on all 1,950 hours of data takes weeks, and full evaluation across all 100 tasks takes several days.</li>
-      </ul>
-    </section>
-
-    <section id="method" class="blog-section method-section" aria-labelledby="method-title">
-      <h2 id="method-title">Method</h2>
-      <section id="vla" class="method-subsection" aria-labelledby="vla-title">
-        <h3 id="vla-title">VLA</h3>
-        <img src="./media/architecture.png" alt="Architecture of the learned policy">
-      </section>
-      <section id="agentic" class="method-subsection" aria-labelledby="agentic-title">
-        <h3 id="agentic-title">Agentic</h3>
-        <img src="./media/astra_policy.png" alt="Architecture of the agentic policy">
-      </section>
-    </section>
-
-    <section id="results" class="blog-section" aria-labelledby="results-title">
-      <h2 id="results-title">Results</h2>
-      <div class="results-table-wrap">
-        <table class="results-table">
-          <thead>
-            <tr><th scope="col">Rank</th><th scope="col">Team</th><th scope="col">Affiliation</th><th scope="col">Method</th><th scope="col">Q Score</th><th scope="col">Full-task SR</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>1</td><td>The North Star</td><td>Huawei Noah EAI Team</td><td>Hiearchical Physical RSI</td><td>0.683 <span class="score-badge verified">Verified</span></td><td>48.2% <span class="score-badge verified">Verified</span></td></tr>
-            <tr><td>2</td><td>IF1001</td><td>Intellifusion</td><td>VLA WAM</td><td>0.615 <span class="score-badge verified">Verified</span></td><td>41.2% <span class="score-badge verified">Verified</span></td></tr>
-            <tr><td>3</td><td>Cyber</td><td>Xiaomi Robotics</td><td>WAM</td><td>0.596 <span class="score-badge verified">Verified</span></td><td>39.6% <span class="score-badge verified">Verified</span></td></tr>
-            <tr><td>4</td><td>Anyverse</td><td>Anyverse-Autolab</td><td>A²MEAS</td><td>0.498 <span class="score-badge verified">Verified</span></td><td>32.0% <span class="score-badge verified">Verified</span></td></tr>
-            <tr><td>5</td><td>Autolab</td><td>Anyverse-Autolab</td><td>A²WLA</td><td>0.495 <span class="score-badge verified">Verified</span></td><td>30.9% <span class="score-badge verified">Verified</span></td></tr>
-            <tr><td>6</td><td>XYRobot</td><td>Beijing XY Robot Technology Co., Ltd.</td><td>VLA+RSI</td><td>0.484 <span class="score-badge verified">Verified</span></td><td>28.9% <span class="score-badge verified">Verified</span></td></tr>
-            <tr><td>7</td><td>asteroid</td><td>CLab</td><td>Agent + WAM</td><td>0.514 <span class="score-badge self-reported">Self-reported</span></td><td>30.8% <span class="score-badge self-reported">Self-reported</span></td></tr>
-            <tr><td>8</td><td>Tasman3001</td><td>Ambarella, Inc.</td><td>VLA+RSI</td><td>0.481 <span class="score-badge self-reported">Self-reported</span></td><td>30.4% <span class="score-badge self-reported">Self-reported</span></td></tr>
-            <tr class="our-team"><td>9</td><td>Robot Learning Collective</td><td>Independent</td><td>Modified PI0.5<br>and Astra</td><td>0.446 <span class="score-badge self-reported">Self-reported</span></td><td>27.3% <span class="score-badge self-reported">Self-reported</span></td></tr>
-            <tr><td>10</td><td>VGI-SKT</td><td>SNU / SKT</td><td>VLA</td><td>0.445 <span class="score-badge self-reported">Self-reported</span></td><td>22.3% <span class="score-badge self-reported">Self-reported</span></td></tr>
-          </tbody>
-          <tfoot>
-            <tr><td colspan="6"><a class="leaderboard-more" href="https://huggingface.co/spaces/behavior-1k/2026-challenge-leaderboard" aria-label="View full official leaderboard">…</a></td></tr>
-          </tfoot>
-        </table>
-      </div>
-    </section>
-
-    <section id="summary" class="blog-section" aria-labelledby="summary-title">
-      <h2 id="summary-title">Summary</h2>
-      <div class="task-explorer">
-        <h3>π0.5 results by task</h3>
-        <p id="selected-task" class="selected-task" aria-live="polite">Loading task results…</p>
-        <div class="task-chart-scroll" role="group" aria-label="Select a task by its π0.5 Q score">
-          <div class="task-chart">
-            <div class="task-chart-ticks" aria-hidden="true"><span>1.0</span><span>0.5</span><span>0</span></div>
-            <div id="task-bars" class="task-bars"></div>
-          </div>
-        </div>
-        <div class="task-chart-legend"><span class="prior-task-key"></span>2025 tasks <span class="new-task-key"></span>New in 2026</div>
-        <iframe id="episode-frame" class="episode-frame" title="Selected task episode" loading="lazy"></iframe>
-      </div>
-      <h3>Learned recoveries</h3>
-    </section>
-
-    <section id="team" class="blog-section" aria-labelledby="team-title">
-      <h2 id="team-title">Team</h2>
-    </section>
-  </main>
+  <p>Moved to <a href="../behavior-1k-2026/">BEHAVIOR-1K 2026</a>.</p>
 </body>
 </html>
