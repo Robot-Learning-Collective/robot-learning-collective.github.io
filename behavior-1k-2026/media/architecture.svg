@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="690" viewBox="0 0 1680 690">
+<defs><marker id="m0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2F57D6"/></marker>
+<marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7E9BEA"/></marker>
+<marker id="m2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#E2783A"/></marker>
+<marker id="m3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3D7F31"/></marker>
+<marker id="m4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#46A2DA"/></marker>
+<marker id="m5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9A3F9F"/></marker>
+<marker id="m6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2C5878"/></marker>
+<marker id="m7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="13" markerHeight="13" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2C5878"/></marker>
+<marker id="m8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="15" markerHeight="15" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3D7F31"/></marker></defs>
+<g font-family="Inter" transform="translate(0,-52)">
+<rect x="908" y="250" width="170" height="202" rx="26" fill="#FBEEDF" stroke="#2C5878" stroke-width="3" stroke-dasharray="12 8"/>
+<rect x="52" y="250" width="896" height="202" rx="26" fill="#F9E4CD" stroke="#2C5878" stroke-width="3" />
+<text x="78" y="284" font-size="21" font-weight="800" fill="#14181F" text-anchor="start" >PaliGemma</text>
+<text x="200" y="284" font-size="16.5" font-weight="500" fill="#6B5B4A" text-anchor="start" >VLM · width 2048 · 18 layers</text>
+<rect x="918" y="306" width="140" height="56" rx="12" fill="#F2C796" stroke="#2C5878" stroke-width="2.5" stroke-dasharray="10 7"/>
+<rect x="74" y="306" width="852" height="56" rx="12" fill="#EDB070" stroke="#2C5878" stroke-width="2.5" />
+<text x="330" y="342" font-size="22" font-weight="800" fill="#14181F" text-anchor="middle" >Gemma 2B</text>
+<rect x="836" y="317" width="70" height="34" rx="9" fill="#2B3440" stroke="none" stroke-width="1" />
+<text x="871" y="339" font-size="15" font-weight="600" fill="#fff" text-anchor="middle" >sink</text>
+<text x="824" y="339" font-size="14.5" font-weight="500" fill="#6E4A22" text-anchor="end" font-style="italic">learnable sink logit + value in every layer</text>
+<rect x="1196" y="226" width="454" height="202" rx="26" fill="#F6E0E0" stroke="#2C5878" stroke-width="2" opacity="0.45" stroke-dasharray="3 6"/>
+<rect x="1184" y="238" width="454" height="202" rx="26" fill="#F6E0E0" stroke="#2C5878" stroke-width="2" opacity="0.7" stroke-dasharray="3 6"/>
+<rect x="1172" y="250" width="454" height="202" rx="26" fill="#F2D2D2" stroke="#2C5878" stroke-width="3" />
+<text x="1198" y="284" font-size="21" font-weight="800" fill="#14181F" text-anchor="start" >Action expert</text>
+<text x="1602" y="284" font-size="16.5" font-weight="500" fill="#7D5656" text-anchor="end" >width 1024 · 18 layers</text>
+<rect x="1194" y="306" width="410" height="56" rx="12" fill="#DE9898" stroke="#2C5878" stroke-width="2.5" />
+<text x="1355" y="342" font-size="21" font-weight="800" fill="#14181F" text-anchor="middle" >Gemma 300M · AdaRMS(<tspan font-family="STIX Two Text" font-style="italic">t</tspan>)</text>
+<rect x="1514" y="317" width="70" height="34" rx="9" fill="#2B3440" stroke="none" stroke-width="1" />
+<text x="1549" y="339" font-size="15" font-weight="600" fill="#fff" text-anchor="middle" >sink</text>
+<path d="M150,434 L150,380" fill="none" stroke="#2F57D6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m0)" />
+<path d="M254,434 L254,380" fill="none" stroke="#2F57D6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m0)" />
+<path d="M358,434 L358,380" fill="none" stroke="#2F57D6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m0)" />
+<path d="M462,434 L462,380" fill="none" stroke="#7E9BEA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m1)" />
+<path d="M576,434 L576,380" fill="none" stroke="#E2783A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m2)" />
+<path d="M680,434 L680,380" fill="none" stroke="#3D7F31" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m3)" />
+<path d="M784,434 L784,380" fill="none" stroke="#3D7F31" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m3)" />
+<path d="M888,434 L888,380" fill="none" stroke="#46A2DA" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m4)" />
+<path d="M1012,434 L1012,380" fill="none" stroke="#9A3F9F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m5)" />
+<path d="M1228,434 L1228,380" fill="none" stroke="#E2783A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m2)" />
+<path d="M1316,434 L1316,380" fill="none" stroke="#2C5878" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m6)" />
+<path d="M1388,434 L1388,380" fill="none" stroke="#2C5878" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m6)" />
+<path d="M1460,434 L1460,380" fill="none" stroke="#2C5878" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m6)" />
+<path d="M1540,434 L1540,380" fill="none" stroke="#3D7F31" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m3)" />
+<path d="M1598,434 L1598,380" fill="none" stroke="#3D7F31" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m3)" />
+<text x="576" y="482" font-size="17" font-weight="700" fill="#14181F" text-anchor="middle" >Scratch</text>
+<text x="576" y="504" font-size="16" font-weight="400" fill="#3A4250" text-anchor="middle" >8</text>
+<text x="680" y="482" font-size="17" font-weight="700" fill="#14181F" text-anchor="middle" >Task</text>
+<text x="680" y="504" font-size="16" font-weight="400" fill="#3A4250" text-anchor="middle" >1</text>
+<text x="784" y="482" font-size="17" font-weight="700" fill="#14181F" text-anchor="middle" >Stage</text>
+<text x="784" y="504" font-size="16" font-weight="400" fill="#3A4250" text-anchor="middle" >4</text>
+<text x="888" y="482" font-size="17" font-weight="700" fill="#14181F" text-anchor="middle" >State</text>
+<text x="888" y="504" font-size="16" font-weight="400" fill="#3A4250" text-anchor="middle" >1 + 21</text>
+<text x="1012" y="482" font-size="17" font-weight="700" fill="#14181F" text-anchor="middle" >FAST</text>
+<text x="1012" y="504" font-size="16" font-weight="400" fill="#3A4250" text-anchor="middle" >≤ 68</text>
+<text x="1012" y="534" font-size="14" font-weight="500" fill="#6C7380" text-anchor="middle" font-style="italic">training only</text>
+<text x="888" y="534" font-size="14" font-weight="500" fill="#6C7380" text-anchor="middle" font-style="italic">bins + joint emb.</text>
+<text x="888" y="552" font-size="14" font-weight="500" fill="#6C7380" text-anchor="middle" font-style="italic">+ sin/cos</text>
+<text x="1228" y="482" font-size="17" font-weight="700" fill="#14181F" text-anchor="middle" >Scratch</text>
+<text x="1228" y="504" font-size="16" font-weight="400" fill="#3A4250" text-anchor="middle" >4</text>
+<text x="1388" y="482" font-size="17" font-weight="700" fill="#14181F" text-anchor="middle" >Noisy actions <tspan font-family="STIX Two Text" font-style="italic">x</tspan><tspan font-family="STIX Two Text" font-style="italic" font-size="11.6" dy="4.4">t</tspan><tspan dy="-4.4" dx="0"></tspan></text>
+<text x="1388" y="504" font-size="16" font-weight="400" fill="#3A4250" text-anchor="middle" >30 × 21</text>
+<text x="1540" y="482" font-size="17" font-weight="700" fill="#14181F" text-anchor="middle" >Task</text>
+<text x="1540" y="504" font-size="16" font-weight="400" fill="#3A4250" text-anchor="middle" >cond</text>
+<text x="1598" y="482" font-size="17" font-weight="700" fill="#14181F" text-anchor="middle" >Stage</text>
+<text x="1598" y="504" font-size="16" font-weight="400" fill="#3A4250" text-anchor="middle" >cond</text>
+<path d="M92,464 L520,464 L458,584 L154,584 z" fill="#DDF0D2" stroke="#2C5878" stroke-width="3" stroke-linejoin="round"/>
+<text x="150" y="488" font-size="15" font-weight="600" fill="#2D4A2A" text-anchor="middle" >head</text>
+<text x="150" y="507" font-size="15" font-weight="400" fill="#2D4A2A" text-anchor="middle" >256</text>
+<text x="254" y="488" font-size="15" font-weight="600" fill="#2D4A2A" text-anchor="middle" >L wrist</text>
+<text x="254" y="507" font-size="15" font-weight="400" fill="#2D4A2A" text-anchor="middle" >256</text>
+<text x="358" y="488" font-size="15" font-weight="600" fill="#2D4A2A" text-anchor="middle" >R wrist</text>
+<text x="358" y="507" font-size="15" font-weight="400" fill="#2D4A2A" text-anchor="middle" >256</text>
+<text x="462" y="488" font-size="15" font-weight="600" fill="#2D4A2A" text-anchor="middle" >reg.</text>
+<text x="462" y="507" font-size="15" font-weight="400" fill="#2D4A2A" text-anchor="middle" >3×8</text>
+<text x="306" y="544" font-size="21" font-weight="800" fill="#14181F" text-anchor="middle" >SigLIP So400m</text>
+<text x="306" y="568" font-size="14" font-weight="500" fill="#3E5A3A" text-anchor="middle" >224×224 / camera · per-camera proj.</text>
+<path d="M306,646 L306,594" fill="none" stroke="#2F57D6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m0)" />
+<text x="306" y="672" font-size="17" font-weight="500" fill="#14181F" text-anchor="middle" >Images · head + 2 wrist cameras</text>
+<text x="306" y="694" font-size="15" font-weight="500" fill="#6C7380" text-anchor="middle" font-style="italic">+ 8 registers / camera</text>
+<path d="M680,306 L680,196" fill="none" stroke="#E2783A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m2)" />
+<text x="680" y="176" font-size="19" font-weight="700" fill="#14181F" text-anchor="middle" >Stage head</text>
+<path d="M1012,306 L1012,196" fill="none" stroke="#E2783A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m2)" />
+<text x="1012" y="176" font-size="19" font-weight="700" fill="#14181F" text-anchor="middle" >(aux. loss)</text>
+<text x="1012" y="150" font-size="19" font-weight="700" fill="#14181F" text-anchor="middle" >FAST tokens</text>
+<path d="M1388,306 L1388,178" fill="none" stroke="#E2783A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m2)" />
+<text x="1388" y="166" font-size="17" font-weight="500" fill="#3A4250" text-anchor="middle" >30 × 21 action chunk</text>
+<text x="1388" y="132" font-size="21" font-weight="700" fill="#14181F" text-anchor="middle" >Velocity  <tspan font-family="STIX Two Text" font-style="italic">v</tspan><tspan font-family="STIX Two Text" font-style="italic" font-size="14.3" dy="5.5">θ</tspan><tspan dy="-5.5" dx="1"></tspan><tspan font-family="STIX Two Text" font-style="normal">(</tspan><tspan font-family="STIX Two Text" font-style="italic">x</tspan><tspan font-family="STIX Two Text" font-style="italic" font-size="14.3" dy="5.5">t</tspan><tspan dy="-5.5" dx="1"></tspan><tspan font-family="STIX Two Text" font-style="normal">, </tspan><tspan font-family="STIX Two Text" font-style="italic">t</tspan><tspan font-family="STIX Two Text" font-style="normal"> | </tspan><tspan font-family="STIX Two Text" font-style="italic">o</tspan><tspan font-family="STIX Two Text" font-style="normal">)</tspan></text>
+<text x="1388" y="96" font-size="18" font-weight="600" fill="#C2442F" text-anchor="middle" font-style="italic">× K flow samples per prefix</text>
+<path d="M1080,320.0 L1168,320.0" fill="none" stroke="#2C5878" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m7)" />
+<path d="M1080,334.0 L1168,334.0" fill="none" stroke="#2C5878" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m7)" />
+<path d="M1080,348.0 L1168,348.0" fill="none" stroke="#2C5878" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m7)" />
+<text x="1124" y="272" font-size="15" font-weight="700" fill="#2C5878" text-anchor="middle" >K,V of all</text>
+<text x="1124" y="290" font-size="15" font-weight="700" fill="#2C5878" text-anchor="middle" >VLM layers</text>
+<text x="1124" y="392" font-size="15" font-weight="600" fill="#2C5878" text-anchor="middle" font-style="italic">learnable</text>
+<text x="1124" y="410" font-size="15" font-weight="600" fill="#2C5878" text-anchor="middle" font-style="italic">mix</text>
+<path d="M680,516 C680,691 1540,691 1540,516" fill="none" stroke="#3D7F31" stroke-width="3.2" stroke-dasharray="0.1 8.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m8)"/>
+<path d="M784,516 C784,644 1598,644 1598,516" fill="none" stroke="#3D7F31" stroke-width="3.2" stroke-dasharray="0.1 8.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m8)"/>
+<text x="1180" y="690" font-size="16.5" font-weight="600" fill="#3D7F31" text-anchor="middle" >task &amp; stage embeddings</text>
+<text x="1180" y="711" font-size="16.5" font-weight="600" fill="#3D7F31" text-anchor="middle" >via zero-init projections</text>
+</g>
+</svg>

@@ -51,14 +51,32 @@
 
     <section id="method" class="blog-section method-section" aria-labelledby="method-title">
       <h2 id="method-title">Method</h2>
+      <p class="method-hint">Hover or tap the outlined parts of each figure for details.</p>
       <section id="vla" class="method-subsection" aria-labelledby="vla-title">
         <h3 id="vla-title">VLA</h3>
-        <img src="./media/architecture.png" alt="Architecture of the learned policy">
+        <div class="method-figure-scroll" aria-label="Interactive learned policy architecture diagram">
+          <div class="method-figure" data-svg="./media/architecture.svg">
+            <img src="./media/architecture.svg" alt="Architecture of the learned policy: VLM, action expert, and task and stage conditioning">
+            <button class="method-hotspot" type="button" style="--x:36.9%;--y:45%;--w:13.5%;--h:35%" data-title="Task and stage conditioning" data-detail="Task and stage embeddings also enter the action expert directly through two zero-initialized conditioning tokens. The policy predicts its stage from images and the task, then tracks it by voting during inference." aria-label="Task and stage conditioning: show explanation" aria-expanded="false"><span aria-hidden="true">?</span></button>
+            <button class="method-hotspot" type="button" style="--x:63.5%;--y:27%;--w:7.7%;--h:39%" data-title="VLM to action expert" data-detail="Each action-expert layer reads a learnable mixture of keys and values from all VLM layers. The VLM prefix is computed once while the expert generates action samples." aria-label="VLM to action expert: show explanation" aria-expanded="false"><span aria-hidden="true">?</span></button>
+          </div>
+        </div>
       </section>
       <section id="agentic" class="method-subsection" aria-labelledby="agentic-title">
         <h3 id="agentic-title">Agentic</h3>
-        <img src="./media/astra_policy.png" alt="Architecture of the agentic policy">
+        <div class="method-figure-scroll" aria-label="Interactive Astra policy diagram">
+          <div class="method-figure" data-svg="./media/astra_policy.svg">
+            <img src="./media/astra_policy.svg" alt="Astra policy: practice on training instances, frozen context, and evaluation routing">
+            <button class="method-hotspot" type="button" style="--x:3.6%;--y:51%;--w:37%;--h:23%" data-title="What practice saves" data-detail="On training instances, Astra can reset, save and restore scenes and read goal feedback. It stores what it learns in its conversation, notes and recipes; no model weights are trained." aria-label="What practice saves: show explanation" aria-expanded="false"><span aria-hidden="true">?</span></button>
+            <button class="method-hotspot" type="button" style="--x:45.4%;--y:24%;--w:11.3%;--h:29%" data-title="Frozen context" data-detail="Each agent-routed evaluation episode starts from a fresh copy of the frozen practice session. Privileged practice tools are unavailable, and nothing learned during one evaluation episode carries into another." aria-label="Frozen context: show explanation" aria-expanded="false"><span aria-hidden="true">?</span></button>
+          </div>
+        </div>
       </section>
+      <aside id="method-popover" class="method-popover" role="status" hidden>
+        <button id="method-popover-close" class="method-popover-close" type="button" aria-label="Close explanation">×</button>
+        <strong id="method-popover-title"></strong>
+        <p id="method-popover-detail"></p>
+      </aside>
     </section>
 
     <section id="results" class="blog-section" aria-labelledby="results-title">
