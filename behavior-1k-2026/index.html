@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BEHAVIOR-1K Challenge (CoRL 2026) · Robot Learning Collective</title>
   <link rel="stylesheet" href="./blog.css?v=20261111-r5">
-  <link rel="stylesheet" href="./agent_replay.css?v=20261110-bucket">
+  <link rel="stylesheet" href="./agent_replay.css?v=20261111-full">
   <script src="./blog.js?v=20261111-r5" defer></script>
   <script src="./failure_chart.js?v=20261110-bucket" defer></script>
   <script src="./astra_example.js?v=20261111-review" defer></script>
-  <script src="./agent_replay.js?v=20261110-bucket" defer></script>
+  <script src="./agent_replay.js?v=20261111-full" defer></script>
   <script src="./emergent_clips.js?v=20261110-bucket" defer></script>
 </head>
 <body>
@@ -256,21 +256,24 @@
           <h3 id="agent-rollout-title">Inside an Astra rollout</h3>
           <select id="agent-episode" aria-label="Choose agent episode" hidden></select>
         </div>
-        <p class="agent-rollout-intro">Step through the recorded model, tool, and robot actions. Times include model and tool waits.</p>
+        <p class="agent-rollout-intro">Step through the full recorded activity, observations, and robot actions. Times include model and tool waits.</p>
         <div class="agent-replay" id="agent-replay">
           <div id="agent-episode-result" class="agent-episode-result"></div>
+          <div id="agent-availability" class="agent-availability"></div>
           <div class="agent-video-wrap">
-            <video id="agent-video" muted playsinline preload="metadata" tabindex="-1" aria-label="Agent evaluation episode"></video>
+            <video id="agent-video" controls muted playsinline preload="metadata" aria-label="Agent evaluation episode"></video>
             <span id="agent-video-note" class="agent-video-note"></span>
           </div>
           <div class="agent-progress-wrap">
             <div id="agent-progress" class="agent-progress" role="slider" tabindex="0" aria-label="Jump to recorded step" aria-orientation="horizontal" aria-valuemin="1"></div>
+            <input id="agent-index" class="agent-index" type="range" min="1" value="1" aria-label="Select recorded activity">
             <div class="agent-progress-legend" aria-hidden="true"><span class="model">Model</span><span class="tool">Tool</span><span class="robot">Robot</span><span class="context">Context</span></div>
           </div>
           <div class="agent-step-nav">
             <button id="agent-previous" type="button" aria-label="Previous recorded step">← Previous</button>
             <span id="agent-step-count" aria-live="polite">Loading episode…</span>
             <button id="agent-next" type="button" aria-label="Next recorded step">Next →</button>
+            <button id="agent-next-summary" type="button" aria-label="Next model summary">Next summary</button>
           </div>
           <article id="agent-step-detail" class="agent-step-detail" aria-live="polite"></article>
         </div>
