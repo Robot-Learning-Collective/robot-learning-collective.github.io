@@ -306,34 +306,7 @@ document.querySelectorAll('.method-figure').forEach(async figure => {
     desktop.setAttribute('aria-label', image.alt);
     desktop.querySelectorAll('[data-method-topic]').forEach(wireMethodTopic);
 
-    const parts = figure.dataset.svg.includes('architecture') ? [
-      {box: [0, 0, 1170, 690], label: 'VLM and layer connection', topics: ['backbone', 'vision', 'task', 'stage_head', 'stage_tokens', 'state', 'fast', 'kv', 'registers', 'scratch', 'sinks']},
-      {box: [1140, 0, 540, 690], label: 'Action expert', topics: ['expert', 'actions', 'conditioning', 'flow', 'scratch', 'sinks']},
-    ] : [
-      {box: [40, 0, 660, 610], label: 'Practice', topics: ['practice_agent', 'practice_loop', 'practice_tools', 'practice_outputs']},
-      {box: [770, 160, 180, 260], label: 'Frozen context', topics: ['frozen']},
-      {box: [1000, 0, 640, 610], label: 'Agent evaluation', topics: ['episode_agent', 'observation', 'controller']},
-      {box: [40, 610, 850, 190], label: 'Task routing', topics: ['routing']},
-      {box: [870, 610, 770, 190], label: 'Runtime fallback', topics: ['fallback']},
-    ];
-    const mobile = parts.map(({box, label, topics}) => {
-      const svg = document.importNode(source.documentElement, true);
-      svg.classList.add('method-mobile-part');
-      svg.setAttribute('viewBox', box.join(' '));
-      svg.setAttribute('width', box[2]);
-      svg.setAttribute('height', box[3]);
-      svg.setAttribute('role', 'group');
-      svg.setAttribute('aria-label', label);
-      svg.querySelectorAll('[data-method-topic]').forEach(topic => {
-        if (topics.includes(topic.dataset.methodTopic)) wireMethodTopic(topic);
-        else topic.remove();
-      });
-      if (figure.dataset.svg.includes('architecture')) {
-        svg.querySelectorAll('text[x="1180"]').forEach(text => text.remove());
-      }
-      return svg;
-    });
-    image.replaceWith(desktop, ...mobile);
+    image.replaceWith(desktop);   // on phones the whole diagram scrolls sideways at one scale (CSS)
     fitTopicBoxes(figure, source);
   } catch (error) {
     // The SVG image remains visible if a browser cannot load inline SVG.
