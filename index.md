@@ -15,6 +15,9 @@ Welcome to the Robot Learning Collective. We are an independent community sharin
 
 # 🚀 Our projects
 
+## [2026 BEHAVIOR Challenge](behavior-1k-2026/)
+We took **9th place** in the Challenge this year, 1st among independent teams (CoRL 2026). This year the Challenge doubled in size, with 100 diverse household tasks. We pushed our VLA policy further and achieved promising results with the agentic approach. As always, everything will be fully open: code, model, and analysis.
+
 ## [VLA-0-Smol](vla-0-smol.md)
 We present a compact VLA model that achieves a high score on simulation benchmarks with a clear recipe to reproduce results and a detailed ablation study showing the impact of key design choices.
 
