@@ -137,8 +137,9 @@ async function select(id) {
   const url = new URL(location.href);
   url.searchParams.set("episode", id);
   history.replaceState(null, "", url);
-  document.title = `${data.task.replaceAll("_", " ")} · Instance ${data.instance} · BEHAVIOR-1K`;
-  $("task-name").textContent = data.task.replaceAll("_", " ");
+  const taskName = data.task.replaceAll("_", " ");
+  document.title = `${taskName} (VLA rollout) · Instance ${data.instance} · BEHAVIOR-1K`;
+  $("task-name").textContent = `${taskName} (VLA rollout)`;
   video.src = data.video_url;
   video.playbackRate = speed;
   video.play().catch(() => {});

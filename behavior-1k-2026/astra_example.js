@@ -5,6 +5,8 @@ const cookTimeline = document.getElementById('cook-timeline');
 const cookTime = document.getElementById('cook-time');
 const cookCue = document.getElementById('cook-cue');
 const cookSteps = document.querySelectorAll('#cook-steps span');
+const cookPlay = document.getElementById('cook-play');
+const cookOverlays = document.querySelectorAll('#cook-comparison .cook-overlay');
 
 if (cookComparison && cookPolicy && cookAstra && cookTimeline && cookTime && cookCue) {
   const videos = [cookPolicy, cookAstra];
@@ -12,17 +14,17 @@ if (cookComparison && cookPolicy && cookAstra && cookTimeline && cookTime && coo
   let scrubbing = false;
   let resumeAfterScrub = false;
   const cues = [
-    [0, 'π0.5 reaches the fridge and opens it faster than Astra.'],
-    [53, 'π0.5 carries cabbage and chili in both hands, saving time.'],
-    [126, 'π0.5 makes a critical mistake: it picks up the chili instead of the knife (behind the plate, possibly hard to see at this resolution and partly blocked by the right arm), which came next in every training demonstration.'],
-    [164, 'π0.5 struggles to put the chili on the cutting board. In the demonstrations, the cabbage is already diced by this point.'],
+    [0, 'The VLA reaches the fridge and opens it faster than Astra.'],
+    [53, 'The VLA carries cabbage and chili in both hands, saving time.'],
+    [126, 'The VLA makes a critical mistake: it picks up the chili instead of the knife (behind the plate, possibly hard to see at this resolution and partly blocked by the right arm), which came next in every training demonstration.'],
+    [164, 'The VLA struggles to put the chili on the cutting board. In the demonstrations, the cabbage is already diced by this point.'],
     [173, 'It eventually places the chili, then seems unsure what to do with both vegetables on the board.'],
     [262, 'Astra makes a weird arm motion to line up the knife grasp, but succeeds.'],
-    [343, 'Why π0.5 remains stuck here is unclear.'],
-    [413, 'π0.5 even demonstrates emergent behavior by recovering and picking up the chili from the floor.'],
+    [343, 'Why the VLA remains stuck here is unclear.'],
+    [413, 'The VLA even demonstrates emergent behavior by recovering and picking up the chili from the floor.'],
     [435, 'Astra struggles to pour the vegetables smoothly into the frying pan, but enough pieces land inside.'],
-    [475, 'π0.5 is still stuck, perhaps reaching for the knife.'],
-    [517, 'π0.5 finally tries something else.'],
+    [475, 'The VLA is still stuck, perhaps reaching for the knife.'],
+    [517, 'The VLA finally tries something else.'],
     [521, 'It misses the knife again, then spends the rest of the episode trying to open the fridge. Near the end, it seemingly gives up and stops moving.'],
   ];
 
@@ -43,7 +45,12 @@ if (cookComparison && cookPolicy && cookAstra && cookTimeline && cookTime && coo
     if (!scrubbing) cookTimeline.value = String(cookPolicy.currentTime);
     cookTime.textContent = `${formatTime(cookPolicy.currentTime)} / ${formatTime(total)}`;
     const action = cookPolicy.ended ? 'Replay' : cookPolicy.paused ? 'Play' : 'Pause';
-    cookPolicy.setAttribute('aria-label', `${action} both videos from the π0.5 view`);
+    cookPolicy.setAttribute('aria-label', `${action} both videos from the VLA view`);
+    if (cookPlay) {
+      cookPlay.textContent = cookPolicy.paused ? (cookPolicy.ended ? '↺' : '▶') : '❚❚';
+      cookPlay.setAttribute('aria-label', `${action} both videos`);
+    }
+    cookComparison.classList.toggle('is-playing', !cookPolicy.paused);
     cookAstra.setAttribute('aria-label', `${action} both videos from the Astra view`);
     updateCue();
   };
@@ -68,6 +75,8 @@ if (cookComparison && cookPolicy && cookAstra && cookTimeline && cookTime && coo
   };
 
   const togglePlayback = () => cookPolicy.paused ? playBoth() : pauseBoth();
+  cookPlay?.addEventListener('click', togglePlayback);
+  cookOverlays.forEach(overlay => overlay.addEventListener('click', togglePlayback));
   for (const video of videos) {
     video.defaultPlaybackRate = speed;
     video.playbackRate = speed;

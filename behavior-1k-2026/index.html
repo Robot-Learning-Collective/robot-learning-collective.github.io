@@ -4,12 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BEHAVIOR-1K Challenge (CoRL 2026) · Robot Learning Collective</title>
-  <link rel="stylesheet" href="./blog.css?v=20261110-bucket">
+  <link rel="stylesheet" href="./blog.css?v=20261111-r5">
   <link rel="stylesheet" href="./agent_replay.css?v=20261110-bucket">
-  <script src="./blog.js?v=20261110-bucket" defer></script>
+  <script src="./blog.js?v=20261111-r5" defer></script>
   <script src="./failure_chart.js?v=20261110-bucket" defer></script>
-  <script src="./astra_chart.js?v=20261110-bucket" defer></script>
-  <script src="./astra_example.js?v=20261110-bucket" defer></script>
+  <script src="./astra_example.js?v=20261111-review" defer></script>
   <script src="./agent_replay.js?v=20261110-bucket" defer></script>
   <script src="./emergent_clips.js?v=20261110-bucket" defer></script>
 </head>
@@ -18,8 +17,9 @@
     <h1>BEHAVIOR-1K Challenge (CoRL 2026)</h1>
     <p class="header-result">9th place overall · 1st among independent teams</p>
     <nav class="header-links" aria-label="Project links">
+      <a href="https://arxiv.org/abs/2611.14432">Paper</a>
       <a href="https://github.com/Robot-Learning-Collective/behavior-1k-solution-2026">GitHub</a>
-      <a href="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/reports/tech-report.pdf">Tech report</a>
+      <a href="https://huggingface.co/IliaLarchenko/BEHAVIOR2026VLA">Checkpoint</a>
       <a href="https://behavior.stanford.edu/challenge/index.html">Challenge</a>
       <a href="https://discord.gg/Jr8tcnVNGw">Discord</a>
     </nav>
@@ -32,21 +32,26 @@
         <span class="page-guide-label" aria-hidden="true">On this page</span>
         <div class="page-guide-entry"><a href="#intro" data-guide-section>Overview</a></div>
         <div class="page-guide-entry"><a href="#challenge" data-guide-section>Challenge</a></div>
-        <div class="page-guide-entry">
-          <a href="#method" data-guide-section>Method</a>
-          <div class="page-guide-sublist"><a href="#vla">VLA</a><a href="#agentic">Agentic</a></div>
-        </div>
         <div class="page-guide-entry"><a href="#results" data-guide-section>Results</a></div>
         <div class="page-guide-entry">
-          <a href="#summary" data-guide-section>Learned policy</a>
-          <div class="page-guide-sublist"><a href="#task-results">Results by task</a><a href="#failure-analysis">Failure analysis</a><a href="#emergent-behavior">Emergent behavior</a></div>
+          <a href="#solution" data-guide-section>Our solution</a>
+          <div class="page-guide-sublist"><a href="#task-results">Results by task</a></div>
         </div>
-        <div class="page-guide-entry"><a href="#astra-results" data-guide-section>Agentic approach</a></div>
+        <div class="page-guide-entry">
+          <a href="#vla" data-guide-section>VLA policy</a>
+          <div class="page-guide-sublist"><a href="#vla-architecture">Architecture</a><a href="#failure-analysis">Failure analysis</a><a href="#emergent-behavior">Emergent behavior</a></div>
+        </div>
+        <div class="page-guide-entry">
+          <a href="#astra" data-guide-section>Astra agent</a>
+          <div class="page-guide-sublist"><a href="#astra-architecture">How it works</a><a href="#cook-comparison">Example</a><a href="#agent-rollout">Inside a rollout</a></div>
+        </div>
+        <div class="page-guide-entry"><a href="#discussion" data-guide-section>Discussion</a></div>
         <div class="page-guide-entry"><a href="#team" data-guide-section>Team</a></div>
+        <div class="page-guide-entry"><a href="#citation" data-guide-section>Citation</a></div>
       </div>
     </nav>
     <section id="intro" class="blog-intro">
-      <p>The 2026 BEHAVIOR Challenge doubled in size to 100 household tasks. Our modified π0.5 policy won last year’s challenge. This year, we extended it into one learned policy for all tasks. Key changes were aligning stages with skill annotations, matching actions to teleoperation controls, excluding demonstration frames after task success, and lowering training variance.</p>
+      <p>The 2026 BEHAVIOR Challenge doubled in size to 100 household tasks. <a href="https://robot-learning-collective.github.io/winning-behavior-1k-challenge">Our modified π0.5 policy won last year’s challenge</a>. This year, we extended it into one learned policy for all tasks. Key changes were aligning stages with skill annotations, matching actions to teleoperation controls, excluding demonstration frames after task success, and lowering training variance.</p>
       <p>We also developed an agentic approach: a GPT-6 Astra agent that controls the robot through observation and motion tools, starting each evaluation from a frozen copy of its practice on training instances.</p>
     </section>
 
@@ -73,32 +78,6 @@
       </ul>
     </section>
 
-    <section id="method" class="blog-section method-section" aria-labelledby="method-title">
-      <h2 id="method-title">Method</h2>
-      <p>We extended our 2025 π<sub>0.5</sub> policy into one checkpoint for all 100 tasks. We aligned stages with demonstration skill annotations, initialized embeddings for new tasks from similar old ones, matched actions to teleoperation controls, and trained longer with lower-variance flow matching. For tasks where the learned policy struggled, we tried an agentic approach with GPT-6 Astra. The agent controls the robot through observation and motion tools, practices on training instances, studies failures, and starts evaluation from a frozen copy of its practice session.</p>
-      <section id="vla" class="method-subsection" aria-labelledby="vla-title">
-        <h3 id="vla-title">VLA (modified π<sub>0.5</sub>)</h3>
-        <div class="method-figure-scroll" aria-label="Interactive learned policy architecture diagram">
-          <div class="method-figure" data-svg="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/figures/architecture.svg">
-            <img src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/figures/architecture.svg" alt="Architecture of the learned policy: VLM, action expert, and task and stage conditioning">
-          </div>
-        </div>
-      </section>
-      <section id="agentic" class="method-subsection" aria-labelledby="agentic-title">
-        <h3 id="agentic-title">Agentic (GPT-6 Astra)</h3>
-        <div class="method-figure-scroll" aria-label="Interactive Astra policy diagram">
-          <div class="method-figure" data-svg="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/figures/astra_policy.svg">
-            <img src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/figures/astra_policy.svg" alt="Astra policy: practice on training instances, frozen context, and evaluation routing">
-          </div>
-        </div>
-      </section>
-      <aside id="method-popover" class="method-popover" role="status" hidden>
-        <button id="method-popover-close" class="method-popover-close" type="button" aria-label="Close explanation">×</button>
-        <strong id="method-popover-title"></strong>
-        <p id="method-popover-detail"></p>
-      </aside>
-    </section>
-
     <section id="results" class="blog-section" aria-labelledby="results-title">
       <h2 id="results-title">Results</h2>
       <div class="results-table-wrap">
@@ -115,7 +94,7 @@
             <tr><td>6</td><td>XYRobot</td><td>Beijing XY Robot Technology Co., Ltd.</td><td>VLA+RSI</td><td>0.484 <span class="score-badge verified">Verified</span></td><td>28.9% <span class="score-badge verified">Verified</span></td></tr>
             <tr><td>7</td><td>asteroid</td><td>CLab</td><td>Agent + WAM</td><td>0.514 <span class="score-badge self-reported">Self-reported</span></td><td>30.8% <span class="score-badge self-reported">Self-reported</span></td></tr>
             <tr><td>8</td><td>Tasman3001</td><td>Ambarella, Inc.</td><td>VLA+RSI</td><td>0.481 <span class="score-badge self-reported">Self-reported</span></td><td>30.4% <span class="score-badge self-reported">Self-reported</span></td></tr>
-            <tr class="our-team"><td>9</td><td>Robot Learning Collective</td><td>Independent</td><td>Modified PI0.5<br>and Astra</td><td>0.446 <span class="score-badge self-reported">Self-reported</span></td><td>27.3% <span class="score-badge self-reported">Self-reported</span></td></tr>
+            <tr class="our-team"><td>9</td><td>Robot Learning Collective</td><td>Independent</td><td>VLA<br>+ Astra agent</td><td>0.446 <span class="score-badge self-reported">Self-reported</span></td><td>27.3% <span class="score-badge self-reported">Self-reported</span></td></tr>
             <tr><td>10</td><td>VGI-SKT</td><td>SNU / SKT</td><td>VLA</td><td>0.445 <span class="score-badge self-reported">Self-reported</span></td><td>22.3% <span class="score-badge self-reported">Self-reported</span></td></tr>
           </tbody>
           <tfoot>
@@ -125,22 +104,60 @@
       </div>
     </section>
 
-    <section id="summary" class="blog-section" aria-labelledby="summary-title">
-      <h2 id="summary-title">Learned policy (π0.5)</h2>
+    <section id="solution" class="blog-section" aria-labelledby="solution-title">
+      <h2 id="solution-title">Our solution</h2>
+      <p>Our solution combines two approaches. One <a href="#vla">VLA policy</a> plays 86 of the 100 tasks. On the other 14, where the VLA was weak, a <a href="#astra">GPT-6 Astra agent</a> controls the robot instead, and hands the rest of the episode back to the VLA if it fails at runtime. Together they scored 0.446 Q on the public instances; the VLA alone scores 0.392.</p>
       <div class="task-explorer">
         <h3 id="task-results">Results by task</h3>
         <p id="selected-task" class="selected-task" aria-live="polite">Loading task results…</p>
-        <div class="task-chart-scroll" role="group" aria-label="Select a task by its π0.5 Q score">
+        <div class="task-chart-scroll" role="group" aria-label="Select a task by its final Q score">
           <div class="task-chart">
             <div class="task-chart-ticks" aria-hidden="true"><span>1.0</span><span>0.5</span><span>0</span></div>
             <div id="task-bars" class="task-bars"></div>
           </div>
         </div>
-        <div class="task-chart-legend"><span class="prior-task-key"></span>2025 tasks <span class="new-task-key"></span>New in 2026</div>
+        <div class="task-chart-legend"><span class="prior-task-key"></span>2025 tasks <span class="new-task-key"></span>New in 2026 <span class="astra-gain-key"></span>Astra gain over the VLA</div>
+        <p class="task-chart-note">Per-task Q on the public instances 301–310, sorted by the final score. Hover over a bar to see both scores, and click it to watch a VLA rollout below. Astra results cover 2–10 public episodes on each of its tasks.</p>
+        <div id="task-tooltip" class="task-tooltip" role="tooltip" hidden></div>
         <div class="episode-shell">
           <iframe id="episode-frame" class="episode-frame" title="Selected task episode" loading="lazy" scrolling="no"></iframe>
         </div>
       </div>
+    </section>
+
+    <section id="vla" class="blog-section" aria-labelledby="vla-title">
+      <h2 id="vla-title">VLA policy</h2>
+      <p>The VLA is our winning 2025 policy, a modified π0.5, grown into one checkpoint for all 100 tasks. Our main lesson from 2025 was that the model was undertrained, so most of this year’s work went into training it longer and better:</p>
+      <ul class="change-list">
+        <li><strong>Stages from skill annotations.</strong> In 2025 the model tracked its progress through equal time slices of each demonstration. Now each of the 413 stages matches a real step of the task, taken from the demonstrations’ skill annotations.</li>
+        <li><strong>New tasks start from similar old ones.</strong> Each of the 50 new tasks starts from a weighted average of the embeddings of 1–5 similar 2025 tasks, so we could continue training the 2025 checkpoint instead of starting over.</li>
+        <li><strong>Actions that match the teleoperation controls.</strong> The model predicts 21 action dimensions instead of 32. The torso moves the way the operators moved it, so the policy cannot command torso poses that never appear in the demonstrations.</li>
+        <li><strong>No training on idle tails.</strong> Frames recorded after the task was already complete are never sampled for training.</li>
+        <li><strong>Lower-variance flow matching and a long run.</strong> Stratified flow times and antithetic noise reduce gradient noise at no cost. One 200k-step run covered about one pass over the 211M frames of the demonstrations.</li>
+      </ul>
+      <div class="stat-row" role="list">
+        <div role="listitem"><strong>0.392</strong><span>Q on all 100 tasks</span></div>
+        <div role="listitem"><strong>0.371</strong><span>on the 50 tasks from 2025, up from 0.260 for our winning 2025 submission</span></div>
+        <div role="listitem"><strong>0.412</strong><span>on the 50 tasks new in 2026</span></div>
+      </div>
+      <section id="vla-architecture" class="method-subsection" aria-labelledby="vla-architecture-title">
+        <h3 id="vla-architecture-title">Architecture</h3>
+        <div class="diagram-toolbar" data-figure="vla-figure">
+          <span class="diagram-hint"><i class="hint-marker" aria-hidden="true"></i>Hover over or tap a marked part for details</span>
+          <div class="segmented" role="radiogroup" aria-label="Highlight what changed">
+            <button type="button" role="radio" aria-checked="true" data-highlight="none">Diagram</button>
+            <button type="button" role="radio" aria-checked="false" data-highlight="2025"><i class="swatch" data-origin="2025" aria-hidden="true"></i>2025 changes</button>
+            <button type="button" role="radio" aria-checked="false" data-highlight="2026"><i class="swatch" data-origin="2026" aria-hidden="true"></i>2026 additions</button>
+            <button type="button" role="radio" aria-checked="false" data-highlight="both">Both</button>
+          </div>
+        </div>
+        <div class="method-figure-scroll" aria-label="Interactive VLA architecture diagram">
+          <div id="vla-figure" class="method-figure" data-highlight="none" data-svg="./figures/architecture.svg?v=20261111-r5">
+            <img src="./figures/architecture.svg?v=20261111-r5" alt="Architecture of the VLA policy: VLM, action expert, and task and stage conditioning">
+          </div>
+        </div>
+        <p class="diagram-swipe-hint" aria-hidden="true">Swipe sideways to see the whole diagram →</p>
+      </section>
       <section id="failure-analysis" class="failure-analysis" aria-labelledby="failure-analysis-title">
         <h3 id="failure-analysis-title">Failure analysis</h3>
         <p class="failure-intro">We manually labeled failures on ten tasks and compared the reasons with last year’s results.</p>
@@ -184,34 +201,54 @@
       </section>
     </section>
 
-    <section id="astra-results" class="blog-section" aria-labelledby="astra-results-title">
-      <h2 id="astra-results-title">Agentic approach (GPT-6 Astra)</h2>
+    <section id="astra" class="blog-section" aria-labelledby="astra-title">
+      <h2 id="astra-title">Astra agent (GPT-6 Astra)</h2>
       <p>Near the competition deadline, we saw Astra begin solving simulated robotics benchmarks (crucially, without a wall-time limit). We tried it on failures of our learned policy and found that it could recover from most of those we tested. We considered using it for online recovery, distilling its behavior into the policy, or as a System 2 controller. With time and budget running out, we chose direct control.</p>
-      <p>We routed 14 tasks where the learned policy struggled and Astra showed promise; time and API costs limited further practice and evaluation. On those tasks, Astra reached a mean Q of 0.639, compared with 0.108 for the learned policy.</p>
-      <figure class="astra-figure">
-        <div class="astra-legend"><span><i class="astra-policy-key"></i>Learned policy</span><span><i class="astra-gain-key"></i>Astra gain</span></div>
-        <div class="astra-chart-scroll"><div id="astra-q-chart" class="astra-q-chart" aria-live="polite">Loading task comparison…</div></div>
-        <figcaption>Per-task Q across all 100 tasks, sorted by learned-policy score. Astra results cover 2–10 public episodes per selected task.</figcaption>
-      </figure>
+      <p>Before evaluation, Astra practices each task on training instances: it isolates the hard steps, studies its failures and the human demonstrations, and writes notes and recipes for itself. No weights are trained. Every evaluation episode then starts from a fresh copy of that frozen practice session, with only the official observations. We routed 14 tasks to the agent, where the VLA struggled and Astra did better in our tests or the VLA scored about zero.</p>
+      <div class="stat-row stat-row-astra" role="list">
+        <div role="listitem"><strong>0.639</strong><span>mean Q on its 14 tasks, against 0.108 for the VLA</span></div>
+        <div role="listitem"><strong>106 / 140</strong><span>public episodes on these tasks played by Astra before the deadline; the VLA played the rest</span></div>
+        <div role="listitem"><strong>≈ 17×</strong><span>slower than real time: a median of 0.63 hours per episode, plus tens of dollars in API fees</span></div>
+      </div>
+      <p>The biggest jump was on installing smoke detectors, from 0.10 with the VLA to 1.0 with Astra. Time and API costs limited further practice and evaluation: we had the agent route working only one to two days before the deadline.</p>
+      <section id="astra-architecture" class="method-subsection" aria-labelledby="astra-architecture-title">
+        <h3 id="astra-architecture-title">How the agent works</h3>
+        <div class="diagram-toolbar" data-figure="astra-figure">
+          <span class="diagram-hint"><i class="hint-marker" aria-hidden="true"></i>Hover over or tap a marked part for details</span>
+        </div>
+        <div class="method-figure-scroll" aria-label="Interactive Astra agent diagram">
+          <div id="astra-figure" class="method-figure" data-svg="./figures/astra_policy.svg?v=20261111-r5">
+            <img src="./figures/astra_policy.svg?v=20261111-r5" alt="Astra agent: practice on training instances, frozen context, and evaluation routing">
+          </div>
+        </div>
+        <p class="diagram-swipe-hint" aria-hidden="true">Swipe sideways to see the whole diagram →</p>
+      </section>
       <figure id="cook-comparison" class="cook-comparison">
         <figcaption><strong>Example: Cook cabbage.</strong> Both methods start from the same scene. The task requires many actions in a particular sequence, but gives no reward until diced cabbage and chili cook in the heated frying pan.</figcaption>
         <div class="cook-comparison-videos">
           <div class="cook-comparison-video">
-            <div class="cook-comparison-label"><strong>π0.5</strong><span class="cook-q cook-q-low">Q 0</span></div>
-            <video id="cook-policy-video" muted playsinline preload="metadata" tabindex="0" role="button" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/featured-clips/cook-cabbage-policy-head-303.mp4" aria-label="Play both videos from the π0.5 view"></video>
+            <div class="cook-comparison-label"><strong>VLA</strong><span class="cook-q cook-q-low">Q 0</span></div>
+            <div class="cook-video-wrap">
+              <video id="cook-policy-video" muted playsinline preload="metadata" tabindex="0" role="button" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/featured-clips/cook-cabbage-policy-head-303.mp4" aria-label="Play both videos from the VLA view"></video>
+              <button class="cook-overlay" type="button" tabindex="-1" aria-hidden="true">▶</button>
+            </div>
           </div>
           <div class="cook-comparison-video">
             <div class="cook-comparison-label"><strong>Astra</strong><span class="cook-q cook-q-high">Q 1.00</span></div>
-            <video id="cook-astra-video" muted playsinline preload="metadata" tabindex="0" role="button" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/featured-clips/cook-cabbage-astra-head-303.mp4" aria-label="Play both videos from the Astra view"></video>
+            <div class="cook-video-wrap">
+              <video id="cook-astra-video" muted playsinline preload="metadata" tabindex="0" role="button" src="https://storage.googleapis.com/rlc-behavior-2026-public-exhibit/featured-clips/cook-cabbage-astra-head-303.mp4" aria-label="Play both videos from the Astra view"></video>
+              <button class="cook-overlay" type="button" tabindex="-1" aria-hidden="true">▶</button>
+            </div>
           </div>
         </div>
         <div class="cook-transport">
+          <button id="cook-play" class="cook-play" type="button" aria-label="Play both videos">▶</button>
           <input id="cook-timeline" type="range" min="0" max="707.27" step="0.1" value="0" aria-label="Seek both videos">
           <span id="cook-time">0:00 / 11:47</span>
           <span class="cook-speed">8×</span>
         </div>
         <div class="emergent-dialogue cook-dialogue">
-          <p id="cook-cue" class="emergent-cue" aria-live="polite">π0.5 reaches the fridge and opens it faster than Astra.</p>
+          <p id="cook-cue" class="emergent-cue" aria-live="polite">The VLA reaches the fridge and opens it faster than Astra.</p>
           <div id="cook-steps" class="emergent-cue-steps" aria-hidden="true"><span class="is-active"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
         </div>
       </figure>
@@ -241,6 +278,13 @@
       </section>
     </section>
 
+    <section id="discussion" class="blog-section" aria-labelledby="discussion-title">
+      <h2 id="discussion-title">Discussion</h2>
+      <p><strong>Training longer paid off most.</strong> Last year we ran out of time with an undertrained model split across four checkpoints. This year a single checkpoint, trained for about one pass over the data, covers all 100 tasks and lifts Q on last year’s 50 tasks from 0.260 to 0.371, despite a 25% shorter time limit per episode. We can’t say how much of that comes from longer training alone: the policy also saw 50 more tasks, and we changed the model and fixed bugs along the way.</p>
+      <p><strong>Small, cheap changes added up.</strong> Stages that follow the real steps of a task, actions that match how operators actually drove the robot, and variance-reduced flow samples each took little code and no extra compute. We did not ablate them one by one, but together with longer training they turned last year’s policy into one that plays all 100 tasks, and, in our failure review, falls over and loses track of the task order less often.</p>
+      <p><strong>A practicing agent is surprisingly good, but slow and expensive.</strong> After practicing on training instances, Astra reached 0.64 Q on 14 tasks where our policy scored 0.11. It learned all of this in context, from its own practice notes and history, without any weight updates, and it worked much better than we expected. But it is very slow and expensive: an episode runs about 17 times slower than real time and costs tens of dollars in API fees.</p>
+    </section>
+
     <section id="team" class="blog-section" aria-labelledby="team-title">
       <h2 id="team-title">Team</h2>
       <ul class="team-contributions">
@@ -253,6 +297,30 @@
         <li><strong>Mirko Kiefer:</strong> model experiments and evaluations.</li>
       </ul>
     </section>
+
+    <section id="citation" class="blog-section" aria-labelledby="citation-title">
+      <h2 id="citation-title">Citation</h2>
+      <p>The full details are in our <a href="https://arxiv.org/abs/2611.14432">technical report</a>. If you use this work, please cite:</p>
+      <div class="citation-block">
+        <button id="copy-citation" class="copy-citation" type="button">Copy</button>
+        <pre><code id="citation-bibtex">@misc{larchenko2026onepolicy,
+  title         = {One Policy for 100 Household Tasks: Our Solution for the 2026 BEHAVIOR Challenge},
+  author        = {Ilia Larchenko and Gleb Zarin and Atindra Nair and Keerti Manney and Vitaly Kleban and Mirko Kiefer and Anjana Yodaiken},
+  year          = {2026},
+  eprint        = {2611.14432},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.RO},
+  url           = {https://arxiv.org/abs/2611.14432}
+}</code></pre>
+      </div>
+    </section>
+
+    <aside id="method-popover" class="method-popover" role="status" hidden>
+      <button id="method-popover-close" class="method-popover-close" type="button" aria-label="Close explanation">×</button>
+      <span id="method-popover-tag" class="method-popover-tag"></span>
+      <strong id="method-popover-title"></strong>
+      <p id="method-popover-detail"></p>
+    </aside>
   </main>
   <footer class="team-footer" aria-label="Team profiles">
     <div class="team-grid">
