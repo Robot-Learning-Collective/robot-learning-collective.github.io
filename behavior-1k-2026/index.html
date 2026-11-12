@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BEHAVIOR-1K Challenge (CoRL 2026) · Robot Learning Collective</title>
   <link rel="stylesheet" href="./blog.css?v=20261112-stats">
-  <link rel="stylesheet" href="./agent_replay.css?v=20261112-tabs">
+  <link rel="stylesheet" href="./agent_replay.css?v=20261112-story3">
   <script src="./blog.js?v=20261111-r5" defer></script>
   <script src="./failure_chart.js?v=20261110-bucket" defer></script>
   <script src="./astra_example.js?v=20261111-review" defer></script>
-  <script src="./agent_replay.js?v=20261112-result" defer></script>
+  <script src="./astra_story.js?v=20261112-story" defer></script>
+  <script src="./agent_replay.js?v=20261112-story4" defer></script>
   <script src="./emergent_clips.js?v=20261110-bucket" defer></script>
 </head>
 <body>
@@ -251,28 +252,44 @@
       </figure>
       <section id="agent-rollout" class="agent-rollout" aria-labelledby="agent-rollout-title">
         <h3 id="agent-rollout-title">Inside an Astra rollout</h3>
-        <p class="agent-rollout-intro">Step through the full recorded activity, observations, and robot actions. Times include model and tool waits.</p>
+        <p class="agent-rollout-intro">The video only moves when the robot moves. Between moves, the robot stood still while Astra studied the cameras and wrote its next command. Press play: the video stops at each key moment to explain what Astra is doing. Under the video is the command Astra sent at that moment. The ← and → keys jump between moments.</p>
         <div id="agent-episode" class="agent-episode-tabs" role="group" aria-label="Choose agent episode"></div>
+        <p id="ar-result" class="ar-result"></p>
+        <p id="ar-status" class="ar-status" role="status">Loading episodes…</p>
         <div class="agent-replay" id="agent-replay">
-          <div id="agent-episode-result" class="agent-episode-result"></div>
-          <div id="agent-availability" class="agent-availability"></div>
-          <div class="agent-video-wrap">
-            <video id="agent-video" controls muted playsinline preload="metadata" aria-label="Agent evaluation episode"></video>
-            <span id="agent-video-note" class="agent-video-note"></span>
+          <div class="ar-screen" id="ar-screen">
+            <video id="ar-video" muted playsinline preload="auto" aria-label="Agent evaluation episode"></video>
+            <span class="ar-cam ar-cam-wrist" aria-hidden="true">Wrist cameras</span>
+            <span class="ar-cam ar-cam-head" aria-hidden="true">Head camera</span>
+            <span class="ar-clock" title="Real time since the episode started, when this frame was on screen">Real time <strong id="ar-wall">0:00</strong></span>
+            <button id="ar-bigplay" class="ar-bigplay" type="button" aria-label="Play the rollout">▶</button>
+            <div class="ar-caption" id="ar-caption" aria-live="polite">
+              <p class="ar-caption-phase" id="ar-caption-phase"></p>
+              <p class="ar-caption-text" id="ar-caption-text"></p>
+              <span class="ar-hold" id="ar-hold" aria-hidden="true"></span>
+            </div>
           </div>
-          <div class="agent-progress-wrap">
-            <div id="agent-progress" class="agent-progress" role="slider" tabindex="0" aria-label="Jump to recorded step" aria-orientation="horizontal" aria-valuemin="1"></div>
-            <input id="agent-index" class="agent-index" type="range" min="1" value="1" aria-label="Select recorded activity">
-            <div class="agent-progress-legend" aria-hidden="true"><span class="model">Model</span><span class="tool">Tool</span><span class="robot">Robot</span><span class="context">Context</span></div>
+          <div class="ar-controls">
+            <button id="ar-play" class="ar-round" type="button" aria-label="Play">▶</button>
+            <div class="ar-strip" id="ar-strip" aria-label="Phases of the rollout"></div>
+            <span id="ar-time" class="ar-time">0:00 / 0:00</span>
           </div>
-          <div class="agent-step-nav">
-            <button id="agent-previous" type="button" aria-label="Previous recorded step">← Previous</button>
-            <span id="agent-step-count" aria-live="polite">Loading episode…</span>
-            <button id="agent-next" type="button" aria-label="Next recorded step">Next →</button>
-            <button id="agent-next-summary" type="button" aria-label="Next model summary">Next summary</button>
+          <div class="ar-cmd">
+            <button id="ar-prev" class="ar-step" type="button" aria-label="Previous command">←</button>
+            <div class="ar-cmd-body" aria-live="polite">
+              <div id="ar-thinks"></div>
+              <p class="ar-command" id="ar-command"></p>
+              <p class="ar-meta" id="ar-meta"></p>
+            </div>
+            <button id="ar-next" class="ar-step" type="button" aria-label="Next command">→</button>
           </div>
-          <article id="agent-step-detail" class="agent-step-detail" aria-live="polite"></article>
         </div>
+        <figure class="ar-timefig">
+          <figcaption>Where the real time went. Each band links a phase of the video to the stretch of real time it took; select one to play it.</figcaption>
+          <div class="ar-legend" aria-hidden="true"><span><i class="moving"></i>Robot moving</span><span><i class="still"></i>Robot still: Astra thinking and running code</span></div>
+          <div class="ar-chart" id="ar-chart"></div>
+        </figure>
+        <div class="ar-tooltip" id="ar-tooltip" role="status" hidden></div>
       </section>
     </section>
 
