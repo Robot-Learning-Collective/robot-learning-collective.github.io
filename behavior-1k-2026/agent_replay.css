@@ -1,3 +1,4 @@
+/* Astra rollout viewer, in the blog's palette. */
 .agent-rollout { margin: 1.5rem 0 2rem; }
 .agent-rollout h3 { margin: 0 0 0.35rem; }
 .agent-rollout-intro { margin: 0 0 0.55rem; font-size: 0.86rem; }
@@ -6,64 +7,87 @@
 .agent-episode-tabs button:hover, .agent-episode-tabs button:focus-visible { border-color: #159957; background: #edf7f1; }
 .agent-episode-tabs button[aria-pressed="true"] { border-color: #159957; background: #e3f4e9; color: #116b42; box-shadow: inset 0 -3px #159957; }
 .agent-episode-tabs button:focus-visible { outline: 2px solid #155799; outline-offset: 2px; }
-.agent-replay { overflow: hidden; border: 1px solid #dce6e4; border-radius: 9px; background: #fff; box-shadow: 0 2px 10px #172d3b12; }
-.agent-episode-result { padding: 0.4rem 0.8rem; color: #33454e; background: #f4f9f6; font-size: 0.78rem; font-weight: 700; }
-.agent-video-wrap { position: relative; display: flex; justify-content: center; background: #eef3f1; }
-.agent-video-wrap video { display: block; width: auto; max-width: 100%; height: min(40vh, 340px); aspect-ratio: 3 / 2; background: #172d3b; }
-.agent-availability { padding: 0.3rem 0.8rem; color: #66747a; font-size: 0.74rem; }
-.agent-video-note { position: absolute; top: 0.65rem; left: 0.65rem; max-width: calc(100% - 1.3rem); padding: 0.25rem 0.5rem; border-radius: 4px; background: #172d3bd9; color: #fff; font-size: 0.75rem; pointer-events: none; }
-.agent-progress-wrap { padding: 0.55rem 0.8rem 0.35rem; }
-.agent-progress { display: grid; gap: 1px; height: 8px; align-items: stretch; cursor: pointer; touch-action: manipulation; }
-.agent-progress:focus-visible { outline: 2px solid #155799; outline-offset: 3px; }
-.agent-index { display: block; width: 100%; margin: 0.5rem 0 0; accent-color: #155799; cursor: pointer; }
-.agent-progress-segment { min-width: 0; }
-.agent-progress-segment:hover { outline: 1px solid #20343d; }
-.agent-progress-segment.is-current { position: relative; z-index: 1; outline: 2px solid #20343d; transform: scaleY(1.6); }
-.agent-progress-segment.model, .agent-progress-legend .model::before { background: #4f9fcd; }
-.agent-progress-segment.tool, .agent-progress-legend .tool::before { background: #9b7ac4; }
-.agent-progress-segment.robot, .agent-progress-legend .robot::before { background: #27a778; }
-.agent-progress-segment.context, .agent-progress-legend .context::before { background: #ac9e6b; }
-.agent-progress-legend { display: flex; gap: 0.8rem; margin-top: 0.38rem; color: #66747a; font-size: 0.68rem; }
-.agent-progress-legend span { display: inline-flex; align-items: center; gap: 0.25rem; }
-.agent-progress-legend span::before { content: ''; width: 0.48rem; height: 0.48rem; border-radius: 2px; }
-.agent-step-nav { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 0.8rem; border-bottom: 1px solid #e3eae7; }
-.agent-step-nav button { padding: 0.4rem 0.7rem; border: 1px solid #c8d8d2; border-radius: 5px; background: #f6faf8; color: #155799; font: inherit; font-size: 0.82rem; cursor: pointer; }
-.agent-step-nav button:hover:not(:disabled), .agent-step-nav button:focus-visible { border-color: #159957; background: #edf7f1; }
-.agent-step-nav button:disabled { opacity: 0.42; cursor: default; }
-.agent-step-count { color: #33454e; font-size: 0.85rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-.agent-step-detail { min-height: 7rem; max-height: 55vh; overflow-y: auto; padding: 0.65rem 0.85rem; color: #33454e; font-size: 0.84rem; }
-.agent-detail-top { display: flex; align-items: center; justify-content: space-between; gap: 0.7rem; flex-wrap: wrap; }
-.agent-kind { display: inline-block; min-width: 4.1rem; padding: 0.14rem 0.4rem; border-radius: 4px; text-align: center; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; }
-.agent-kind.model { background: #e8f2f8; color: #155799; }
-.agent-kind.tool { background: #f1edf8; color: #67499a; }
-.agent-kind.robot { background: #e4f3ed; color: #157551; }
-.agent-kind.context { background: #f2f1e9; color: #746f3d; }
-.agent-detail-time { color: #66747a; font-size: 0.76rem; font-variant-numeric: tabular-nums; }
-.agent-step-detail h4 { margin: 0.3rem 0 0.2rem; color: #33454e; font-size: 1rem; }
-.agent-step-detail .agent-usage { margin: 0.3rem 0; color: #526375; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
-.agent-step-detail p { margin: 0.4rem 0; }
-.agent-summary-text { white-space: pre-wrap; }
-.agent-state-summary { display: flex; flex-wrap: wrap; gap: 0.3rem 0.8rem; margin: 0.35rem 0 0.55rem; padding: 0.45rem; border-radius: 5px; background: #f4f9f6; font-size: 0.77rem; }
-.agent-state-summary small { width: 100%; color: #66747a; }
-.agent-state-summary ul { margin: 0.35rem 0; padding-left: 1.2rem; }
-.agent-observations { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.55rem 0; }
-.agent-observations img { max-width: 100%; max-height: 22rem; object-fit: contain; border: 1px solid #dce6e4; border-radius: 4px; }
-.agent-step-detail .agent-intent strong { color: #33454e; }
-.agent-muted { color: #6f7b80; }
-.agent-controller { color: #526375; font-size: 0.8rem; }
-.agent-step-detail details { margin: 0.55rem 0 0; }
-.agent-step-detail details summary { color: #155799; cursor: pointer; }
-.agent-step-detail details p { max-width: 70ch; }
-.agent-command summary { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 0.35rem; }
-.agent-command summary::before { content: '▸'; }
-.agent-command[open] summary::before { content: '▾'; }
-.agent-command-label, .agent-command-preview { grid-column: 2; }
-.agent-command-preview { overflow: hidden; color: #33454e; font-size: 0.78rem; text-overflow: ellipsis; white-space: nowrap; }
-.agent-command[open] .agent-command-preview { display: none; }
-.agent-step-detail pre { overflow-x: auto; margin: 0.5rem 0 0; padding: 0.65rem; border-radius: 5px; background: #f4f7f6; color: #263c43; font-size: 0.78rem; }
+.ar-result { margin: 0 0 0.55rem; color: #66747a; font-size: 0.78rem; }
+.ar-status { margin: 0.5rem 0; color: #66747a; font-size: 0.86rem; }
+
+/* Video with narrated captions */
+.ar-screen { position: relative; overflow: hidden; border-radius: 8px; background: #172d3b; }
+.ar-screen video { display: block; width: 100%; aspect-ratio: 3 / 2; background: #172d3b; cursor: pointer; }
+.ar-cam, .ar-clock { position: absolute; top: 0.5rem; padding: 0.1rem 0.45rem; border-radius: 4px; background: #172d3bb3; color: #eef3f1; font-size: 0.72rem; pointer-events: none; }
+.ar-cam-wrist { left: 0.5rem; }
+.ar-cam-head { left: calc(33.33% + 0.5rem); }
+.ar-clock { right: 0.5rem; padding: 0.2rem 0.55rem; font-size: 0.78rem; }
+.ar-clock strong { margin-left: 0.25rem; font: 500 0.78rem ui-monospace, "SF Mono", Menlo, monospace; font-variant-numeric: tabular-nums; }
+.ar-bigplay { position: absolute; top: 42%; left: 50%; width: 3.6rem; height: 3.6rem; padding-left: 0.3rem; transform: translate(-50%, -50%); border: 0; border-radius: 50%; background: #172d3bcc; color: #fff; font-size: 1.4rem; cursor: pointer; transition: opacity 0.2s; }
+.ar-bigplay:hover { background: #155799; }
+.ar-screen.is-playing .ar-bigplay { opacity: 0; pointer-events: none; }
+.ar-caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 2.6rem 1.2rem 1rem; background: linear-gradient(to bottom, transparent, #172d3bdd 42%); color: #fff; pointer-events: none; }
+.ar-caption[hidden] { display: none; }
+.ar-caption-phase { margin: 0 0 0.15rem; color: #9fe0c0; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.02em; }
+.ar-caption-text { margin: 0; font-size: 1.02rem; line-height: 1.45; text-shadow: 0 1px 2px #0009; }
+.ar-hold { position: absolute; left: 0; bottom: 0; width: 0; height: 3px; background: #27a778; visibility: hidden; }
+.ar-caption.is-holding .ar-hold { visibility: visible; }
+
+/* One control row: play, phase timeline, time */
+.ar-controls { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.55rem; }
+.ar-round { flex: none; width: 2.3rem; height: 2.3rem; border: 0; border-radius: 50%; background: #155799; color: #fff; font-size: 0.85rem; cursor: pointer; }
+.ar-round:hover { background: #0f3f70; }
+.ar-time { color: #66747a; font: 0.76rem ui-monospace, "SF Mono", Menlo, monospace; white-space: nowrap; }
+.ar-strip { position: relative; flex: 1; min-width: 0; display: flex; gap: 2px; height: 2rem; cursor: pointer; touch-action: none; }
+.ar-seg { position: relative; min-width: 0; padding: 0 0.45rem; overflow: hidden; border: 0; border-radius: 4px; background: #e4ece9; color: #33454e; font: inherit; font-size: 0.72rem; text-align: left; white-space: nowrap; cursor: pointer; }
+.ar-seg b { margin-right: 0.3rem; }
+.ar-seg.is-tight { padding: 0; text-align: center; }
+.ar-seg.is-tight span { display: none; }
+.ar-seg.is-tight b { margin: 0; }
+.ar-seg.is-active { background: #155799; color: #fff; }
+.ar-seg:hover:not(.is-active) { background: #d6e6f3; }
+.ar-seg i { position: absolute; bottom: 0; width: 1px; height: 6px; background: currentColor; opacity: 0.35; }
+.ar-playhead { position: absolute; top: -3px; bottom: -3px; z-index: 2; width: 2px; margin-left: -1px; border-radius: 1px; background: #20343d; pointer-events: none; }
+
+/* The command behind the current frame */
+.ar-cmd { display: grid; grid-template-columns: 2rem minmax(0, 1fr) 2rem; align-items: center; gap: 0.75rem; margin-top: 0.7rem; padding: 0.7rem; border: 1px solid #dce6e4; border-radius: 8px; background: #fbfdfc; }
+.ar-step { width: 2rem; height: 2rem; border: 1px solid #c8d8d2; border-radius: 50%; background: #f6faf8; color: #155799; font: inherit; cursor: pointer; }
+.ar-step:hover:not(:disabled) { border-color: #159957; background: #edf7f1; }
+.ar-step:disabled { opacity: 0.4; cursor: default; }
+.ar-cmd-body { min-height: 4.2em; display: flex; flex-direction: column; justify-content: center; }
+.ar-command { margin: 0; color: #20343d; font: 0.84rem/1.5 ui-monospace, "SF Mono", Menlo, monospace; overflow-wrap: anywhere; }
+.ar-command::before { content: '› '; color: #849095; }
+.ar-meta { margin: 0.2rem 0 0; color: #66747a; font-size: 0.74rem; }
+.ar-meta .is-stalled { color: #a15c00; font-weight: 700; }
+.ar-meta .is-timeout { color: #b42318; font-weight: 700; }
+.ar-think { margin: 0 0 0.3rem; color: #526375; font-size: 0.78rem; }
+.ar-think summary { font-style: italic; cursor: pointer; }
+.ar-think summary:hover { color: #155799; }
+.ar-think div { max-height: 12em; margin: 0.35rem 0 0.2rem; padding-left: 0.6rem; overflow-y: auto; border-left: 2px solid #dce6e4; }
+.ar-think p { margin: 0 0 0.4rem; }
+
+/* Where the real time went */
+.ar-timefig { margin: 1.4rem 0 0; }
+.ar-timefig figcaption { margin: 0 0 0.4rem; color: #33454e; font-size: 0.86rem; }
+.ar-legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; margin-bottom: 0.4rem; color: #526375; font-size: 0.74rem; }
+.ar-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+.ar-legend i { display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 2px; }
+.ar-legend .moving, .ar-chart .ar-moving { background: #27a778; fill: #27a778; }
+.ar-legend .still, .ar-chart .ar-still { background: #e4ece9; fill: #e4ece9; }
+.ar-chart svg { display: block; width: 100%; overflow: visible; }
+.ar-chart text { fill: #526375; font: 0.72rem "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+.ar-chart .ar-row { fill: #33454e; font-weight: 700; }
+.ar-chart .ar-sub { fill: #66747a; font-variant-numeric: tabular-nums; }
+.ar-chart .ar-num { fill: #33454e; font-weight: 700; }
+.ar-chart .ar-on-moving { fill: #fff; }
+.ar-chart .ar-phase { outline: none; cursor: pointer; }
+.ar-chart .ar-band { fill: #27a778; fill-opacity: 0.08; transition: fill-opacity 0.15s; }
+.ar-chart .ar-phase:is(:hover, :focus-visible, .is-active) .ar-band { fill-opacity: 0.24; }
+.ar-chart .ar-hit { fill: transparent; }
+.ar-chart .ar-leader { stroke: #9aa8ad; stroke-width: 1; }
+.ar-tooltip { position: fixed; z-index: 90; max-width: 17rem; padding: 0.5rem 0.7rem; border: 1px solid #c9d6dc; border-radius: 6px; background: #fff; color: #33454e; box-shadow: 0 6px 20px #172d3b30; font-size: 0.8rem; line-height: 1.4; pointer-events: none; }
+.ar-tooltip b { display: block; }
+
 @media (max-width: 42rem) {
-  .agent-episode-tabs { gap: 0.35rem; }
-  .agent-episode-tabs button { padding: 0.45rem 0.3rem; font-size: 0.76rem; }
-  .agent-video-wrap video { height: min(32vh, 260px); }
-  .agent-step-nav button { padding: 0.35rem 0.4rem; }
+  .agent-episode-tabs button { font-size: 0.8rem; }
+  .ar-cam { font-size: 0.62rem; }
+  .ar-caption { position: relative; padding: 0.6rem 0.8rem 0.8rem; background: #172d3b; }
+  .ar-caption-text { font-size: 0.92rem; }
+  .ar-controls { flex-wrap: wrap; }
+  .ar-strip { flex-basis: 100%; order: -1; }
 }
