@@ -3,6 +3,7 @@ description: Open-sourcing VLA models
 remote_theme: pages-themes/cayman
 plugins:
   - jekyll-remote-theme
+  - jekyll-relative-links
 markdown: kramdown
 github:
   is_project_page: false
