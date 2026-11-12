@@ -8,6 +8,7 @@
   let selected = 0;
   let clipEnd = null;
   let progressSegments = [];
+  let loadSerial = 0;
 
   const el = (tag, text, className) => {
     const node = document.createElement(tag);
@@ -120,11 +121,12 @@
     if (step.usage != null) detail.append(jsonDetails('Token usage and estimated cost', step.usage));
   }
 
-  async function load(entry) {
+  async function load(entry, serial) {
     detail.replaceChildren(el('p', 'Loading rollout…'));
     const response = await fetch(entry.data);
     if (!response.ok) throw new Error('Rollout data could not be loaded');
     const data = await response.json();
+    if (serial !== loadSerial) return;
     if (data.version !== 2 || !data.agent?.spans?.length || !data.agent?.states?.length || !data.metadata?.video_fps || !data.video)
       throw new Error('Full rollout data is incomplete');
     episode = {...data, steps: data.agent.spans};
@@ -132,13 +134,22 @@
     video.src = data.video;
     video.setAttribute('aria-label', `${task}, instance ${data.metadata.instance_id}, agent evaluation video`);
     const q = data.metadata.metrics?.q_score?.final;
-    const result = data.metadata.success === true ? 'task succeeded' : data.metadata.success === false ? 'task incomplete' : 'outcome unavailable';
-    $('agent-episode-result').textContent = `${task} · instance ${data.metadata.instance_id} · ${result}${q != null ? ` · Q ${Number(q).toFixed(2)}` : ''}`;
+    $('agent-episode-result').textContent = `instance ${data.metadata.instance_id}${q != null ? ` · Q ${Number(q).toFixed(2)}` : ''}`;
     const models = data.agent.spans.filter(span => span.kind === 'model');
     $('agent-availability').textContent = `${data.agent.spans.length} recorded activities · ${models.filter(span => span.summary).length} of ${models.length} model calls returned a readable summary`;
     $('agent-next-summary').disabled = !models.some(span => span.summary);
     buildProgress();
     select(0);
+  }
+
+  function choose(entry, button) {
+    chooser.querySelectorAll('button').forEach(candidate => {
+      candidate.setAttribute('aria-pressed', String(candidate === button));
+    });
+    const serial = ++loadSerial;
+    return load(entry, serial).catch(error => {
+      if (serial === loadSerial) showError(error);
+    });
   }
 
   video.addEventListener('timeupdate', () => {
@@ -175,9 +186,8 @@
     if (event.key === 'Home') { event.preventDefault(); select(0); }
     if (event.key === 'End') { event.preventDefault(); select(episode.steps.length - 1); }
   });
-  chooser.addEventListener('change', () => load(JSON.parse(chooser.value)).catch(showError));
   $('agent-replay').addEventListener('keydown', event => {
-    if (event.target === video || event.target === chooser) return;
+    if (event.target === video) return;
     if (event.key === 'ArrowLeft') { event.preventDefault(); select(selected - 1); }
     if (event.key === 'ArrowRight') { event.preventDefault(); select(selected + 1); }
   });
@@ -189,13 +199,15 @@
     .then(response => { if (!response.ok) throw new Error('Episode list could not be loaded'); return response.json(); })
     .then(manifest => {
       if (!manifest.episodes?.length) throw new Error('No agent rollouts are available');
-      for (const entry of manifest.episodes) {
-        const option = el('option', `${displayTask(entry.task)} · ${entry.instance}`);
-        option.value = JSON.stringify(entry);
-        chooser.append(option);
-      }
-      chooser.hidden = manifest.episodes.length < 2;
-      return load(manifest.episodes[0]);
+      const buttons = manifest.episodes.map(entry => {
+        const button = el('button', displayTask(entry.task));
+        button.type = 'button';
+        button.setAttribute('aria-pressed', 'false');
+        button.addEventListener('click', () => choose(entry, button));
+        return button;
+      });
+      chooser.replaceChildren(...buttons);
+      return choose(manifest.episodes[0], buttons[0]);
     })
     .catch(showError);
 })();

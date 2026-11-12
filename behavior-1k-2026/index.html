@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BEHAVIOR-1K Challenge (CoRL 2026) · Robot Learning Collective</title>
-  <link rel="stylesheet" href="./blog.css?v=20261111-r5">
-  <link rel="stylesheet" href="./agent_replay.css?v=20261111-full">
+  <link rel="stylesheet" href="./blog.css?v=20261112-stats">
+  <link rel="stylesheet" href="./agent_replay.css?v=20261112-tabs">
   <script src="./blog.js?v=20261111-r5" defer></script>
   <script src="./failure_chart.js?v=20261110-bucket" defer></script>
   <script src="./astra_example.js?v=20261111-review" defer></script>
-  <script src="./agent_replay.js?v=20261111-full" defer></script>
+  <script src="./agent_replay.js?v=20261112-result" defer></script>
   <script src="./emergent_clips.js?v=20261110-bucket" defer></script>
 </head>
 <body>
@@ -137,7 +137,6 @@
       <div class="stat-row" role="list">
         <div role="listitem"><strong>0.392</strong><span>Q on all 100 tasks</span></div>
         <div role="listitem"><strong>0.371</strong><span>on the 50 tasks from 2025, up from 0.260 for our winning 2025 submission</span></div>
-        <div role="listitem"><strong>0.412</strong><span>on the 50 tasks new in 2026</span></div>
       </div>
       <section id="vla-architecture" class="method-subsection" aria-labelledby="vla-architecture-title">
         <h3 id="vla-architecture-title">Architecture</h3>
@@ -206,7 +205,6 @@
       <p>Before evaluation, Astra practices each task on training instances: it isolates the hard steps, studies its failures and the human demonstrations, and writes notes and recipes for itself. No weights are trained. Every evaluation episode then starts from a fresh copy of that frozen practice session, with only the official observations. We routed 14 tasks to the agent, where the VLA struggled and Astra did better in our tests or the VLA scored about zero.</p>
       <div class="stat-row stat-row-astra" role="list">
         <div role="listitem"><strong>0.639</strong><span>mean Q on its 14 tasks, against 0.108 for the VLA</span></div>
-        <div role="listitem"><strong>106 / 140</strong><span>public episodes on these tasks played by Astra before the deadline; the VLA played the rest</span></div>
         <div role="listitem"><strong>≈ 17×</strong><span>slower than real time: a median of 0.63 hours per episode, plus tens of dollars in API fees</span></div>
       </div>
       <p>The biggest jump was on installing smoke detectors, from 0.10 with the VLA to 1.0 with Astra. Time and API costs limited further practice and evaluation: we had the agent route working only one to two days before the deadline.</p>
@@ -252,11 +250,9 @@
         </div>
       </figure>
       <section id="agent-rollout" class="agent-rollout" aria-labelledby="agent-rollout-title">
-        <div class="agent-rollout-heading">
-          <h3 id="agent-rollout-title">Inside an Astra rollout</h3>
-          <select id="agent-episode" aria-label="Choose agent episode" hidden></select>
-        </div>
+        <h3 id="agent-rollout-title">Inside an Astra rollout</h3>
         <p class="agent-rollout-intro">Step through the full recorded activity, observations, and robot actions. Times include model and tool waits.</p>
+        <div id="agent-episode" class="agent-episode-tabs" role="group" aria-label="Choose agent episode"></div>
         <div class="agent-replay" id="agent-replay">
           <div id="agent-episode-result" class="agent-episode-result"></div>
           <div id="agent-availability" class="agent-availability"></div>

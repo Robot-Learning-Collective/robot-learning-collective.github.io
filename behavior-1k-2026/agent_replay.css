@@ -1,8 +1,11 @@
 .agent-rollout { margin: 1.5rem 0 2rem; }
-.agent-rollout-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
-.agent-rollout-heading h3 { margin: 0 0 0.35rem; }
-.agent-rollout-heading select { max-width: 15rem; padding: 0.35rem; border: 1px solid #c6d7d3; border-radius: 5px; background: #fff; color: #33454e; }
+.agent-rollout h3 { margin: 0 0 0.35rem; }
 .agent-rollout-intro { margin: 0 0 0.55rem; font-size: 0.86rem; }
+.agent-episode-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.55rem; margin: 0.85rem 0 0.7rem; }
+.agent-episode-tabs button { min-width: 0; min-height: 2.85rem; padding: 0.55rem 0.7rem; border: 1px solid #cbded5; border-radius: 8px; background: #f7fbf8; color: #27634a; font: inherit; font-size: 0.88rem; font-weight: 650; line-height: 1.25; cursor: pointer; }
+.agent-episode-tabs button:hover, .agent-episode-tabs button:focus-visible { border-color: #159957; background: #edf7f1; }
+.agent-episode-tabs button[aria-pressed="true"] { border-color: #159957; background: #e3f4e9; color: #116b42; box-shadow: inset 0 -3px #159957; }
+.agent-episode-tabs button:focus-visible { outline: 2px solid #155799; outline-offset: 2px; }
 .agent-replay { overflow: hidden; border: 1px solid #dce6e4; border-radius: 9px; background: #fff; box-shadow: 0 2px 10px #172d3b12; }
 .agent-episode-result { padding: 0.4rem 0.8rem; color: #33454e; background: #f4f9f6; font-size: 0.78rem; font-weight: 700; }
 .agent-video-wrap { position: relative; display: flex; justify-content: center; background: #eef3f1; }
@@ -59,8 +62,8 @@
 .agent-command[open] .agent-command-preview { display: none; }
 .agent-step-detail pre { overflow-x: auto; margin: 0.5rem 0 0; padding: 0.65rem; border-radius: 5px; background: #f4f7f6; color: #263c43; font-size: 0.78rem; }
 @media (max-width: 42rem) {
-  .agent-rollout-heading { display: block; }
-  .agent-rollout-heading select { margin: 0.2rem 0 0.6rem; }
+  .agent-episode-tabs { gap: 0.35rem; }
+  .agent-episode-tabs button { padding: 0.45rem 0.3rem; font-size: 0.76rem; }
   .agent-video-wrap video { height: min(32vh, 260px); }
   .agent-step-nav button { padding: 0.35rem 0.4rem; }
 }

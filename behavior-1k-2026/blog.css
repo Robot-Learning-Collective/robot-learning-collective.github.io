@@ -166,7 +166,7 @@ body { margin: 0; font: 16px/1.5 "Open Sans", "Helvetica Neue", Helvetica, Arial
 /* Blog review additions */
 .blog-intro a, .blog-section p a { color: #155799; }
 .change-list li { margin: 0.35rem 0; }
-.stat-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.9rem; margin: 1.4rem 0 1.6rem; }
+.stat-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem; margin: 1.4rem 0 1.6rem; }
 .stat-row > div { padding: 0.8rem 0.9rem; border: 1px solid #dce6e4; border-radius: 10px; background: #fbfdfc; }
 .stat-row strong { display: block; color: #0072b2; font-size: 1.9rem; line-height: 1.15; font-variant-numeric: tabular-nums; }
 .stat-row-astra strong { color: #009e73; }
